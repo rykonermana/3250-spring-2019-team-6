@@ -1,6 +1,11 @@
 import unittest
 import csv
+<<<<<<< HEAD
 from jvpm.constant_table import ConstantTable
+=======
+import struct
+import array
+>>>>>>> master
 # unittest
 
 class ClassFile:
@@ -90,11 +95,21 @@ class ClassFile:
 
     def print_self(self):
     #     print(self)
+<<<<<<< HEAD
         print("Magic: ", self.magic)
         print("Minor version: ", self.minor)
         print("Major version: ", self.major)
         print("Constant pool count: ", self.constant_pool_count)
         self.constant_table.print_message()
+=======
+        print("Magic: ", self.magic) # pragma: no cover
+        print("Minor version: ", self.minor)  # pragma: no cover
+        print("Major version: ", self.major)  # pragma: no cover
+        print("Constant pool count: ", self.constant_pool_count)  # pragma: no cover
+    #    print("Constant pool helper: ", self.constant_pool_helper)
+        print("Constant pool table: ", self.constant_table)  # pragma: no cover
+        print("Constant pool byte length: ", self.constant_pool_length)  # pragma: no cover
+>>>>>>> master
     #     print("Access flags: ", hex(self.access_flags[0]), hex(self.access_flags[1]))
     #     print("This class: ", self.this_class)
     #     print("Superclass: ", self.superclass)
@@ -109,18 +124,31 @@ class ClassFile:
     #     print("Attribute count: ", self.attribute_count)
     #     print("Attribute table: ", "[%s]" % ", ".join(map(str, self.attribute_table)))
 
+<<<<<<< HEAD
     # def run_opcodes(self):
     #    opcodes = OpCodes(self.method_table)
     #    opcodes.run()
+=======
+    def run_opcodes(self):
+        opcodes = OpCodes(self.method_table)
+        opcodes.run()
+>>>>>>> master
 
 #
 # if '__main__' == __name__:
 #     ClassFile()
 
+'''class LocalVar:
+    def __init__(self, localvar=[]):
+        self.localvar = localvar
+'''
+
 class OpCodes:
+
     def __init__(self,opcodes=[]):
         self.table = self.load() #{0x00: self.not_implemented} #read in table with opcodes
         self.stack = []
+        self.localvar = [0]*10
         self.opcodes = opcodes
         #self.run()
 
@@ -135,7 +163,7 @@ class OpCodes:
 
     def run(self):
         for _ in self.opcodes:
-            print("stack: ", self.stack)
+            print("stack: ", self.stack)  # pragma: no cover
             #method = self.interpret(i)
             #print("running method", method, "...")
             #print("finished method", method, "...")
@@ -145,7 +173,7 @@ class OpCodes:
         return 'not implemented'
 
     def interpret(self, value):
-        print("running method: ", self.table[value])
+        print("running method: ", self.table[value])  # pragma: no cover
         getattr(self, self.table[value])()
         return self.table[value]
 
@@ -158,7 +186,7 @@ class OpCodes:
     #adds top two operands in the stack and returns the value
     def iadd(self):
         self.push_int_to_stack(self.stack.pop() + self.stack.pop())
-		
+
     #Compares top two integer bits in the stack and returns the AND result
     def iand(self):
         self.push_int_to_stack(self.stack.pop() & self.stack.pop())
@@ -233,3 +261,95 @@ class OpCodes:
     #Pushes the exclusive OR result of the top two integers of the stack back onto the stack
     def ixor(self):
         self.push_int_to_stack(self.stack.pop() ^ self.stack.pop())
+
+    #Load specified integer value onto the operand stack
+    def iload(self, index):
+        self.stack.append(self.localvar[index])
+
+    #Load integer value in localvar list at index 0 to operand stack
+    def iload_0(self, index):
+        self.stack.append(self.localvar[index])
+
+    #Load integer value in localvar list at index 1 to operand stack
+    def iload_1(self, index):
+        self.stack.append(self.localvar[index])
+
+    #Load integer value in localvar list at index 2 to operand stack
+    def iload_2(self, index):
+        self.stack.append(self.localvar[index])
+
+    #Load integer value in localvar list at index 3 to operand stack
+    def iload_3(self, index):
+        self.stack.append(self.localvar[index])
+
+    #Store specified integer value into localvar list at index 0
+    def istore(self, index):
+        self.localvar[index] = self.stack.pop()
+
+    #Store specified integer value into localvar list at index 0
+    def istore_0(self, index):
+        self.localvar[index] = self.stack.pop()
+
+    #Store integer value on operand stack to localvar list at index 1
+    def istore_1(self, index):
+        self.localvar[index] = self.stack.pop()
+
+    #Store integer value on operand stack to localvar list at index 2
+    def istore_2(self, index):
+        self.localvar[index] = self.stack.pop()
+
+    #Store integer value on operand stack to localvar list at index 3
+    def istore_3(self, index):
+        self.localvar[index] = self.stack.pop()
+
+    def i2b(self):
+        self.stack.append(self.stack.pop().to_bytes(length = 1, byteorder = 'big', signed = True))
+
+    def i2c(self):
+        #self.stack.append(self.stack.pop().char(c))
+        self.stack.append(chr(self.stack.pop()))
+
+    def i2d(self):
+        self.stack.append(self.stack.pop()/1.0)
+
+    def i2f(self):
+        self.stack.append(self.stack.pop()/1.0)
+
+    def i2l(self):
+        max = 2 ** 64 - 1
+        min = -2 ** 64
+        value = self.stack.pop()
+        if value >= min and value <= max:
+            self.stack.append(value / 1.0)
+        else:
+            raise ValueError("Value {} cannot be converted to long".format(value))
+
+    def i2s(self):
+        max = 2**16-1
+        min = -2**16
+        value = self.stack.pop()
+        if value >= min and value <= max:
+            self.stack.append(value/1.0)
+        else:
+            raise ValueError("Value {} cannot be converted to short".format(value))
+
+
+    def invokeVirtual(self, methodRef):
+        if (methodRef == "java/io/PrintStream.println:(I)V"):
+            return(int(self.stack.pop()))
+        #elif (methodRef == "java/util/Stack.push:(Ljava/lang/Object;)Ljava/lang/Object"):
+        #   return self.stack.append(self.stack.pop())
+        elif (methodRef == "java/io/PrintStream.println:(Z)V"):
+            x = self.stack.pop()
+            if (x == 1):
+                return("true")
+            elif (x == 0):
+                return("false")
+            else:
+                return("not a boolean")  # Case probably raises an exception not 'not a boolean' - Christian
+        #elif (methodRef == "Method java/io/PrintStream.println:(D)V"):
+        #    return(long(self.stack.pop()))
+        elif (methodRef == "java/io/PrintStream.println:(Ljava/lang/String;)V"):
+            return(self.stack.pop())
+        else:
+            return("not implemented")

@@ -6,20 +6,20 @@ python:
 install:
 - pip install codecov
 - pip install coverage
+addons:
+  sonarcloud:
+    organization: rykonermana-github
 script:
-- sonar-scanner
 - python3 -V
 - python3 -m unittest discover
 - coverage run -m unittest discover
 - coverage report
+- sonar-scanner
 env:
   matrix:
   global:
     secure: OOJjK6RGWUtO9aJ29NPiwDUtKntG7XgWq/MmuDHwOm2m4+8Y+8UgNCodpStPZ6yawf8cAJbzJRjQlMBVvBM3xV199e3lnZw3/fNVn9xKGRNkml/zjriCcLgERnj666IR4UkugvpiE62//DedisT9sVtNomCh+aYcVW1UOXGZOZ99Q7tK96IYKlHH2p0eaVQ+OP4o6k2INdBteGk3mmS5LvkTvJuFA16VWEBRe/dVlt1PpSEoIrM/+xiYXRXn0SQfX9lbQfiVOfJZ9ySd4UbaYt61jPI24+ndMUVYV+3BgeLOoO0h7iJmLCMVvFk8TRJNPvFxu9p2zzRogkXlpl51BDvlNcOtTEHGn6LSkRp6l2OISjnv70fumTBkn1fxC8v+JcDR1ur1V0e7mwqaBZbGhy2fC7+wYFV+RW4augiyq9/pUL4Yu0iKcKJdi3zMhhfu5n92aHWSn09a9K1JpSA6AQm/sQszF+CDFPB4Y/J0DXSdNcAQ0synMihptm/6P++ml6fLLH8RSILvTS3LbpXnzth440CBHKSZiCgtPeUHOcexSu1Od3wqeQUfhXMPMHC80WnI/HmChUfxKg1dKcI+Qu56UYIzHlpXaIgodt/iZD7Reg0rrkzi3YtgjzP1x+GQm/Ocv1Kl7cRAu0/IDXoAGTQZ4qZk3qRnJ18Eu7q7joM=
 after_success:
 - codecov
-addons:
-  sonarcloud:
-    organization: rykonermana-github
-    token:
-      secure: 13308ec43645784128eec48e3fcc8035a67a592f
+
+
