@@ -9,7 +9,6 @@ class ConstantTable:
         self.constant_pool_count = count
         self.constant_pool_helper = load_constant_helper()
         self.constant_table, self.final_byte = self.get_constant_pool_table()
-        print(self.constant_table)
         self.get_constant_messages()
 
     def get_constant_pool_table(self):
