@@ -1,11 +1,8 @@
 import unittest
 import csv
-<<<<<<< HEAD
-from jvpm.constant_table import ConstantTable
-=======
 import struct
 import array
->>>>>>> master
+from jvpm.constant_table import ConstantTable
 # unittest
 
 class ClassFile:
@@ -95,21 +92,11 @@ class ClassFile:
 
     def print_self(self):
     #     print(self)
-<<<<<<< HEAD
         print("Magic: ", self.magic)
         print("Minor version: ", self.minor)
         print("Major version: ", self.major)
         print("Constant pool count: ", self.constant_pool_count)
         self.constant_table.print_message()
-=======
-        print("Magic: ", self.magic) # pragma: no cover
-        print("Minor version: ", self.minor)  # pragma: no cover
-        print("Major version: ", self.major)  # pragma: no cover
-        print("Constant pool count: ", self.constant_pool_count)  # pragma: no cover
-    #    print("Constant pool helper: ", self.constant_pool_helper)
-        print("Constant pool table: ", self.constant_table)  # pragma: no cover
-        print("Constant pool byte length: ", self.constant_pool_length)  # pragma: no cover
->>>>>>> master
     #     print("Access flags: ", hex(self.access_flags[0]), hex(self.access_flags[1]))
     #     print("This class: ", self.this_class)
     #     print("Superclass: ", self.superclass)
@@ -124,15 +111,9 @@ class ClassFile:
     #     print("Attribute count: ", self.attribute_count)
     #     print("Attribute table: ", "[%s]" % ", ".join(map(str, self.attribute_table)))
 
-<<<<<<< HEAD
-    # def run_opcodes(self):
-    #    opcodes = OpCodes(self.method_table)
-    #    opcodes.run()
-=======
     def run_opcodes(self):
         opcodes = OpCodes(self.method_table)
         opcodes.run()
->>>>>>> master
 
 #
 # if '__main__' == __name__:
