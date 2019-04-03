@@ -1,10 +1,10 @@
 import unittest
 import csv
-import struct
+from jvpm.constant_table import ConstantTable
 # unittest
 
 class ClassFile:
-    def __init__(self, file='test/JavaTestStuff2.class'):
+    def __init__(self, file='test/HelloWorld.class'):
         with open(file, 'rb') as binary_file:
             # the byte string being stored in self.data to be parsed
             self.data = binary_file.read()
@@ -12,8 +12,8 @@ class ClassFile:
             self.minor = self.get_minor()
             self.major = self.get_major()
             self.constant_pool_count = self.get_constant_pool()-1
-            self.constant_pool_helper = self.load_constant_helper()
-            self.constant_table, self.constant_pool_length =  self.get_constant_pool_table()
+            self.constant_table = ConstantTable(self.data, self.constant_pool_count)
+            self.constant_pool_length = self.constant_table.final_byte
             # self.access_flags = self.get_access_flags()
             # self.this_class = self.get_this_class()
             # self.superclass = self.get_super_class()
@@ -28,19 +28,6 @@ class ClassFile:
             #self.cp_ic_fc_mc = self.cp_ic_fc + len(self.method_table)
             # self.attribute_count = self.get_attribute_count()
             # self.attribute_table = self.get_attribute_table()
-
-    def load_constant_helper(self):
-        dict_variable_length = {}
-        with open('jvpm/files/constant_codes.csv', 'r') as csvfile:
-            spamreader = csv.DictReader(csvfile)
-            for x in list(spamreader):
-                constant_info = {}
-                constant_info['num_initial_bytes'] = int(x['Additional bytes'].strip())
-                constant_info['variable_length']=bool(int(x['Variable Length'].strip()))
-                constant_info['description']=x['Description'].strip()
-                the_number = int(x['Tag byte'].strip(),10)
-                dict_variable_length[the_number]=constant_info
-        return dict_variable_length
 
     def get_magic(self):
         magic = ""
@@ -57,45 +44,23 @@ class ClassFile:
     def get_constant_pool(self):
         return self.data[8] + self.data[9]
 
-    def get_constant_pool_table(self):
-        #constant = self.data[10:(10+self.constant_pool)]
-        the_table = {}
-        active_position=10
-        for i in range(1,self.constant_pool_count+1):
-            dict_constant={}
-            constant_code=0
-            for j in self.data[active_position:active_position+1]:
-                constant_code+= j
-            #print("Constant code: ", constant_code)
-            active_position+=1
-            dict_constant['constant_code']=constant_code
-            message_length=int(self.constant_pool_helper[constant_code]['num_initial_bytes'])
-            dict_constant['message']=self.data[active_position:active_position+message_length]
-            active_position+=message_length
-            if(self.constant_pool_helper[constant_code]['variable_length']):
-                value_length=int(dict_constant['message'][0]) + int(dict_constant['message'][1])
-                dict_constant['value']=self.data[active_position:active_position+value_length]
-                active_position+=value_length
-            #print(dict_constant)
-            the_table[i] = dict_constant
-        return the_table, (active_position - 10)
     #
     # def get_access_flags(self):
-    #     return self.data[10 + self.constant_pool-1:11 + self.constant_pool]
+    #     return self.data[10 + self.constant_pool_length-1:11 + self.constant_pool_length]
     #
     # def get_this_class(self):
-    #     return self.data[12 + self.constant_pool] + self.data[13 + self.constant_pool]
+    #     return self.data[12 + self.constant_pool_length] + self.data[13 + self.constant_pool_length]
     #
     # def get_super_class(self):
-    #     return self.data[14 + self.constant_pool] + self.data[15 + self.constant_pool]
+    #     return self.data[14 + self.constant_pool_length] + self.data[15 + self.constant_pool_length]
     #
     # def get_interface_count(self):
-    #     return self.data[16 + self.constant_pool] + self.data[17 + self.constant_pool]
+    #     return self.data[16 + self.constant_pool_length] + self.data[17 + self.constant_pool_length]
     #
     # def get_interface_table(self):
     #     interface = ""
     #     for i in range(self.interface_count):
-    #         interface += format(self.data[i + 18 + self.constant_pool], '02X')
+    #         interface += format(self.data[i + 18 + self.constant_pool_length], '02X')
     #     return interface
     #
     # def get_field_count(self):
@@ -107,12 +72,12 @@ class ClassFile:
     #     #    field += format(self.data[i + 20 + self.cp_and_ic], '02X')
     #     return field
 
-    def get_method_count(self):
-        return self.data[20 + self.cp_ic_fc] + self.data[21 + self.cp_ic_fc]
+    #def get_method_count(self):
+    #    return self.data[20 + self.cp_ic_fc] + self.data[21 + self.cp_ic_fc]
 
-    def get_method_table(self):
-        method = self.data[22+self.cp_ic_fc:22+self.cp_ic_fc+self.method_count]
-        return method
+    #def get_method_table(self):
+    #    method = self.data[22+self.cp_ic_fc:22+self.cp_ic_fc+self.method_count]
+    #    return method
     #
     # def get_attribute_count(self):
     #     return self.data[22 + self.cp_ic_fc_mc] + self.data[23 + self.cp_ic_fc_mc]
@@ -122,16 +87,14 @@ class ClassFile:
     #     # for i in range(self.attribute_count):
     #     #    attribute += format(self.data[i + 24 + self.cp_ic_fc_mc], '02X')
     #     return attribute
-    #
+
     def print_self(self):
     #     print(self)
         print("Magic: ", self.magic)
         print("Minor version: ", self.minor)
         print("Major version: ", self.major)
         print("Constant pool count: ", self.constant_pool_count)
-    #    print("Constant pool helper: ", self.constant_pool_helper)
-        print("Constant pool table: ", self.constant_table)
-        print("Constant pool byte length: ", self.constant_pool_length)
+        self.constant_table.print_message()
     #     print("Access flags: ", hex(self.access_flags[0]), hex(self.access_flags[1]))
     #     print("This class: ", self.this_class)
     #     print("Superclass: ", self.superclass)
@@ -145,10 +108,10 @@ class ClassFile:
     #    print("Opcode table: ",''.join("%02x, "%i for i in self.method_table))
     #     print("Attribute count: ", self.attribute_count)
     #     print("Attribute table: ", "[%s]" % ", ".join(map(str, self.attribute_table)))
-	
-    def run_opcodes(self):
-        opcodes = OpCodes(self.method_table)
-        opcodes.run()
+
+    # def run_opcodes(self):
+    #    opcodes = OpCodes(self.method_table)
+    #    opcodes.run()
 
 #
 # if '__main__' == __name__:
@@ -156,7 +119,7 @@ class ClassFile:
 
 class OpCodes:
     def __init__(self,opcodes=[]):
-        self.table = self.load() #{0x00: self.not_implemented} #TODO read in table with opcodes
+        self.table = self.load() #{0x00: self.not_implemented} #read in table with opcodes
         self.stack = []
         self.opcodes = opcodes
         #self.run()
