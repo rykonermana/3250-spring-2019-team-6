@@ -302,15 +302,15 @@ class OpCodes:
             return(self.stack.pop())
         elif (methodRef == "java/util/Scanner.nextString:()Ljava.lang/String"):
             userinput = str(input())
-            print(myinput)
+            print(userinput)
             return input
         elif (methodRef == "java/util/Scanner.nextInt:()I"):
             userinput = str(input())
-            print(myinput)
+            print(userinput)
             return int(input())
         elif (methodRef == "java/util/Scanner.nextDouble:()D"):
             userinput = str(input())
-            print(myinput)
+            print(userinput)
             return float(input())
         else:
             return("not implemented")
