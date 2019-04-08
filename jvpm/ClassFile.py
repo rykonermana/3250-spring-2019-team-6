@@ -332,5 +332,11 @@ class OpCodes:
         #    return(long(self.stack.pop()))
         elif (methodRef == "java/io/PrintStream.println:(Ljava/lang/String;)V"):
             return(self.stack.pop())
+        elif (methodRef == "java/util/Scanner.nextString:()Ljava.lang/String"):
+            return input()
+        elif (methodRef == "java/util/Scanner.nextInt:()I"):
+            return int(input())
+        elif (methodRef == "java/util/Scanner.nextDouble:()D"):
+            return double(input())
         else:
             return("not implemented")
