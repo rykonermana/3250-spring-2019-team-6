@@ -162,8 +162,8 @@ class OpCodes:
         getattr(self, self.table[value])()
         return self.table[value]
 
-    def push_int_to_stack(self,value):
-        if(value>2147483647 or value<-2147483648):
+    def push_int_to_stack(self, value):
+        if value>2147483647 or value < -2147483648:
             raise ValueError()
         else:
             self.stack.append(value)
@@ -205,22 +205,22 @@ class OpCodes:
         self.push_int_to_stack(self.stack.pop() * (-1))
 
     def ior(self):
-        self.push_int_to_stack(self.stack.pop()|self.stack.pop())
+        self.push_int_to_stack(self.stack.pop() | self.stack.pop())
 
     def irem(self):
-        self.push_int_to_stack(self.stack.pop()%self.stack.pop())
+        self.push_int_to_stack(self.stack.pop() % self.stack.pop())
 
     def ishl(self):
-        self.push_int_to_stack(self.stack.pop()<<self.stack.pop())
+        self.push_int_to_stack(self.stack.pop() << self.stack.pop())
 
     def ishr(self):
-        self.push_int_to_stack(self.stack.pop()>>self.stack.pop())
+        self.push_int_to_stack(self.stack.pop() >> self.stack.pop())
 
     def isub(self):
         self.push_int_to_stack(self.stack.pop()-self.stack.pop())
 
     def iushr(self):
-        self.push_int_to_stack((self.stack.pop() % 0x100000000) >> self.stack.pop())#needs testing
+        self.push_int_to_stack((self.stack.pop() % 0x100000000) >> self.stack.pop())  # needs testing
 
     def ixor(self):
         self.push_int_to_stack(self.stack.pop() ^ self.stack.pop())
@@ -256,10 +256,9 @@ class OpCodes:
         self.localvar[index] = self.stack.pop()
 
     def i2b(self):
-        self.stack.append(self.stack.pop().to_bytes(length = 1, byteorder = 'big', signed = True))
+        self.stack.append(self.stack.pop().to_bytes(length=1, byteorder='big', signed=True))
 
     def i2c(self):
-        #self.stack.append(self.stack.pop().char(c))
         self.stack.append(chr(self.stack.pop()))
 
     def i2d(self):
@@ -272,7 +271,7 @@ class OpCodes:
         max = 2 ** 64 - 1
         min = -2 ** 64
         value = self.stack.pop()
-        if value >= min and value <= max:
+        if min <= value <= max:
             self.stack.append(value / 1.0)
         else:
             raise ValueError("Value {} cannot be converted to long".format(value))
@@ -281,17 +280,16 @@ class OpCodes:
         max = 2**16-1
         min = -2**16
         value = self.stack.pop()
-        if value >= min and value <= max:
+        if min <= value <= max:
             self.stack.append(value/1.0)
         else:
             raise ValueError("Value {} cannot be converted to short".format(value))
 
-
-    def invoke_virtual(self, methodRef):
+    def invoke_virtual(self, method_Ref):
         if methodRef == "java/io/PrintStream.println:(I)V":
             return int(self.stack.pop())
-        #elif (methodRef == "java/util/Stack.push:(Ljava/lang/Object;)Ljava/lang/Object"):
-        #return self.stack.append(self.stack.pop())
+        # elif (methodRef == "java/util/Stack.push:(Ljava/lang/Object;)Ljava/lang/Object"):
+        # return self.stack.append(self.stack.pop())
         elif methodRef == "java/io/PrintStream.println:(Z)V":
             x = self.stack.pop()
             if x == 1:
@@ -299,8 +297,8 @@ class OpCodes:
             elif x == 0:
                 return "false"
             else:
-                return "not a boolean"  #Case probably raises an exception not 'not a boolean' - Christian
-        #elif (methodRef == "Method java/io/PrintStream.println:(D)V"):
+                return "not a boolean"  # Case probably raises an exception not 'not a boolean' - Christian
+        # elif (methodRef == "Method java/io/PrintStream.println:(D)V"):
         #    return(long(self.stack.pop()))
         elif methodRef == "java/io/PrintStream.println:(Ljava/lang/String;)V":
             return self.stack.pop()
