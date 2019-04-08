@@ -301,10 +301,16 @@ class OpCodes:
         elif (methodRef == "java/io/PrintStream.println:(Ljava/lang/String;)V"):
             return(self.stack.pop())
         elif (methodRef == "java/util/Scanner.nextString:()Ljava.lang/String"):
-            return str(input())
+            userinput = str(input())
+            print(myinput)
+            return input
         elif (methodRef == "java/util/Scanner.nextInt:()I"):
+            userinput = str(input())
+            print(myinput)
             return int(input())
         elif (methodRef == "java/util/Scanner.nextDouble:()D"):
+            userinput = str(input())
+            print(myinput)
             return float(input())
         else:
             return("not implemented")
