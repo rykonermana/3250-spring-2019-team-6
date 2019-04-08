@@ -359,10 +359,16 @@ class OpCodes:
         elif methodRef == "java/io/PrintStream.println:(Ljava/lang/String;)V":
             return self.stack.pop()
         elif methodRef == "java/util/Scanner.nextString:()Ljava.lang/String":
-            return input()
+            userinput = str(input())
+            print(userinput)
+            return input
         elif methodRef == "java/util/Scanner.nextInt:()I":
+            userinput = str(input())
+            print(userinput)
             return int(input())
         elif methodRef == "java/util/Scanner.nextDouble:()D":
-            return double(input())
+            userinput = str(input())
+            print(userinput)
+            return float(input())
         else:
             return "not implemented"
