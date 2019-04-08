@@ -5,6 +5,7 @@ import array
 from jvpm.constant_table import ConstantTable
 # unittest
 
+
 class ClassFile:
     def __init__(self, file='test/HelloWorld.class'):
         with open(file, 'rb') as binary_file:
@@ -27,7 +28,7 @@ class ClassFile:
             # self.field_table = self.get_field_table()
             # self.method_count = self.get_method_count()
             # self.method_table = self.get_method_table()
-            #self.cp_ic_fc_mc = self.cp_ic_fc + len(self.method_table)
+            # self.cp_ic_fc_mc = self.cp_ic_fc + len(self.method_table)
             # self.attribute_count = self.get_attribute_count()
             # self.attribute_table = self.get_attribute_table()
 
@@ -51,13 +52,16 @@ class ClassFile:
     #     return self.data[10 + self.constant_pool_length-1:11 + self.constant_pool_length]
     #
     # def get_this_class(self):
-    #     return self.data[12 + self.constant_pool_length] + self.data[13 + self.constant_pool_length]
+    #     return self.data[12 + self.constant_pool_length]
+    #     + self.data[13 + self.constant_pool_length]
     #
     # def get_super_class(self):
-    #     return self.data[14 + self.constant_pool_length] + self.data[15 + self.constant_pool_length]
+    #     return self.data[14 + self.constant_pool_length]
+    #     + self.data[15 + self.constant_pool_length]
     #
     # def get_interface_count(self):
-    #     return self.data[16 + self.constant_pool_length] + self.data[17 + self.constant_pool_length]
+    #     return self.data[16 + self.constant_pool_length] + self.data[17
+    #     + self.constant_pool_length]
     #
     # def get_interface_table(self):
     #     interface = ""
@@ -74,10 +78,10 @@ class ClassFile:
     #     #    field += format(self.data[i + 20 + self.cp_and_ic], '02X')
     #     return field
 
-    #def get_method_count(self):
+    # def get_method_count(self):
     #    return self.data[20 + self.cp_ic_fc] + self.data[21 + self.cp_ic_fc]
 
-    #def get_method_table(self):
+    # def get_method_table(self):
     #    method = self.data[22+self.cp_ic_fc:22+self.cp_ic_fc+self.method_count]
     #    return method
     #
@@ -91,7 +95,6 @@ class ClassFile:
     #     return attribute
 
     def print_self(self):
-    #     print(self)
         print("Magic: ", self.magic)
         print("Minor version: ", self.minor)
         print("Major version: ", self.major)
@@ -105,9 +108,9 @@ class ClassFile:
     #     print("Field count: ", self.field_count)
     #     print("Cp + Ic + fc: ", self.cp_ic_fc)
     #     print("Field table: ", "[%s]" % ", ".join(map(str, self.field_table)))
-    #    print("Method count: ", self.method_count)
+    #     print("Method count: ", self.method_count)
     #     print("Cp + IC + Fc + Mc: ", self.cp_ic_fc_mc)
-    #    print("Opcode table: ",''.join("%02x, "%i for i in self.method_table))
+    #     print("Opcode table: ",''.join("%02x, "%i for i in self.method_table))
     #     print("Attribute count: ", self.attribute_count)
     #     print("Attribute table: ", "[%s]" % ", ".join(map(str, self.attribute_table)))
 
@@ -115,40 +118,41 @@ class ClassFile:
         opcodes = OpCodes(self.method_table)
         opcodes.run()
 
-#
 # if '__main__' == __name__:
 #     ClassFile()
+
 
 '''class LocalVar:
     def __init__(self, localvar=[]):
         self.localvar = localvar
 '''
 
+
 class OpCodes:
 
-    def __init__(self,opcodes=[]):
-        self.table = self.load() #{0x00: self.not_implemented} #read in table with opcodes
+    def __init__(self, opcodes=[]):
+        self.table = self.load() # {0x00: self.not_implemented} #read in table with opcodes
         self.stack = []
         self.localvar = [0]*10
         self.opcodes = opcodes
-        #self.run()
+        # self.run()
 
     def load(self):
-	    dict1 = {}
-	    with open('jvpm/files/int_opcodes.csv', 'r') as csvfile:
-		    spamreader = csv.DictReader(csvfile)
-		    for x in list(spamreader):
-			    the_number = int(x['opcode'].strip(),16)
-			    dict1[the_number]=x['name'].strip()
-	    return dict1
+        dict1 = {}
+        with open('jvpm/files/int_opcodes.csv', 'r') as csvfile:
+            spamreader = csv.DictReader(csvfile)
+            for x in list(spamreader):
+                the_number = int(x['opcode'].strip(), 16)
+                dict1[the_number] = x['name'].strip()
+        return dict1
 
     def run(self):
         for _ in self.opcodes:
             print("stack: ", self.stack)  # pragma: no cover
-            #method = self.interpret(i)
-            #print("running method", method, "...")
-            #print("finished method", method, "...")
-            #test = input()
+            # method = self.interpret(i)
+            # print("running method", method, "...")
+            # print("finished method", method, "...")
+            # test = input()
 
     def not_implemented(self):
         return 'not implemented'
@@ -283,28 +287,28 @@ class OpCodes:
             raise ValueError("Value {} cannot be converted to short".format(value))
 
 
-    def invokeVirtual(self, methodRef):
-        if (methodRef == "java/io/PrintStream.println:(I)V"):
-            return(int(self.stack.pop()))
+    def invoke_virtual(self, methodRef):
+        if methodRef == "java/io/PrintStream.println:(I)V":
+            return int(self.stack.pop())
         #elif (methodRef == "java/util/Stack.push:(Ljava/lang/Object;)Ljava/lang/Object"):
-        #   return self.stack.append(self.stack.pop())
-        elif (methodRef == "java/io/PrintStream.println:(Z)V"):
+        #return self.stack.append(self.stack.pop())
+        elif methodRef == "java/io/PrintStream.println:(Z)V":
             x = self.stack.pop()
-            if (x == 1):
-                return("true")
-            elif (x == 0):
-                return("false")
+            if x == 1:
+                return "true"
+            elif x == 0:
+                return "false"
             else:
-                return("not a boolean")  # Case probably raises an exception not 'not a boolean' - Christian
+                return "not a boolean"  #Case probably raises an exception not 'not a boolean' - Christian
         #elif (methodRef == "Method java/io/PrintStream.println:(D)V"):
         #    return(long(self.stack.pop()))
-        elif (methodRef == "java/io/PrintStream.println:(Ljava/lang/String;)V"):
-            return(self.stack.pop())
-        elif (methodRef == "java/util/Scanner.nextString:()Ljava.lang/String"):
+        elif methodRef == "java/io/PrintStream.println:(Ljava/lang/String;)V":
+            return self.stack.pop()
+        elif methodRef == "java/util/Scanner.nextString:()Ljava.lang/String":
             return input()
-        elif (methodRef == "java/util/Scanner.nextInt:()I"):
+        elif methodRef == "java/util/Scanner.nextInt:()I":
             return int(input())
-        elif (methodRef == "java/util/Scanner.nextDouble:()D"):
+        elif methodRef == "java/util/Scanner.nextDouble:()D":
             return double(input())
         else:
-            return("not implemented")
+            return "not implemented"
