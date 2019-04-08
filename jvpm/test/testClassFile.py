@@ -3,9 +3,10 @@ from unittest.mock import mock_open, patch
 from jvpm.ClassFile import ClassFile
 
 class TestClassFile(unittest.TestCase):
-	#test class of reading java byte code
+    #test class of reading java byte code
+    
     def setUp(self):
-            self.cf = ClassFile('jvpm/files/HelloWorld.class')
+        self.cf = ClassFile('jvpm/files/HelloWorld.class')
 
     def test_magic(self):
         self.assertEqual(self.cf.get_magic(), 'CAFEBABE')
