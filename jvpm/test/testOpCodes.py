@@ -1,3 +1,4 @@
+"""Unittest to be used with ClassFile.py"""
 import unittest
 from unittest.mock import mock_open, patch
 from unittest.mock import MagicMock
@@ -5,53 +6,54 @@ from jvpm.ClassFile import OpCodes
 
 
 class TestOpCodes(unittest.TestCase):
-    #def test_not_implemented(self):
+    """Unittest for opcodes"""
+    # def test_not_implemented(self):
     #   self.assertEqual(OpCodes().interpret(0), 'not implemented')
     #   with self.assertRaises(KeyError):
     #   OpCodes().interpret(1)
-    
+
     def test_iadd_simple(self):
         testiadd = OpCodes()
         testiadd.stack.append(2)
         testiadd.stack.append(2)
         testiadd.iadd()
         self.assertEqual(testiadd.stack.pop(), 4)
-	      
+
     def test_int_overflow_positive(self):
         testiadd = OpCodes()
-        self.assertRaises(ValueError,testiadd.push_int_to_stack, 2147483648)
-        
+        self.assertRaises(ValueError, testiadd.push_int_to_stack, 2147483648)
+
     def test_int_overflow_negative(self):
         testiadd = OpCodes()
-        self.assertRaises(ValueError,testiadd.push_int_to_stack, -2147483649)
-        
+        self.assertRaises(ValueError, testiadd.push_int_to_stack, -2147483649)
+
     def test_int_max_positive(self):
         testop = OpCodes()
         testop.push_int_to_stack(2147483647)
-        self.assertEqual(testop.stack.pop(),2147483647)
-        
+        self.assertEqual(testop.stack.pop(), 2147483647)
+
     def test_int_min_negative(self):
         testop = OpCodes()
         testop.push_int_to_stack(-2147483648)
-        self.assertEqual(testop.stack.pop(),-2147483648)
-        
+        self.assertEqual(testop.stack.pop(), -2147483648)
+
     def test_iand_simple(self):
         testiand = OpCodes()
         testiand.stack.append(5)
         testiand.stack.append(3)
         testiand.iand()
         self.assertEqual(testiand.stack.pop(), 1)
-        
+
     def test_iconst_m1_simple(self):
         testiconst_m1 = OpCodes()
         testiconst_m1.iconst_m1()
         self.assertEqual(testiconst_m1.stack.pop(), -1)
-        
+
     def test_iconst_0_simple(self):
         testiconst_0 = OpCodes()
         testiconst_0.iconst_0()
         self.assertEqual(testiconst_0.stack.pop(), 0)
-
+        
     def test_iconst_1_simple(self):
         testiconst_1 = OpCodes()
         testiconst_1.iconst_1()
@@ -132,12 +134,12 @@ class TestOpCodes(unittest.TestCase):
         test8.isub()
         self.assertEqual(test8.stack.pop(), 4)
 
-    #I wasn't sure about iushr so i commented it out for now - Christian
-    #def test_iushr_simple(self):
-        #test9 = OpCodes()
-        #test9.stack.append(3)
-        #test9.stack.append(8)
-        #test9.ishr()
+    # I wasn't sure about iushr so i commented it out for now - Christian
+    # def test_iushr_simple(self):
+        # test9 = OpCodes()
+        # test9.stack.append(3)
+        # test9.stack.append(8)
+        # test9.ishr()
 
     def test_ixor_simple(self):
         test10 = OpCodes()
@@ -149,16 +151,18 @@ class TestOpCodes(unittest.TestCase):
     def test_invokeVirtual(self):
         test11 = OpCodes()
         test11.stack.append(7)
-        self.assertEqual(test11.invokeVirtual("java/io/PrintStream.println:(I)V"), 7)
-        #test11.stack.append(4.321)
-        #self.assertEqual(test11.invokeVirtual("Method java/io/PrintStream.println:(D)V"), 4.321)
+        self.assertEqual(test11.invoke_virtual("java/io/PrintStream.println:(I)V"), 7)
+        # test11.stack.append(4.321)
+        # self.assertEqual(test11.invokeVirtual("Method java/io/PrintStream.println:(D)V"), 4.321)
         test11.stack.append(1)
-        self.assertEqual(test11.invokeVirtual("java/io/PrintStream.println:(Z)V"), 'true')
+        self.assertEqual(test11.invoke_virtual("java/io/PrintStream.println:(Z)V"), 'true')
         test11.stack.append(0)
-        self.assertEqual(test11.invokeVirtual("java/io/PrintStream.println:(Z)V"), 'false')
+        self.assertEqual(test11.invoke_virtual("java/io/PrintStream.println:(Z)V"), 'false')
         test11.stack.append("HelloWorld")
-        self.assertEqual(test11.invokeVirtual("java/io/PrintStream.println:(Ljava/lang/String;)V"), 'HelloWorld')
-        self.assertEqual(test11.invokeVirtual("java/util/Stack.push:(Ljava/lang/Object;)Ljava/lang/Object"), 'not implemented')
+        self.assertEqual(test11.invoke_virtual("java/io/PrintStream.println:"
+                                               "(Ljava/lang/String;)V"), 'HelloWorld')
+        self.assertEqual(test11.invoke_virtual("java/util/Stack.push:"
+                                               "(Ljava/lang/Object;)Ljava/lang/Object"), 'not implemented')
 
     def test_i2b_simple(self):
         test = OpCodes()
@@ -175,12 +179,12 @@ class TestOpCodes(unittest.TestCase):
     def test_i2b_showerror(self):
         test = OpCodes()
         test.stack.append(128)
-        self.assertRaises(OverflowError,test.i2b)
+        self.assertRaises(OverflowError, test.i2b)
 
     def test_showError(self):
         test = OpCodes()
         test.stack.append(-129)
-        self.assertRaises(OverflowError,test.i2b)
+        self.assertRaises(OverflowError, test.i2b)
 
     def test_i2c_simpletest(self):
         test = OpCodes()
