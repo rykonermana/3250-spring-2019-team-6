@@ -10,7 +10,7 @@ public class JavaTest {
       int c;
       double d;
       byte e;
-      int myint;
+      int myInt;
          
       a = 1 + 2;
       b = 3 / 4;
@@ -26,7 +26,7 @@ public class JavaTest {
       c = a ^ b;
       d = c;
       
-      myint = Reader.nextInt();
+      myInt = Reader.nextInt();
       System.out.println("This is my integer: " + myint);
       System.out.println("Hello World");
             
