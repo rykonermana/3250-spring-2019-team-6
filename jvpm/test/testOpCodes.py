@@ -53,7 +53,7 @@ class TestOpCodes(unittest.TestCase):
         testiconst_0 = OpCodes()
         testiconst_0.iconst_0()
         self.assertEqual(testiconst_0.stack.pop(), 0)
-        
+
     def test_iconst_1_simple(self):
         testiconst_1 = OpCodes()
         testiconst_1.iconst_1()
