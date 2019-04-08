@@ -323,14 +323,14 @@ class TestOpCodes(unittest.TestCase):
     def test_strscanner_simple(self):
         teststrscanner = OpCodes()
         with unittest.mock.patch('builtins.input', return_value = "Testing"):
-            assert teststrscanner.invokeVirtual("java/util/Scanner.nextString:()Ljava.lang/String") == "Testing"
+            self.assertEqual(teststrscanner.invoke_virtual("java/util/Scanner.nextString:()Ljava.lang/String"), "Testing")
 
     def test_intscanner_simple(self):
         testintscanner = OpCodes()
         with unittest.mock.patch('builtins.input', return_value = 2):
-            assert testintscanner.invokeVirtual("java/util/Scanner.nextInt:()I") == 2
+            assert testintscanner.invoke_virtual("java/util/Scanner.nextInt:()I") == 2
 
     def test_floatscanner_simple(self):
         testfloatscanner = OpCodes()
         with unittest.mock.patch('builtins.input', return_value = 1.0):
-            assert testfloatscanner.invokeVirtual("java/util/Scanner.nextDouble:()D") == 1.0
+            assert testfloatscanner.invoke_virtual("java/util/Scanner.nextDouble:()D") == 1.0

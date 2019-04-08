@@ -361,13 +361,13 @@ class OpCodes:
         elif methodRef == "java/util/Scanner.nextString:()Ljava.lang/String":
             userinput = str(input())
             print(userinput)
-            return input
+            return str(input())
         elif methodRef == "java/util/Scanner.nextInt:()I":
-            userinput = str(input())
+            userinput = int(input())
             print(userinput)
             return int(input())
         elif methodRef == "java/util/Scanner.nextDouble:()D":
-            userinput = str(input())
+            userinput = float(input())
             print(userinput)
             return float(input())
         else:
