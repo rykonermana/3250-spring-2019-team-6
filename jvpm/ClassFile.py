@@ -164,122 +164,90 @@ class OpCodes:
         else:
             self.stack.append(value)
 
-    #adds top two operands in the stack and returns the value
     def iadd(self):
         self.push_int_to_stack(self.stack.pop() + self.stack.pop())
 
-    #Compares top two integer bits in the stack and returns the AND result
     def iand(self):
         self.push_int_to_stack(self.stack.pop() & self.stack.pop())
 
-    #Pushes -1 onto the stack
     def iconst_m1(self):
         self.push_int_to_stack(-1)
 
-    #Pushes 0 onto the stack
     def iconst_0(self):
         self.push_int_to_stack(0)
 
-    #Pushes 1 onto the stack
     def iconst_1(self):
         self.push_int_to_stack(1)
 
-    #Pushes 2 onto the stack
     def iconst_2(self):
         self.push_int_to_stack(2)
 
-    #Pushes 3 onto the stack
     def iconst_3(self):
         self.push_int_to_stack(3)
 
-    #Pushes 4 onto the stack
     def iconst_4(self):
         self.push_int_to_stack(4)
 
-    #Pushes 5 onto the stack
     def iconst_5(self):
         self.push_int_to_stack(5)
 
-    #Divides top two integers on the stack and pushes the integer answer
     def idiv(self):
         self.push_int_to_stack(self.stack.pop()//self.stack.pop())
 
-    #Multiplies top two integers on the stack and pushes the result to the stack
     def imul(self):
         self.push_int_to_stack(self.stack.pop()*self.stack.pop())
 
-    #Pushes the next integer on the stack *-1
     def ineg(self):
         self.push_int_to_stack(self.stack.pop() * (-1))
 
-    #Pushes bitwise int OR into the stack of the top two integers
     def ior(self):
         self.push_int_to_stack(self.stack.pop()|self.stack.pop())
 
-    #Pushes the remainder of the division of the top two integers in the stack
     def irem(self):
         self.push_int_to_stack(self.stack.pop()%self.stack.pop())
 
-    #Pushes the next integer on the stack back onto it after it was shifted left by the amount
-    #of the the second integer on the stack
     def ishl(self):
         self.push_int_to_stack(self.stack.pop()<<self.stack.pop())
 
-    #Pushes the next integer on the stack back onto it after it was arithmetically shifted right by the amount
-    #of the the second integer on the stack
     def ishr(self):
         self.push_int_to_stack(self.stack.pop()>>self.stack.pop())
 
-    #Pushes the result of the top two integers of the stack back onto the stack
     def isub(self):
         self.push_int_to_stack(self.stack.pop()-self.stack.pop())
 
-    #Pushes the next integer on the stack back onto it after it was logically shifted right by the amount
-    #of the the second integer on the stack
     def iushr(self):
         self.push_int_to_stack((self.stack.pop() % 0x100000000) >> self.stack.pop())#needs testing
 
-    #Pushes the exclusive OR result of the top two integers of the stack back onto the stack
     def ixor(self):
         self.push_int_to_stack(self.stack.pop() ^ self.stack.pop())
 
-    #Load specified integer value onto the operand stack
     def iload(self, index):
         self.stack.append(self.localvar[index])
 
-    #Load integer value in localvar list at index 0 to operand stack
     def iload_0(self, index):
         self.stack.append(self.localvar[index])
 
-    #Load integer value in localvar list at index 1 to operand stack
     def iload_1(self, index):
         self.stack.append(self.localvar[index])
 
-    #Load integer value in localvar list at index 2 to operand stack
     def iload_2(self, index):
         self.stack.append(self.localvar[index])
 
-    #Load integer value in localvar list at index 3 to operand stack
     def iload_3(self, index):
         self.stack.append(self.localvar[index])
 
-    #Store specified integer value into localvar list at index 0
     def istore(self, index):
         self.localvar[index] = self.stack.pop()
 
-    #Store specified integer value into localvar list at index 0
     def istore_0(self, index):
         self.localvar[index] = self.stack.pop()
 
-    #Store integer value on operand stack to localvar list at index 1
     def istore_1(self, index):
         self.localvar[index] = self.stack.pop()
 
-    #Store integer value on operand stack to localvar list at index 2
     def istore_2(self, index):
         self.localvar[index] = self.stack.pop()
 
-    #Store integer value on operand stack to localvar list at index 3
     def istore_3(self, index):
         self.localvar[index] = self.stack.pop()
 
