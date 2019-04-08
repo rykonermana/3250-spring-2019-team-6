@@ -11,6 +11,8 @@ public class JavaTest {
       double d;
       byte e;
       int myInt;
+      double myDouble;
+      String myString;
          
       a = 1 + 2;
       b = 3 / 4;
@@ -26,8 +28,12 @@ public class JavaTest {
       c = a ^ b;
       d = c;
       
+      myString = Reader.nextLine();
+      System.out.println("This is my string: " + myString);
       myInt = Reader.nextInt();
-      System.out.println("This is my integer: " + myint);
+      System.out.println("This is my integer: " + myInt);
+      myDouble = Reader.nextDouble();
+      System.out.println("This is my double: " + myDouble);
       System.out.println("Hello World");
             
    }
