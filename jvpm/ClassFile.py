@@ -4,6 +4,7 @@ import csv
 import struct
 import array
 from .constant_table import ConstantTable
+
 # unittest
 
 class ClassFile():
