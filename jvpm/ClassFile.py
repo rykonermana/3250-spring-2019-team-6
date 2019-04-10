@@ -3,7 +3,7 @@ import unittest
 import csv
 import struct
 import array
-from jvpm.constant_table import ConstantTable
+from constant_table import ConstantTable
 # unittest
 
 
@@ -26,7 +26,7 @@ class ClassFile:
             # self.cp_and_ic = self.interface_count + self.constant_table['length']
             # self.interface_table = self.get_interface_table()
             # self.field_count = self.get_field_count()
-            # self.cp_ic_fc = 224 #  = self.cp_and_ic + self.field_count
+            self.cp_ic_fc = 224 #  = self.cp_and_ic + self.field_count
             # self.field_table = self.get_field_table()
             # self.method_count = self.get_method_count()
             # self.method_table = self.get_method_table()
@@ -359,16 +359,10 @@ class OpCodes:
         elif methodRef == "java/io/PrintStream.println:(Ljava/lang/String;)V":
             return self.stack.pop()
         elif methodRef == "java/util/Scanner.nextString:()Ljava.lang/String":
-            userinput = str(input())
-            print(userinput)
             return str(input())
         elif methodRef == "java/util/Scanner.nextInt:()I":
-            userinput = int(input())
-            print(userinput)
             return int(input())
         elif methodRef == "java/util/Scanner.nextDouble:()D":
-            userinput = float(input())
-            print(userinput)
             return float(input())
         else:
             return "not implemented"
