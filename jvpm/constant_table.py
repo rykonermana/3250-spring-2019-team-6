@@ -14,67 +14,58 @@ class ConstantTable:
     def get_constant_pool_table(self):
         """parses java byte code to retrieve raw constant pool"""
         the_table = {}
-        active_position = 10
+        INIT_POSITION = 10
+        active_position = INIT_POSITION
         for i in range(1, self.constant_pool_count+1):
-            dict_constant = {}
-            constant_code = 0
-            for j in self.data[active_position:active_position+1]:
-                constant_code += j
+            #3 steps here: get constant type from bytes, get additional bytes for constant code, get utf-8 variable length message. split???
+            constant_code = self.parse_double_bytes_value(self.data,active_position)
             active_position += 1
-            dict_constant['constant_code'] = constant_code
             message_length = int(self.constant_pool_helper[constant_code]['num_initial_bytes'])
-            dict_constant['message'] = self.data[active_position:active_position+message_length]
-            dict_constant['decode'] = self.constant_pool_helper[constant_code]['decode']
-            dict_constant['format'] = self.constant_pool_helper[constant_code]['format']
+            dict_constant = {'constant_code':constant_code, 'message': self.data[active_position:active_position+message_length]}
             active_position += message_length
             if self.constant_pool_helper[constant_code]['variable_length']:
-                value_length = int(dict_constant['message'][0]) + int(dict_constant['message'][1])
-                dict_constant['value'] = self.data[active_position:active_position+value_length]
+                value_length = self.parse_double_bytes_value(dict_constant['message'],0)
+                dict_constant['decrypted_message'] = self.data[active_position:active_position+value_length].decode('utf-8', 'replace')
                 active_position += value_length
             the_table[i] = dict_constant
-        return the_table, (active_position - 10)
+        return the_table, (active_position - INIT_POSITION)
 
     def get_constant_messages(self):
         """loop through constants to get values"""
         for i in range(1, self.constant_pool_count+1):
             self.check_or_parse_constant(i)
 
-    def final_constant(self, number):
-        """return constant for utf-8 constant"""
-        return self.constant_table[number]['value'].decode('utf-8', 'replace')
-
     def check_or_parse_constant(self, constant_number):
         """check if final constant value exists or begin call to retrieve"""
         if not 'decrypted_message' in self.constant_table[constant_number].keys():
-            decoded = getattr(self, self.constant_table[constant_number]['decode'])(constant_number)
+            parse_message_string = self.constant_pool_helper[self.constant_table[constant_number]['constant_code']]['decode']
+            decoded = getattr(self, parse_message_string)(constant_number)
             self.constant_table[constant_number]['decrypted_message'] = decoded
 
-    def nested_constant_1(self, number):
-        """return the final constant value for 1-byte code"""
-        constant_number = self.constant_table[number]['message'][0]
-        constant_number += self.constant_table[number]['message'][1]
-        self.check_or_parse_constant(constant_number)
-        return self.constant_table[constant_number]['decrypted_message']
+    def nested_constant(self, number):
+        """return all constants associated with something"""
+        constant_code = self.constant_table[number]['constant_code']
+        num_bytes = self.constant_pool_helper[constant_code]['num_initial_bytes']
+        num_constants = num_bytes // 2 #2 bytes per constant
+        offset = num_bytes % 2 #Method handle first byte is some descriptor
+        string_format = self.constant_pool_helper[constant_code]['format']
+        constant_message =[]
+        for i in range(num_constants):
+            constant_numbers = self.parse_double_bytes_value(self.constant_table[number]['message'],offset+2*i)
+            self.check_or_parse_constant(constant_numbers)
+            constant_message.append(self.constant_table[constant_numbers]['decrypted_message'])
+        return str(string_format).join(constant_message)
 
-    def nested_constant_2(self, number):
-        """return the final constant value for 2-byte code"""
-        constant_number_1 = self.constant_table[number]['message'][0]
-        constant_number_1 += self.constant_table[number]['message'][1]
-        constant_number_2 = self.constant_table[number]['message'][2]
-        constant_number_2 += self.constant_table[number]['message'][3]
-        self.check_or_parse_constant(constant_number_1)
-        self.check_or_parse_constant(constant_number_2)
-        return self.constant_table[number]['format'].format(self.constant_table[constant_number_1]['decrypted_message'], self.constant_table[constant_number_2]['decrypted_message'])
+    def parse_double_bytes_value(self,bytes, start):
+        """returns values of two byte constant"""
+        return bytes[start] + bytes[start+1]
 
-    def nested_constant_plus(self, number):
-        """return the final constant value for a MethodHandle"""
-        constant_number_1 = self.constant_table[number]['message'][1] + self.constant_table[number]['message'][2]
-        self.check_or_parse_constant(constant_number_1)
-        return self.constant_table[number]['format'].format(self.constant_table[constant_number_1])
-
-    def print_message(self):
+    def __str__(self):
         """Return the javap version of the constant"""
-        print("Constant pool: \n", "%s" % "\n ".join(map(lambda x: "{: >10} = {: <15}{}".format('#'+str(x), self.constant_pool_helper[self.constant_table[x]['constant_code']]['description'], self.constant_table[x]['decrypted_message']), self.constant_table)))
+        the_result = "Constant pool: \n", "%s" % "\n ".join(map(lambda x: "{: >10} = {: <15}{}".format('#'+str(x), 
+            self.constant_pool_helper[self.constant_table[x]['constant_code']]['description'], 
+            self.constant_table[x]['decrypted_message']), self.constant_table))
+        return ''.join(the_result)
 
 def load_constant_helper():
     """loads file with details on each constant type"""

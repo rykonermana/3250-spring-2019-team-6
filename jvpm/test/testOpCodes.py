@@ -2,7 +2,7 @@
 import unittest
 from unittest.mock import mock_open, patch
 from unittest.mock import MagicMock
-from jvpm.ClassFile import OpCodes
+from ..ClassFile import OpCodes
 
 
 class TestOpCodes(unittest.TestCase):

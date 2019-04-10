@@ -3,11 +3,10 @@ import unittest
 import csv
 import struct
 import array
-from constant_table import ConstantTable
+from .constant_table import ConstantTable
 # unittest
 
-
-class ClassFile:
+class ClassFile():
     """Main file of the java python virtual machine"""
     def __init__(self, file='test/HelloWorld.class'):
         with open(file, 'rb') as binary_file:
@@ -26,7 +25,7 @@ class ClassFile:
             # self.cp_and_ic = self.interface_count + self.constant_table['length']
             # self.interface_table = self.get_interface_table()
             # self.field_count = self.get_field_count()
-            self.cp_ic_fc = 224 #  = self.cp_and_ic + self.field_count
+            # self.cp_ic_fc = 224 #  = self.cp_and_ic + self.field_count
             # self.field_table = self.get_field_table()
             # self.method_count = self.get_method_count()
             # self.method_table = self.get_method_table()
@@ -101,13 +100,13 @@ class ClassFile:
     #     #    attribute += format(self.data[i + 24 + self.cp_ic_fc_mc], '02X')
     #     return attribute
 
-    def print_self(self):
+    def __str__(self):
         """Prints out to the console"""
-        print("Magic: ", self.magic)
-        print("Minor version: ", self.minor)
-        print("Major version: ", self.major)
-        print("Constant pool count: ", self.constant_pool_count)
-        self.constant_table.print_message()
+        result = "{} {}".format("Magic:", self.magic)
+        result += "{} {}\n{} {}\n{} {}\n{}".format("Minor version: ", self.minor, 
+            "Major version: ", self.major, 
+            "Constant pool count: ", self.constant_pool_count, 
+            str(self.constant_table))
     #     print("Access flags: ", hex(self.access_flags[0]), hex(self.access_flags[1]))
     #     print("This class: ", self.this_class)
     #     print("Superclass: ", self.superclass)
@@ -121,20 +120,12 @@ class ClassFile:
     #     print("Opcode table: ",''.join("%02x, "%i for i in self.method_table))
     #     print("Attribute count: ", self.attribute_count)
     #     print("Attribute table: ", "[%s]" % ", ".join(map(str, self.attribute_table)))
+        return result
 
     def run_opcodes(self):
         """Runs the opcode class with the method table passed through it"""
         opcodes = OpCodes(self.method_table)
         opcodes.run()
-
-# if '__main__' == __name__:
-#     ClassFile()
-
-
-#   class LocalVar:
-#   def __init__(self, localvar=[]):
-#       self.localvar = localvar
-
 
 class OpCodes:
     """This class defines a method for operational codes that java virtual machine uses"""
