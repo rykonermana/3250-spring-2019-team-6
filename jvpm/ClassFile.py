@@ -3,7 +3,7 @@ import unittest
 import csv
 import struct
 import array
-from constant_table import ConstantTable
+from jvpm.constant_table import ConstantTable
 # unittest
 
 
