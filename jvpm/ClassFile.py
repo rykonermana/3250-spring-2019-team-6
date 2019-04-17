@@ -158,8 +158,8 @@ class OpCodes:
 
     def not_implemented(self):
         """Called when a certain element of the program is not yet implemented"""
-        return 'not implemented'
-
+        print "This function is not implemented."
+        raise NotImplementedError
     def interpret(self, value):
         """Interprets"""
         print("running method: ", self.table[value])  # pragma: no cover
@@ -344,10 +344,10 @@ class OpCodes:
             elif num == 0:
                 return "false"
             else:
-                return "not a boolean"
-                # Case probably raises an exception not 'not a boolean' - Christian
-        # elif (methodRef == "Method java/io/PrintStream.println:(D)V"):
-        #    return(long(self.stack.pop()))
+                self.not_implemented()
+        
+        elif (methodRef == "Method java/io/PrintStream.println:(D)V"):
+            return (self.stack.pop() / 1.0)
         elif methodRef == "java/io/PrintStream.println:(Ljava/lang/String;)V":
             return self.stack.pop()
         elif methodRef == "java/util/Scanner.nextString:()Ljava.lang/String":
@@ -355,6 +355,9 @@ class OpCodes:
         elif methodRef == "java/util/Scanner.nextInt:()I":
             return int(input())
         elif methodRef == "java/util/Scanner.nextDouble:()D":
-            return float(input())
+            return (input() / 1.0)
         else:
-            return "not implemented"
+            self.not_implemented()
+			
+			
+
