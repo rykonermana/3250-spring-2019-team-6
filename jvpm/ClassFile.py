@@ -254,45 +254,45 @@ class OpCodes:
         """Pushes the result of the operation 'exclusive or' of two numbers in the stack"""
         self.push_int_to_stack(self.stack.pop() ^ self.stack.pop())
 
-    def iload(self, index):
-        """Loads a variable from the variable array unto the stack"""
-        self.stack.append(self.localvar[index])
-
-    def iload_0(self, index):
+    def iload_0(self):
         """Loads the variable of the variable array 'index 0' unto the stack"""
-        self.stack.append(self.localvar[index])
+        INDEX = 0
+        self.stack.append(self.localvar[INDEX])
 
-    def iload_1(self, index):
+    def iload_1(self):
         """Loads the variable of the variable array 'index 1' unto the stack"""
-        self.stack.append(self.localvar[index])
+        INDEX = 1
+        self.stack.append(self.localvar[INDEX])
 
-    def iload_2(self, index):
+    def iload_2(self):
         """Loads the variable of the variable array 'index 2' unto the stack"""
-        self.stack.append(self.localvar[index])
+        INDEX = 2
+        self.stack.append(self.localvar[INDEX])
 
-    def iload_3(self, index):
+    def iload_3(self):
         """Loads the variable of the variable array 'index 3' unto the stack"""
-        self.stack.append(self.localvar[index])
+        INDEX = 3
+        self.stack.append(self.localvar[INDEX])
 
-    def istore(self, index):
-        """Stores the next number in the stack onto the variable array on the given index"""
-        self.localvar[index] = self.stack.pop()
-
-    def istore_0(self, index):
+    def istore_0(self):
         """Stores the next number in the stack onto the variable array on 'index 0'"""
-        self.localvar[index] = self.stack.pop()
+        INDEX = 0
+        self.localvar[INDEX] = self.stack.pop()
 
-    def istore_1(self, index):
+    def istore_1(self):
         """Stores the next number in the stack onto the variable array on 'index 1'"""
-        self.localvar[index] = self.stack.pop()
+        INDEX = 1
+        self.localvar[INDEX] = self.stack.pop()
 
-    def istore_2(self, index):
+    def istore_2(self):
         """Stores the next number in the stack onto the variable array on 'index 2'"""
-        self.localvar[index] = self.stack.pop()
+        INDEX = 2
+        self.localvar[INDEX] = self.stack.pop()
 
-    def istore_3(self, index):
+    def istore_3(self):
         """Stores the next number in the stack onto the variable array on 'index 3'"""
-        self.localvar[index] = self.stack.pop()
+        INDEX = 3
+        self.localvar[INDEX] = self.stack.pop()
 
     def i2b(self):
         """Pushes the next number in the stack as a byte reference"""

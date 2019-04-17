@@ -260,64 +260,52 @@ class TestOpCodes(unittest.TestCase):
         test.stack.append(-2**64-1)
         self.assertRaises(ValueError, test.i2l)
 
-    def test_iload_simple(self):
-        testiload = OpCodes()
-        testiload.localvar.insert(5, 3)
-        testiload.iload(5)
-        self.assertEqual(testiload.stack.pop(), 3)
-
     def test_iload1_simple(self):
         testiload1 = OpCodes()
         testiload1.localvar.insert(1, 8)
-        testiload1.iload_1(1)
+        testiload1.iload_1()
         self.assertEqual(testiload1.stack.pop(), 8)
 
     def test_iload0_simple(self):
         testiload0 = OpCodes()
         testiload0.localvar.insert(0, 8)
-        testiload0.iload_0(0)
+        testiload0.iload_0()
         self.assertEqual(testiload0.stack.pop(), 8)
 
     def test_iload2_simple(self):
         testiload2 = OpCodes()
         testiload2.localvar.insert(2, 6)
-        testiload2.iload_2(2)
+        testiload2.iload_2()
         self.assertEqual(testiload2.stack.pop(), 6)
 
     def test_iload3_simple(self):
         testiload3 = OpCodes()
         testiload3.localvar.insert(3, 4)
-        testiload3.iload_3(3)
+        testiload3.iload_3()
         self.assertEqual(testiload3.stack.pop(), 4)
-
-    def test_istore_simple(self):
-        testistore = OpCodes()
-        testistore.stack.append(1)
-        testistore.istore(0)
-        self.assertEqual(testistore.localvar[0], 1)
 
     def test_istore0_simple(self):
         testistore0 = OpCodes()
         testistore0.stack.append(5)
-        testistore0.istore_0(0)
+        testistore0.istore_0()
         self.assertEqual(testistore0.localvar[0], 5)
 
     def test_istore1_simple(self):
         testistore1 = OpCodes()
         testistore1.stack.append(5)
-        testistore1.istore_1(1)
+        testistore1.istore_1()
         self.assertEqual(testistore1.localvar[1], 5)
 
     def test_istore2_simple(self):
         testistore2 = OpCodes()
         testistore2.stack.append(4)
-        testistore2.istore_2(2)
+        testistore2.istore_2()
         self.assertEqual(testistore2.localvar[2], 4)
 
     def test_istore3_simple(self):
         testistore3 = OpCodes()
         testistore3.stack.append(2)
-        testistore3.istore_3(3)
+        testistore3.istore_3()
         self.assertEqual(testistore3.localvar[3], 2)
 
     def test_strscanner_simple(self):

@@ -20,7 +20,7 @@ class ConstantTable:
             #3 steps here: get constant type from bytes, get additional bytes for constant code, get utf-8 variable length message. split???
             constant_code = self.parse_double_bytes_value(self.data,active_position)
             active_position += 1
-            message_length = int(self.constant_pool_helper[constant_code]['num_initial_bytes'])
+            message_length = self.constant_pool_helper[constant_code]['num_initial_bytes']
             dict_constant = {'constant_code':constant_code, 'message': self.data[active_position:active_position+message_length]}
             active_position += message_length
             if self.constant_pool_helper[constant_code]['variable_length']:
