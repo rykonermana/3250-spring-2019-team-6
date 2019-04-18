@@ -158,8 +158,7 @@ class OpCodes:
 
     def not_implemented(self):
         """Called when a certain element of the program is not yet implemented"""
-        print "This function is not implemented."
-        raise NotImplementedError
+        raise NotImplementedError("This function is not implemented.")
     def interpret(self, value):
         """Interprets"""
         print("running method: ", self.table[value])  # pragma: no cover
@@ -333,31 +332,38 @@ class OpCodes:
     def invoke_virtual(self, methodRef):
         """Method for reading a java invoke virtual method and applying the correct method
         from python"""
-        if methodRef == "java/io/PrintStream.println:(I)V":
-            return int(self.stack.pop())
-        # elif (methodRef == "java/util/Stack.push:(Ljava/lang/Object;)Ljava/lang/Object"):
-        # return self.stack.append(self.stack.pop())
-        elif methodRef == "java/io/PrintStream.println:(Z)V":
-            num = self.stack.pop()
-            if num == 1:
-                return "true"
-            elif num == 0:
-                return "false"
-            else:
-                self.not_implemented()
-        
-        elif (methodRef == "Method java/io/PrintStream.println:(D)V"):
-            return (self.stack.pop() / 1.0)
-        elif methodRef == "java/io/PrintStream.println:(Ljava/lang/String;)V":
-            return self.stack.pop()
-        elif methodRef == "java/util/Scanner.nextString:()Ljava.lang/String":
-            return str(input())
-        elif methodRef == "java/util/Scanner.nextInt:()I":
-            return int(input())
-        elif methodRef == "java/util/Scanner.nextDouble:()D":
-            return (input() / 1.0)
+        invoke = {"java/io/PrintStream.println:(I)V": "printInt", "java/io/PrintStream.println:(Z)V": "printBoolean", 
+        "Method java/io/PrintStream.println:(D)V": "printDouble", "java/io/PrintStream.println:(Ljava/lang/String;)V": "printString",
+        "java/util/Scanner.nextString:()Ljava.lang/String": "inputString", "java/util/Scanner.nextInt:()I": "inputInt",
+        "java/util/Scanner.nextDouble:()D": "inputDouble"}
+        if methodRef in invoke:
+            return (getattr(self, invoke[methodRef])())
         else:
             self.not_implemented()
-			
-			
+	
+    def printInt(self):
+        return int(self.stack.pop())	
 
+    def printBoolean(self):
+        num = self.stack.pop()
+        if num == 1:
+            return "true"
+        elif num == 0:
+            return "false"
+        else:
+            raise TypeError("Value coudn't be intterpretted as a boolean.")
+
+    def printDouble(self):
+        return (self.stack.pop() / 1.0)
+		
+    def printString(self):
+        return str(self.stack.pop())
+		
+    def inputString(self):
+        return str(input())
+		
+    def inputInt(self):
+        return int(input())
+		
+    def inputDouble(self):
+        return (input() / 1.0)
