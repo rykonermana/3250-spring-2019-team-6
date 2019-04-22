@@ -161,8 +161,7 @@ class TestOpCodes(unittest.TestCase):
         test11.stack.append("HelloWorld")
         self.assertEqual(test11.invoke_virtual("java/io/PrintStream.println:"
                                                "(Ljava/lang/String;)V"), 'HelloWorld')
-        self.assertEqual(test11.invoke_virtual("java/util/Stack.push:"
-                                               "(Ljava/lang/Object;)Ljava/lang/Object"), 'not implemented')
+        self.assertRaises(NotImplementedError, test11.invoke_virtual, "java/util/Stack.push:")
 
     def test_i2b_simple(self):
         test = OpCodes()
@@ -322,3 +321,80 @@ class TestOpCodes(unittest.TestCase):
         testfloatscanner = OpCodes()
         with unittest.mock.patch('builtins.input', return_value = 1.0):
             assert testfloatscanner.invoke_virtual("java/util/Scanner.nextDouble:()D") == 1.0
+    def test_lshl(self):
+        test_lshl = OpCodes()
+        test_lshl.stack.append(1)
+        test_lshl.push_long_to_stack(5)
+        test_lshl.lshl()
+        self.assertEqual(test_lshl.pop_long(),10)
+    def test_lshl_neg(self):
+        test_lshl = OpCodes()
+        test_lshl.stack.append(-1)
+        test_lshl.push_long_to_stack(5)
+        self.assertRaises(ValueError, test_lshl.lshl)
+    def test_lshl_zeros(self):
+        test_lshl = OpCodes()
+        test_lshl.stack.append(0)
+        test_lshl.push_long_to_stack(5)
+        test_lshl.lshl()
+        self.assertEqual(test_lshl.pop_long(), 5)
+    def test_lshl_max(self):
+        test_lshl = OpCodes()
+        test_lshl.stack.append(1)
+        test_lshl.push_long_to_stack(2**63-1)
+        test_lshl.lshl()
+        self.assertEqual(test_lshl.pop_long(),2**64-2)
+    def test_lshl_min(self):
+        test_lshl = OpCodes()
+        test_lshl.stack.append(1)
+        test_lshl.push_long_to_stack(-(2 ** 63-1))
+        test_lshl.lshl()
+        self.assertEqual(test_lshl.pop_long(), -(2 ** 64-2) )
+    def test_lshl_longNeg(self):
+        test_lshl = OpCodes()
+        test_lshl.stack.append(1)
+        test_lshl.push_long_to_stack(-5)
+        test_lshl.lshl()
+        self.assertEqual(test_lshl.pop_long(),-10)
+    def test_lshr(self):
+        test_lshr = OpCodes()
+        test_lshr.stack.append(1)
+        test_lshr.push_long_to_stack(3)
+        test_lshr.lshr()
+        self.assertEqual(test_lshr.pop_long(),1)
+    def test_lshr_neg(self):
+        test_lshr = OpCodes()
+        test_lshr.stack.append(-1)
+        test_lshr.push_long_to_stack(3)
+        self.assertRaises(ValueError, test_lshr.lshr)
+    def test_lshr_zeros(self):
+        test_lshr = OpCodes()
+        test_lshr.stack.append(0)
+        test_lshr.push_long_to_stack(3)
+        test_lshr.lshr()
+        self.assertEqual(test_lshr.pop_long(), 3)
+    def test_lshr_max(self):
+        test_lshr = OpCodes()
+        test_lshr.stack.append(1)
+        test_lshr.push_long_to_stack(2**63-1)
+        test_lshr.lshr()
+        self.assertEqual(test_lshr.pop_long(),2**62-1)
+    def test_lshr_min(self):
+        test_lshr = OpCodes()
+        test_lshr.stack.append(1)
+        test_lshr.push_long_to_stack(-(2 ** 63))
+        test_lshr.lshr()
+        self.assertEqual(test_lshr.pop_long(), -(2 ** 62) )
+    def test_push_pop(self):
+        test_lshr = OpCodes()
+        test_lshr.push_long_to_stack(-(2 ** 63))
+        self.assertEqual(test_lshr.pop_long(), -(2**63))
+    def test_lshr_longNeg(self):
+        test_lshr = OpCodes()
+        test_lshr.stack.append(1)
+        test_lshr.push_long_to_stack(-3)
+        test_lshr.lshr()
+        self.assertEqual(test_lshr.pop_long(),-2)
+
+
+

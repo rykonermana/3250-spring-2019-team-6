@@ -330,46 +330,37 @@ class OpCodes:
             raise ValueError("Value {} cannot be converted to short".format(value))
 
     def push_long_to_stack(self, word):
-        length = len(word)
-        if length <= 64:
-            self.stack.append(self.extractLowerBits(word))
-			self.stack.append(self.extractUpperBits(word))
-        else:
-            raise ValueError("There are more than 32 bits".format(word))
-			
+        negative = 1
+        if word<0:
+            negative = -1
+            word*=-1
+        self.stack.append(negative*self.extractLowerBits(word))
+        self.stack.append(negative*self.extractUpperBits(word))
+
     def extractUpperBits(self, word):
-        binary = bin(word)
-        # remove first two characters because bin() prefaces strings with 0b
-        binary = binary[2:]
-        end = 64
-        start = 33
-        # extract k  bit sub-string
-        lastBitsSubStr = binary[start : end+1]
-        return lastBitsSubStr
+        return (word & 0xFFFFFFFF00000000) >> 32
 		
     def extractLowerBits(self, word):
-        binary = bin(num) 
-        binary = binary[2:] 
-        end = 32 
-        start = 0 
-        firstBitsSubStr = binary[start : end+1]
-        return firstBitsSubStr
+        return word & 0x00000000FFFFFFFF
     
-    def popLong():
-        upperBits = bin(self.stack.pop())
-        upperBits = upperBits[2:]
-        lowerBits = bin(self.stack.pop())
-        lowerBits = lowerBits[2:]
-        binaryWord = lowerBits + upperBits
-        word = binaryWord[0 : 64]
-        return int(word, 2)
+    def pop_long(self):
+        #print(self.stack)
+        upperBits = self.stack.pop()
+        lowerBits = self.stack.pop()
+        #print('upper',upperBits,'lower',lowerBits)
+        negative = 1
+        if upperBits<0 or lowerBits <0:
+            negative = -1
+        upperBits = abs(upperBits) << 32
+        binaryWord = (abs(lowerBits) + upperBits)*negative
+        return binaryWord
 		
     def ladd(self):
-        word = self.popLong() + self.popLong()
+        word = self.pop_long() + self.pop_long()
         self.push_long_to_stack(word)
 	
     def land(self):
-        word = self.popLong() & self.popLong()
+        word = self.pop_long() & self.pop_long()
         self.push_long_to_stack(word)
 		
     def lconst_m1(self):
@@ -401,24 +392,38 @@ class OpCodes:
         self.push_long_to_stack(word)
 
     def ldiv(self):
-        word = self.popLong() // self.popLong()
+        word = self.pop_long() // self.pop_long()
         self.push_long_to_stack(word)
 
     def lmul(self):
-        word = self.popLog() * self.popLong()
+        word = self.popLog() * self.pop_long()
         self.push_long_to_stack(word)
 
     def lneg(self):
-        word = self.popLong() * -1
+        word = self.pop_long() * -1
         self.push_long_to_stack(word)
 
     def lor(self):
-        word = self.popLong() | self.popLong()
+        word = self.pop_long() | self.pop_long()
         self.push_long_to_stack(word)
 
     def lrem(self):
-        word = self.popLong() % self.popLong()
+        word = self.pop_long() % self.pop_long()
         self.push_long_to_stack(word)
+
+    def lshl(self):
+        long = self.pop_long()
+        shift_amt = self.stack.pop()
+        #print("long",long,"shift_amt",shift_amt)
+        long = long << shift_amt
+        #print(long)
+        self.push_long_to_stack(long)
+
+    def lshr(self):
+        long = self.pop_long()
+        shift_amt = self.stack.pop()
+        long = long >> shift_amt
+        self.push_long_to_stack(long)
 		
     def invoke_virtual(self, methodRef):
         """Method for reading a java invoke virtual method and applying the correct method
