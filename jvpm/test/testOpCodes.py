@@ -395,6 +395,100 @@ class TestOpCodes(unittest.TestCase):
         test_lshr.push_long_to_stack(-3)
         test_lshr.lshr()
         self.assertEqual(test_lshr.pop_long(),-2)
-
-
-
+    def test_ladd(self):
+        test_ladd = OpCodes()
+        test_ladd.push_long_to_stack(1)
+        test_ladd.push_long_to_stack(1)
+        test_ladd.ladd()
+        self.assertEqual(test_ladd.pop_long(), 2)
+    def test_ladd_negs(self):
+        test_ladd = OpCodes()
+        test_ladd.push_long_to_stack(-1)
+        test_ladd.push_long_to_stack(-1)
+        test_ladd.ladd()
+        self.assertEqual(test_ladd.pop_long(), -2)
+    def test_ladd_maximum(self):
+        test_ladd = OpCodes()
+        test_ladd.push_long_to_stack(2**63 - 1)
+        test_ladd.push_long_to_stack(1)
+        test_ladd.ladd()
+        self.assertEqual(test_ladd.pop_long(), -(2**63 -1)
+    def test_ladd_minimum(self):
+        test_ladd = OpCodes()
+        test_ladd.push_long_to_stack(-(2**63 -1))
+        test_ladd.push_long_to_stack(-1)
+        test_ladd.ladd()
+        self.assertEqual(test_ladd.pop_long(), (2**63 -1))
+    def test_land(self):
+        test_land = OpCodes()
+        test_land.push_long_to_stack(3)
+        test_land.push_long_to_stack(2)
+        test_land.land()
+        self.assertEqual(test_ladd.pop_long(), 2)
+    def test_lconst_m1(self):
+        test_lconst_m1 = OpCodes()
+        test_lconst_m1.lconst_m1()
+        self.assertEqual(test_lconst_m1.pop_long(), -1)
+    def test_lconst_0(self):
+        test_lconst_0 = OpCodes()
+        test_lconst_0.lconst_0()
+        self.assertEqual(test_lconst_0.pop_long(), 0)
+    def test_lconst_1(self):
+        test_lconst_1 = OpCodes()
+        test_lconst_1.lconst_1()
+        self.assertEqual(test_lconst_1.pop_long(), 1)
+    def test_lconst_2(self):
+        test_lconst_2 = OpCodes()
+        test_lconst_2.lconst_2()
+        self.assertEqual(test_lconst_2.pop_long(), 2)
+    def test_lconst_3(self):
+        test_lconst_3 = OpCodes()
+        test_lconst_3.lconst_3()
+        self.assertEqual(test_lconst_3.pop_long(), 3)
+    def test_lconst_4(self):
+        test_lconst_4 = OpCodes()
+        test_lconst_4.lconst_4()
+        self.assertEqual(test_lconst_4.pop_long(), 4)
+    def test_lconst_5(self):
+        test_lconst_5 = OpCodes()
+        test_lconst_5.lconst_5()
+        self.assertEqual(test_lconst_5.pop_long(), 5)
+    def test_ldiv_0(self):
+        test_ldiv = OpCodes()
+        test_ldiv.push_long_to_stack(0)
+        test_ldiv.push_long_to_stack(4)
+        self.assertRaises(ZeroDivisionError, test_ldiv.ldiv)
+    def test_ldiv(self):
+        test_ldiv = OpCodes()
+        test_ldiv.push_long_to_stack(2)
+        test_ldiv.push_long_to_stack(4)
+        test_ldiv.ldiv()
+        self.assertEqual(test_ldiv.pop_long(), 2)
+    def test_lmul(self):
+        test_lmul = OpCodes()
+        test_lmul.push_long_to_stack(2)
+        test_lmul.push_long_to_stack(4)
+        test_lmul.lmul()
+        self.assertEqual(test_lmul.pop_long(), 8)
+    def test_lneg_NtoP(self):
+        test_lneg = OpCodes()
+        test.lneg.push_long_to_stack(-1)
+        test_lneg.lneg()
+        self.assertEqual(test_lneg.pop_long(), 1)
+    def test_lneg_PtoN(self):
+        test_lneg = OpCodes()
+        test_lneg.push_long_to_stack(1)
+        test_lneg.lneg()
+        self.assertEqual(test_lneg.pop_long, -1)
+    def test_lor(self):
+        test_lor = OpCodes()
+        test_lor.push_long_to_stack(1)
+        test_lor.push_long_to_stack(8)
+        test_lor.lor()
+        self.assertEqual(test_lor.pop_long(), 9)
+    def test_lrem(self):
+        test_lrem = OpCodes()
+        test_lrem.push_long_to_stack(5)
+        test_lrem.push_long_to_stack(12)
+        test_lrem.lrem()
+        self.assertEqual(test_lrem.pop_long(), 2)
