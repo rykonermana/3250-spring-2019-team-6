@@ -128,8 +128,10 @@ class ClassFile():
         opcodes = OpCodes(self.method_table)
         opcodes.run()
 
+
 class OpCodes:
     """This class defines a method for operational codes that java virtual machine uses"""
+
     def __init__(self, opcodes=[]):
         self.table = self.load()  # {0x00: self.not_implemented} #read in table with opcodes
         self.stack = []
@@ -159,6 +161,7 @@ class OpCodes:
     def not_implemented(self):
         """Called when a certain element of the program is not yet implemented"""
         raise NotImplementedError("This function is not implemented.")
+
     def interpret(self, value):
         """Interprets"""
         print("running method: ", self.table[value])  # pragma: no cover
@@ -168,7 +171,8 @@ class OpCodes:
     def push_int_to_stack(self, value):
         """Method to check if python is attempting to push a 64 bit integer which is
         not allowed in java"""
-        if value > 2147483647 or value < -2147483648:
+        extreme_value = 2147483647
+        if value > extreme_value or value < -extreme_value:
             raise ValueError()
         self.stack.append(value)
 
@@ -182,31 +186,38 @@ class OpCodes:
 
     def iconst_m1(self):
         """Pushes '-1' onto the stack"""
-        self.push_int_to_stack(-1)
+        m_number = -1
+        self.push_int_to_stack(m_number)
 
     def iconst_0(self):
         """Pushes '0' unto the stack"""
-        self.push_int_to_stack(0)
+        m_number = 0
+        self.push_int_to_stack(m_number)
 
     def iconst_1(self):
         """pushes '1' unto the stack"""
-        self.push_int_to_stack(1)
+        m_number = 1
+        self.push_int_to_stack(m_number)
 
     def iconst_2(self):
         """Pushes '2' unto the stack"""
-        self.push_int_to_stack(2)
+        m_number = 2
+        self.push_int_to_stack(m_number)
 
     def iconst_3(self):
         """Pushes '3' unto the stack"""
-        self.push_int_to_stack(3)
+        m_number = 3
+        self.push_int_to_stack(m_number)
 
     def iconst_4(self):
         """Pushes '4' unto the stack"""
-        self.push_int_to_stack(4)
+        m_number = 4
+        self.push_int_to_stack(m_number)
 
     def iconst_5(self):
         """Pushes '5' unto the stack"""
-        self.push_int_to_stack(5)
+        m_number = 5
+        self.push_int_to_stack(m_number)
 
     def idiv(self):
         """Pushes the result of the second number in the stack divided by the next
@@ -219,7 +230,8 @@ class OpCodes:
 
     def ineg(self):
         """Pushes the next number in the stack multiplied by '-1'"""
-        self.push_int_to_stack(self.stack.pop() * (-1))
+        m_number = -1
+        self.push_int_to_stack(self.stack.pop() * m_number)
 
     def ior(self):
         """Pushes the result of the operation 'or' of two numbers in the stack"""
@@ -246,7 +258,8 @@ class OpCodes:
     def iushr(self):
         """Pushes the result of the second number in the stack with it's bytes shifted right
         arithmetically by the amount of the next number in the stack"""
-        self.push_int_to_stack((self.stack.pop() % 0x100000000) >> self.stack.pop())
+        m_number = 0x100000000
+        self.push_int_to_stack((self.stack.pop() % m_number) >> self.stack.pop())
         # needs testing
 
     def ixor(self):
@@ -303,19 +316,22 @@ class OpCodes:
 
     def i2d(self):
         """Pushes the next number in the stack as a double reference"""
-        self.stack.append(self.stack.pop()/1.0)
+        m_number = 1.0
+        self.stack.append(self.stack.pop()/m_number)
 
     def i2f(self):
         """Pushes the next number in the stack as a float reference"""
-        self.stack.append(self.stack.pop()/1.0)
+        m_number = 1.0
+        self.stack.append(self.stack.pop()/m_number)
 
     def i2l(self):
         """Pushes the next number in the stack as a long reference"""
         op_max = 2 ** 64 - 1
         op_min = -2 ** 64
+        m_number = 1.0
         value = self.stack.pop()
         if op_min <= value <= op_max:
-            self.stack.append(value / 1.0)
+            self.stack.append(value / m_number)
         else:
             raise ValueError("Value {} cannot be converted to long".format(value))
 
@@ -323,9 +339,10 @@ class OpCodes:
         """Pushes the next number in the stack as a short reference"""
         op_max = 2**16-1
         op_min = -2**16
+        m_number = 1.0
         value = self.stack.pop()
         if op_min <= value <= op_max:
-            self.stack.append(value/1.0)
+            self.stack.append(value/m_number)
         else:
             raise ValueError("Value {} cannot be converted to short".format(value))
 
@@ -340,7 +357,7 @@ class OpCodes:
             return (getattr(self, invoke[methodRef])())
         else:
             self.not_implemented()
-	
+
     def printInt(self):
         return int(self.stack.pop())	
 
@@ -355,15 +372,15 @@ class OpCodes:
 
     def printDouble(self):
         return (self.stack.pop() / 1.0)
-		
+
     def printString(self):
         return str(self.stack.pop())
-		
+
     def inputString(self):
         return str(input())
-		
+
     def inputInt(self):
         return int(input())
-		
+
     def inputDouble(self):
         return (input() / 1.0)
