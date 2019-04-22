@@ -395,7 +395,7 @@ class OpCodes:
         numerator = self.pop_long()
         denomenator = self.pop_long()
         if denomenator != 0:
-            word = self.pop_long() // self.pop_long()
+            word = numerator / denomenator
             self.push_long_to_stack(word)
         else:
             raise ZeroDivisionError("Divided by Zero")
