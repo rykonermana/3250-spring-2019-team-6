@@ -331,8 +331,9 @@ class OpCodes:
 
     def push_long_to_stack(self, word):
         length = len(word)
-        if length <= 32:
-            self.stack.append(word)
+        if length <= 64:
+            self.stack.append(self.extractLowerBits(word))
+			self.stack.append(self.extractUpperBits(word))
         else:
             raise ValueError("There are more than 32 bits".format(word))
 			
@@ -365,73 +366,59 @@ class OpCodes:
 		
     def ladd(self):
         word = self.popLong() + self.popLong()
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 	
     def land(self):
         word = self.popLong() & self.popLong()
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 		
     def lconst_m1(self):
         word = -1
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 	
     def lconst_0(self):
         word = 0
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 
     def lconst_1(self):
         word = 1
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 
     def lconst_2(self):
         word = 2
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 	
     def lconst_3(self):
         word = 3
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
     
     def lconst_4(self):
         word = 4
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 
     def lconst_5(self):
         word = 5
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 
     def ldiv(self):
         word = self.popLong() // self.popLong()
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 
     def lmul(self):
         word = self.popLog() * self.popLong()
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 
     def lneg(self):
         word = self.popLong() * -1
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 
     def lor(self):
         word = self.popLong() | self.popLong()
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 
     def lrem(self):
         word = self.popLong() % self.popLong()
-        self.push_long_to_stack(self.extractLowerBits(word))
-        self.push_long_to_stack(self.extractUpperBits(word))
+        self.push_long_to_stack(word)
 		
     def invoke_virtual(self, methodRef):
         """Method for reading a java invoke virtual method and applying the correct method
