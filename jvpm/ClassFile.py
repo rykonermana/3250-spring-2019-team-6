@@ -7,8 +7,10 @@ from .constant_table import ConstantTable
 
 # unittest
 
+
 class ClassFile():
     """Main file of the java python virtual machine"""
+
     def __init__(self, file='test/HelloWorld.class'):
         with open(file, 'rb') as binary_file:
             # the byte string being stored in self.data to be parsed
@@ -17,7 +19,8 @@ class ClassFile():
             self.minor = self.get_minor()
             self.major = self.get_major()
             self.constant_pool_count = self.get_constant_pool()-1
-            self.constant_table = ConstantTable(self.data, self.constant_pool_count)
+            self.constant_table = ConstantTable(
+                self.data, self.constant_pool_count)
             self.constant_pool_length = self.constant_table.final_byte
             # self.access_flags = self.get_access_flags()
             # self.this_class = self.get_this_class()
@@ -104,10 +107,11 @@ class ClassFile():
     def __str__(self):
         """Prints out to the console"""
         result = "{} {}".format("Magic:", self.magic)
-        result += "{} {}\n{} {}\n{} {}\n{}".format("Minor version: ", self.minor, 
-            "Major version: ", self.major, 
-            "Constant pool count: ", self.constant_pool_count, 
-            str(self.constant_table))
+        result += "{} {}\n{} {}\n{} {}\n{}".format("Minor version: ", self.minor,
+                                                   "Major version: ", self.major,
+                                                   "Constant pool count: ",
+                                                   self.constant_pool_count,
+                                                   str(self.constant_table))
     #     print("Access flags: ", hex(self.access_flags[0]), hex(self.access_flags[1]))
     #     print("This class: ", self.this_class)
     #     print("Superclass: ", self.superclass)
@@ -133,7 +137,8 @@ class OpCodes:
     """This class defines a method for operational codes that java virtual machine uses"""
 
     def __init__(self, opcodes=[]):
-        self.table = self.load()  # {0x00: self.not_implemented} #read in table with opcodes
+        # {0x00: self.not_implemented} #read in table with opcodes
+        self.table = self.load()
         self.stack = []
         self.localvar = [0]*10
         self.opcodes = opcodes
@@ -259,7 +264,8 @@ class OpCodes:
         """Pushes the result of the second number in the stack with it's bytes shifted right
         arithmetically by the amount of the next number in the stack"""
         m_number = 0x100000000
-        self.push_int_to_stack((self.stack.pop() % m_number) >> self.stack.pop())
+        self.push_int_to_stack(
+            (self.stack.pop() % m_number) >> self.stack.pop())
         # needs testing
 
     def ixor(self):
@@ -268,47 +274,48 @@ class OpCodes:
 
     def iload_0(self):
         """Loads the variable of the variable array 'index 0' unto the stack"""
-        INDEX = 0
-        self.stack.append(self.localvar[INDEX])
+        index = 0
+        self.stack.append(self.localvar[index])
 
     def iload_1(self):
         """Loads the variable of the variable array 'index 1' unto the stack"""
-        INDEX = 1
-        self.stack.append(self.localvar[INDEX])
+        index = 1
+        self.stack.append(self.localvar[index])
 
     def iload_2(self):
         """Loads the variable of the variable array 'index 2' unto the stack"""
-        INDEX = 2
-        self.stack.append(self.localvar[INDEX])
+        index = 2
+        self.stack.append(self.localvar[index])
 
     def iload_3(self):
         """Loads the variable of the variable array 'index 3' unto the stack"""
-        INDEX = 3
-        self.stack.append(self.localvar[INDEX])
+        index = 3
+        self.stack.append(self.localvar[index])
 
     def istore_0(self):
         """Stores the next number in the stack onto the variable array on 'index 0'"""
-        INDEX = 0
-        self.localvar[INDEX] = self.stack.pop()
+        index = 0
+        self.localvar[index] = self.stack.pop()
 
     def istore_1(self):
         """Stores the next number in the stack onto the variable array on 'index 1'"""
-        INDEX = 1
-        self.localvar[INDEX] = self.stack.pop()
+        index = 1
+        self.localvar[index] = self.stack.pop()
 
     def istore_2(self):
         """Stores the next number in the stack onto the variable array on 'index 2'"""
-        INDEX = 2
-        self.localvar[INDEX] = self.stack.pop()
+        index = 2
+        self.localvar[index] = self.stack.pop()
 
     def istore_3(self):
         """Stores the next number in the stack onto the variable array on 'index 3'"""
-        INDEX = 3
-        self.localvar[INDEX] = self.stack.pop()
+        index = 3
+        self.localvar[index] = self.stack.pop()
 
     def i2b(self):
         """Pushes the next number in the stack as a byte reference"""
-        self.stack.append(self.stack.pop().to_bytes(length=1, byteorder='big', signed=True))
+        self.stack.append(self.stack.pop().to_bytes(
+            length=1, byteorder='big', signed=True))
 
     def i2c(self):
         """Pushes the next number in the stack as a character reference"""
@@ -333,7 +340,8 @@ class OpCodes:
         if op_min <= value <= op_max:
             self.stack.append(value / m_number)
         else:
-            raise ValueError("Value {} cannot be converted to long".format(value))
+            raise ValueError(
+                "Value {} cannot be converted to long".format(value))
 
     def i2s(self):
         """Pushes the next number in the stack as a short reference"""
@@ -344,43 +352,56 @@ class OpCodes:
         if op_min <= value <= op_max:
             self.stack.append(value/m_number)
         else:
-            raise ValueError("Value {} cannot be converted to short".format(value))
+            raise ValueError(
+                "Value {} cannot be converted to short".format(value))
 
     def invoke_virtual(self, methodRef):
         """Method for reading a java invoke virtual method and applying the correct method
         from python"""
-        invoke = {"java/io/PrintStream.println:(I)V": "printInt", "java/io/PrintStream.println:(Z)V": "printBoolean", 
-        "Method java/io/PrintStream.println:(D)V": "printDouble", "java/io/PrintStream.println:(Ljava/lang/String;)V": "printString",
-        "java/util/Scanner.nextString:()Ljava.lang/String": "inputString", "java/util/Scanner.nextInt:()I": "inputInt",
-        "java/util/Scanner.nextDouble:()D": "inputDouble"}
+        invoke = {"java/io/PrintStream.println:(I)V": "printInt",
+                  "java/io/PrintStream.println:(Z)V": "printBoolean",
+                  "Method java/io/PrintStream.println:(D)V": "printDouble",
+                  "java/io/PrintStream.println:(Ljava/lang/String;)V": "printString",
+                  "java/util/Scanner.nextString:()Ljava.lang/String": "inputString",
+                  "java/util/Scanner.nextInt:()I": "inputInt",
+                  "java/util/Scanner.nextDouble:()D": "inputDouble"}
         if methodRef in invoke:
-            return (getattr(self, invoke[methodRef])())
-        else:
-            self.not_implemented()
+            return getattr(self, invoke[methodRef])()
+        # else
+        self.not_implemented()
 
-    def printInt(self):
-        return int(self.stack.pop())	
+    def print_int(self):
+        """Is called when invokeVirtual method is called to print an integer"""
+        return int(self.stack.pop())
 
-    def printBoolean(self):
+    def print_boolean(self):
+        """Is called when invokeVirtual method is called to print an boolean"""
         num = self.stack.pop()
         if num == 1:
             return "true"
-        elif num == 0:
+        if num == 0:
             return "false"
-        else:
-            raise TypeError("Value coudn't be intterpretted as a boolean.")
+        # else
+        raise TypeError("Value couldn't be interpreted as a boolean.")
 
-    def printDouble(self):
-        return (self.stack.pop() / 1.0)
+    def print_double(self):
+        """Is called when invokedVirtual method is called to print a double"""
+        m_number = 1.0
+        return self.stack.pop() / m_number
 
-    def printString(self):
+    def print_string(self):
+        """Is called when invokedVirtual method is called to print a string"""
         return str(self.stack.pop())
 
-    def inputString(self):
+    def input_string(self):
+        """Takes input as a string"""
         return str(input())
 
-    def inputInt(self):
+    def input_int(self):
+        """Takes input as an integer"""
         return int(input())
 
-    def inputDouble(self):
-        return (input() / 1.0)
+    def input_double(self):
+        """Takes input as a float/double"""
+        m_number = 1.0
+        return input() / m_number
