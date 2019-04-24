@@ -1,4 +1,4 @@
-from ClassFile import ClassFile
+from ClassFile import OpCodes
 
-classy = ClassFile('jvpm/files/HelloWorld.class')
+classy = OpCodes()
 print(classy)

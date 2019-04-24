@@ -373,13 +373,13 @@ class OpCodes:
     def invoke_virtual(self, methodRef):
         """Method for reading a java invoke virtual method and applying the correct method
         from python"""
-        invoke = {"java/io/PrintStream.println:(I)V": "printInt",
-                  "java/io/PrintStream.println:(Z)V": "printBoolean",
-                  "Method java/io/PrintStream.println:(D)V": "printDouble",
-                  "java/io/PrintStream.println:(Ljava/lang/String;)V": "printString",
-                  "java/util/Scanner.nextString:()Ljava.lang/String": "inputString",
-                  "java/util/Scanner.nextInt:()I": "inputInt",
-                  "java/util/Scanner.nextDouble:()D": "inputDouble"}
+        invoke = {"java/io/PrintStream.println:(I)V": "print_int",
+                  "java/io/PrintStream.println:(Z)V": "print_boolean",
+                  "Method java/io/PrintStream.println:(D)V": "print_double",
+                  "java/io/PrintStream.println:(Ljava/lang/String;)V": "print_string",
+                  "java/util/Scanner.nextString:()Ljava.lang/String": "input_string",
+                  "java/util/Scanner.nextInt:()I": "input_int",
+                  "java/util/Scanner.nextDouble:()D": "input_double"}
         if methodRef in invoke:
             return getattr(self, invoke[methodRef])()
         # else
