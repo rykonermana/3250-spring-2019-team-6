@@ -2,6 +2,8 @@
 import unittest
 import csv
 import struct
+import numpy
+
 from .constant_table import ConstantTable
 from .method_table import MethodTable
 
@@ -116,7 +118,6 @@ class ClassFile():
         opcodes = OpCodes(self.method_table)
         opcodes.run()
 
-
 class OpCodes:
     """This class defines a method for operational codes that java virtual machine uses"""
 
@@ -161,6 +162,8 @@ class OpCodes:
         """Called when a certain element of the program is not yet implemented"""
         raise NotImplementedError("This function is not implemented.")
 
+############################## PUSH TO STACK METHODS ###########################################
+
     def push_int_to_stack(self, value):
         """Method to check if python is attempting to push a 64 bit integer which is
         not allowed in java"""
@@ -168,27 +171,57 @@ class OpCodes:
             raise ValueError()
         self.stack.append(value)
 
+    def push_float_to_stack(self, value):
+        """Method to check if python is attempting to push a 64 bit float which is
+        not allowed in java"""
+        if value > 2147483647 or value < -2147483648:
+            raise ValueError()
+        self.stack.append(numpy.float32(value))
+
+    def pop_float_from_stack(self, value):
+        """Method to check if python is attempting to push a 64 bit float which is
+        not allowed in java"""
+        if value > 2147483647 or value < -2147483648:
+            raise ValueError()
+        self.stack.pop(numpy.float32(value))
+        
+    def push_to_stack(self,val):
+        if self.type == T_INT:
+            self.push_int_to_stack(val)
+        elif self.type == T_LONG:
+            self.push_long_to_stack(val)
+        elif self.type == T_FLOAT:
+            self.pop_float_from_stack()
+
+    def pop_from_stack(self):
+        if self.type == T_LONG:
+            return self.pop_long_from_stack()
+        elif self.type == T_INT:
+            return self.stack.pop()
+        elif self.type == T_FLOAT:
+            return self.pop_float_from_stack()
+
     def add(self):
         """Adds two numbers in a stack and pushes the result back on"""
         self.push_to_stack(self.pop_from_stack() + self.pop_from_stack())
 
-    def iand(self):
+    def opcode_and(self):
         """Pushes the result of the operation 'and' of two numbers in the stack"""
         self.push_int_to_stack(self.stack.pop() & self.stack.pop())
 
-    def iconst_m1(self):
+    def const_m1(self):
         """Pushes '-1' onto the stack"""
-        self.push_int_to_stack(-1)
+        self.push_to_stack(-1)
 
-    def iconst_0(self):
+    def const_0(self):
         """Pushes '0' unto the stack"""
         self.push_int_to_stack(0)
 
-    def iconst_1(self):
+    def const_1(self):
         """pushes '1' unto the stack"""
         self.push_int_to_stack(1)
 
-    def iconst_2(self):
+    def const_2(self):
         """Pushes '2' unto the stack"""
         self.push_int_to_stack(2)
 
@@ -344,12 +377,6 @@ class OpCodes:
             return (getattr(self, invoke[methodRef])())
         else:
             self.not_implemented()
-
-    def push_to_stack(self,val):
-        if self.type == T_INT:
-            self.push_int_to_stack(val)
-        elif self.type == T_LONG:
-            self.push_long_to_stack(val)
 
     def printInt(self):
         return int(self.stack.pop())
