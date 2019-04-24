@@ -178,7 +178,7 @@ class OpCodes:
         """Method to check if python is attempting to push a 64 bit integer which is
         not allowed in java"""
         extreme_value = 2147483647
-        if value > extreme_value or value < -extreme_value:
+        if value > extreme_value or value < (-extreme_value - 1):
             raise ValueError()
         self.stack.append(value)
 
