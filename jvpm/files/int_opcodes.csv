@@ -1,85 +1,82 @@
-name,opcode,num_initial_bytes,method
-iconst_m1 ,2,0,iconst_m1 
-iconst_0 ,3,0,iconst_0 
-iconst_1 ,4,0,iconst_1 
-iconst_2 ,5,0,iconst_2 
-iconst_3 ,6,0,iconst_3 
-iconst_4 ,7,0,iconst_4 
-iconst_5 ,8,0,iconst_5 
-iload_0 ,1a ,0,iload_0 
-iload_1 ,1b ,0,iload_1 
-iload_2 ,1c ,0,iload_2 
-iload_3 ,1d ,0,iload_3 
-istore ,36,0,istore 
-istore_0 ,3b ,0,istore_0 
-istore_1 ,3c ,0,istore_1 
-istore_2 ,3d ,0,istore_2 
-istore_3 ,3e ,0,istore_3 
-iadd ,60,0,iadd 
-isub ,64,0,isub 
-imul ,68,0,imul 
-idiv ,6c ,0,idiv 
-irem ,70,0,irem 
-ineg ,74,0,ineg 
-ishl ,78,0,ishl 
-ishr ,7a ,0,ishr 
-iushr ,7c ,0,iushr 
-iand ,7e ,0,iand 
-ior ,80,0,ior 
-ixor ,82,0,ixor 
-i2l ,85,0,i2l 
-i2f ,86,0,i2f 
-i2d ,87,0,i2d 
-i2b ,91,0,i2b 
-i2c ,92,0,i2c 
-i2s ,93,0,i2s 
-ireturn ,ac ,0,ireturn 
-lload_0 ,1e ,0,lload_0 
-lload_1 ,1f ,0,lload_1 
-lload_2 ,20,0,lload_2 
-lload_3 ,21,0,lload_3 
-fload_0 ,22,0,fload_0 
-fload_1 ,23,0,fload_1 
-fload_2 ,24,0,fload_2 
-fload_3 ,25,0,fload_3 
-lload ,16,0,lload 
-fload ,17,0,fload 
-ldc ,12,2,ldc 
-ldc_w ,13,4,ldc_w 
-ldc2_w ,14,4,ldc2_w 
-iload ,15,0,iload 
-lload ,16,0,lload 
-fload ,17,0,fload 
-lstore_0 ,3f ,0,lstore_0 
-lstore_1 ,40,0,lstore_1 
-lstore_2 ,41,0,lstore_2 
-lstore_3 ,42,0,lstore_3 
-fstore_0 ,43,0,fstore_0 
-fstore_1 ,44,0,fstore_1 
-fstore_2 ,45,0,fstore_2 
-fstore_3 ,46,0,fstore_3 
-ladd ,61,0,ladd 
-fadd ,62,0,fadd 
-lsub ,65,0,lsub 
-fsub ,66,0,fsub 
-lmul ,69,0,lmul 
-fmul ,6a ,0,fmul 
-ldiv ,6d ,0,ldiv 
-fdiv ,6e ,0,fdiv 
-lrem ,71,0,lrem 
-frem ,72,0,frem 
-lneg ,75,0,lneg 
-fneg ,76,0,fneg 
-lshl ,79,0,lshl 
-lushr ,7d ,0,lushr 
-lshr ,7b ,0,lshr 
-land ,7f ,0,land 
-lor ,81,0,lor 
-lxor ,83,0,lxor 
-l2i ,88,0,l2i 
-l2f ,89,0,l2f 
-l2d ,8a ,0,l2d 
-f2i ,8b ,0,f2i 
-f2l ,8c ,0,f2l 
-f2d ,8d ,0,f2d 
-invokevirtual ,b6 ,4,invokevirtual 
+name,opcode,num_initial_bytes,method,type_enum,type
+f2d ,8d ,0,conver_double,T_FLOAT,3
+f2i ,8b ,0,convert_int,T_FLOAT,3
+f2l ,8c ,0,convert_long,T_FLOAT,3
+fadd ,62,0,fadd ,T_FLOAT,3
+fdiv ,6e ,0,fdiv ,T_FLOAT,3
+fload ,17,0,load ,T_FLOAT,3
+fload_0 ,22,0,load_0 ,T_FLOAT,3
+fload_1 ,23,0,load_1 ,T_FLOAT,3
+fload_2 ,24,0,load_2 ,T_FLOAT,3
+fload_3 ,25,0,load_3 ,T_FLOAT,3
+fmul ,6a ,0,mul ,T_FLOAT,3
+fneg ,76,0,neg ,T_FLOAT,3
+frem ,72,0,rem ,T_FLOAT,3
+fstore_0 ,43,0,store_0 ,T_FLOAT,3
+fstore_1 ,44,0,store_1 ,T_FLOAT,3
+fstore_2 ,45,0,store_2 ,T_FLOAT,3
+fstore_3 ,46,0,store_3 ,T_FLOAT,3
+fsub ,66,0,sub ,T_FLOAT,3
+i2b ,91,0,convert_byte,T_INT,1
+i2c ,92,0,convert_char,T_INT,1
+i2d ,87,0,conver_double,T_INT,1
+i2f ,86,0,convert_float,T_INT,1
+i2l ,85,0,convert_long,T_INT,1
+i2s ,93,0,convert_short,T_INT,1
+iadd ,60,0,add ,T_INT,1
+iand ,7e ,0,opcode_and ,T_INT,1
+iconst_0 ,3,0,const_0 ,T_INT,1
+iconst_1 ,4,0,const_1 ,T_INT,1
+iconst_2 ,5,0,const_2 ,T_INT,1
+iconst_3 ,6,0,const_3 ,T_INT,1
+iconst_4 ,7,0,const_4 ,T_INT,1
+iconst_5 ,8,0,const_5 ,T_INT,1
+iconst_m1 ,2,0,const_m1 ,T_INT,1
+idiv ,6c ,0,idiv ,T_INT,1
+iload ,15,0,iload ,T_INT,1
+iload_0 ,1a ,0,load_0 ,T_INT,1
+iload_1 ,1b ,0,load_1 ,T_INT,1
+iload_2 ,1c ,0,load_2 ,T_INT,1
+iload_3 ,1d ,0,load_3 ,T_INT,1
+imul ,68,0,imul ,T_INT,1
+ineg ,74,0,ineg ,T_INT,1
+invokevirtual ,b6 ,4,invokevirtual ,NONE,0
+ior ,80,0,opcode_or ,T_INT,1
+irem ,70,0,irem ,T_INT,1
+ishl ,78,0,ishl ,T_INT,1
+ishr ,7a ,0,ishr ,T_INT,1
+istore ,36,0,store ,T_INT,1
+istore_0 ,3b ,0,store_0 ,T_INT,1
+istore_1 ,3c ,0,store_1 ,T_INT,1
+istore_2 ,3d ,0,store_2 ,T_INT,1
+istore_3 ,3e ,0,store_3 ,T_INT,1
+isub ,64,0,sub ,T_INT,1
+iushr ,7c ,0,ushr ,T_INT,1
+ixor ,82,0,xor ,T_INT,1
+l2d ,8a ,0,convert_double,T_LONG,2
+l2f ,89,0,convert_float,T_LONG,2
+l2i ,88,0,convert_int,T_LONG,2
+ladd ,61,0,add ,T_LONG,2
+land ,7f ,0,opcode_and ,T_LONG,2
+ldc ,12,2,ldc ,NONE,0
+ldc_w ,13,4,ldc_w ,NONE,0
+ldc2_w ,14,4,ldc2_w ,NONE,0
+ldiv ,6d ,0,div,T_LONG,2
+lload ,16,0,load,T_LONG,2
+lload_0 ,1e ,0,load_0 ,T_LONG,2
+lload_1 ,1f ,0,load_1 ,T_LONG,2
+lload_2 ,20,0,load_2 ,T_LONG,2
+lload_3 ,21,0,load_3 ,T_LONG,2
+lmul ,69,0,mul ,T_LONG,2
+lneg ,75,0,neg ,T_LONG,2
+lor ,81,0,opcode_or ,T_LONG,2
+lrem ,71,0,rem ,T_LONG,2
+lshl ,79,0,shl ,T_LONG,2
+lshr ,7b ,0,shr ,T_LONG,2
+lstore_0 ,3f ,0,store_0 ,T_LONG,2
+lstore_1 ,40,0,store_1 ,T_LONG,2
+lstore_2 ,41,0,store_2 ,T_LONG,2
+lstore_3 ,42,0,store_3 ,T_LONG,2
+lsub ,65,0,sub ,T_LONG,2
+lushr ,7d ,0,ushr ,T_LONG,2
+lxor ,83,0,xor ,T_LONG,2

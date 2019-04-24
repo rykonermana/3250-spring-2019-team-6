@@ -19,4 +19,4 @@ class TestClassFile(unittest.TestCase):
         self.assertEqual(self.cf.get_major(), 52)
 
     def test_count_pool(self):
-        self.assertEqual(self.cf.get_constant_pool(), 27)
+        self.assertEqual(self.cf.get_constant_pool(), 42)

@@ -14,7 +14,7 @@ NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE = 0, 1, 2 ,3, 4
 class ClassFile():
     """Main file of the java python virtual machine"""
 
-    def __init__(self, file='test/HelloWorld.class'):
+    def __init__(self, file='jvpm/files/HelloWorld.class'):
         with open(file, 'rb') as binary_file:
             # the byte string being stored in self.data to be parsed
             self.data = binary_file.read()
@@ -32,10 +32,10 @@ class ClassFile():
             # self.cp_and_ic = self.interface_count + self.constant_table['length']
             # self.interface_table = self.get_interface_table()
             # self.field_count = self.get_field_count()
-            self.cp_ic_fc = 224 #  = self.cp_and_ic + self.field_count
+            # self.cp_ic_fc = 224 #  = self.cp_and_ic + self.field_count
             # self.field_table = self.get_field_table()
-            self.method_count = self.get_method_count()
-            self.method_table = MethodTable(self.data,self.method_count,self.cp_ic_fc)
+            # self.method_count = self.get_method_count()
+            # self.method_table = MethodTable(self.data,self.method_count,self.cp_ic_fc)
             # self.cp_ic_fc_mc = self.cp_ic_fc + len(self.method_table)
             # self.attribute_count = self.get_attribute_count()
             # self.attribute_table = self.get_attribute_table()
@@ -121,7 +121,7 @@ class ClassFile():
 class OpCodes:
     """This class defines a method for operational codes that java virtual machine uses"""
 
-    def __init__(self, class_ref, opcodes=[]):
+    def __init__(self, class_ref=ClassFile(), opcodes=[]):
         # {0x00: self.not_implemented} #read in table with opcodes
         self.table = self.load()
         self.stack = []
@@ -136,8 +136,9 @@ class OpCodes:
             dict1 = {}
             spamreader = csv.DictReader(csvfile)
             for ind in list(spamreader):
-                opcode_info = {'name': ind['name'].strip(), 'num_arguments': int(
-                    ind['num_parameters'].strip())}
+                opcode_info = {'name': ind['name'].strip(), 
+                    'num_initial_bytes': int(ind['num_initial_bytes'].strip()),
+                    'type':int(ind['type'])}
                 the_number = int(ind['opcode'].strip(), 16)
                 dict1[the_number] = opcode_info
         return dict1
@@ -148,6 +149,7 @@ class OpCodes:
             print("stack: ", self.stack)  # pragma: no cover
             print("running method: ",
                   self.table[opcode]['name'])  # pragma: no cover
+            self.type = self.table[opcode]['type']
             if self.table[opcode]['num_arguments'] > 0:
                 args = []
                 for arg in value:
@@ -163,6 +165,23 @@ class OpCodes:
         raise NotImplementedError("This function is not implemented.")
 
 ############################## PUSH TO STACK METHODS ###########################################
+    def push_to_stack(self,val):
+        if self.type == T_INT:
+            self.push_int_to_stack(val)
+        elif self.type == T_LONG:
+            self.push_long_to_stack(val)
+        elif self.type == T_FLOAT:
+            self.push_float_to_stack(val)
+        elif self.type == T_DOUBLE:
+            self.stack.append(val)
+
+    def pop_from_stack(self):
+        if self.type == T_LONG:
+            return self.pop_long_from_stack()
+        elif self.type == T_INT:
+            return self.stack.pop()
+        elif self.type == T_FLOAT:
+            return self.pop_float_from_stack()
 
     def push_int_to_stack(self, value):
         """Method to check if python is attempting to push a 64 bit integer which is
@@ -178,28 +197,41 @@ class OpCodes:
             raise ValueError()
         self.stack.append(numpy.float32(value))
 
-    def pop_float_from_stack(self, value):
+    def pop_float_from_stack(self):
         """Method to check if python is attempting to push a 64 bit float which is
         not allowed in java"""
+        value = self.stack.pop()
         if value > 2147483647 or value < -2147483648:
-            raise ValueError()
-        self.stack.pop(numpy.float32(value))
+            raise ValueError("Invalid float")
+        return numpy.float32(value)
+    
+    def push_long_to_stack(self, word):
+        negative = 1
+        if word > 2**63-1 or word < -(2**63):
+            raise ValueError("long is too big or small")
+        if word<0:
+            negative = -1
+            word*=-1
+        self.stack.append(negative*self.extractLowerBits(word))
+        self.stack.append(negative*self.extractUpperBits(word))
         
-    def push_to_stack(self,val):
-        if self.type == T_INT:
-            self.push_int_to_stack(val)
-        elif self.type == T_LONG:
-            self.push_long_to_stack(val)
-        elif self.type == T_FLOAT:
-            self.pop_float_from_stack()
+    def pop_long_from_stack(self):
+        upperBits = self.stack.pop()
+        lowerBits = self.stack.pop()
+        negative = 1
+        if upperBits<0 or lowerBits <0:
+            negative = -1
+        upperBits = abs(upperBits) << 32
+        binaryWord = (abs(lowerBits) + upperBits)*negative
+        return binaryWord
 
-    def pop_from_stack(self):
-        if self.type == T_LONG:
-            return self.pop_long_from_stack()
-        elif self.type == T_INT:
-            return self.stack.pop()
-        elif self.type == T_FLOAT:
-            return self.pop_float_from_stack()
+    def extractUpperBits(self, word):
+        return (int(word) & 0xFFFFFFFF00000000) >> 32
+		
+    def extractLowerBits(self, word):
+        return int(word) & 0x00000000FFFFFFFF
+    
+    ## start primitive type opcodes ##########################################################
 
     def add(self):
         """Adds two numbers in a stack and pushes the result back on"""
@@ -207,7 +239,7 @@ class OpCodes:
 
     def opcode_and(self):
         """Pushes the result of the operation 'and' of two numbers in the stack"""
-        self.push_int_to_stack(self.stack.pop() & self.stack.pop())
+        self.push_to_stack(self.pop_from_stack() & self.pop_from_stack())
 
     def const_m1(self):
         """Pushes '-1' onto the stack"""
@@ -215,174 +247,191 @@ class OpCodes:
 
     def const_0(self):
         """Pushes '0' unto the stack"""
-        self.push_int_to_stack(0)
+        self.push_to_stack(0)
 
     def const_1(self):
         """pushes '1' unto the stack"""
-        self.push_int_to_stack(1)
+        self.push_to_stack(1)
 
     def const_2(self):
         """Pushes '2' unto the stack"""
-        self.push_int_to_stack(2)
+        self.push_to_stack(2)
 
-    def iconst_3(self):
+    def const_3(self):
         """Pushes '3' unto the stack"""
-        self.push_int_to_stack(3)
+        self.push_to_stack(3)
 
-    def iconst_4(self):
+    def const_4(self):
         """Pushes '4' unto the stack"""
-        self.push_int_to_stack(4)
+        self.push_to_stack(4)
 
-    def iconst_5(self):
+    def const_5(self):
         """Pushes '5' unto the stack"""
-        self.push_int_to_stack(5)
+        self.push_to_stack(5)
 
-    def idiv(self):
+    def div(self):
         """Pushes the result of the second number in the stack divided by the next
          number in the stack"""
-        self.push_int_to_stack(self.stack.pop()//self.stack.pop())
+        numerator = self.pop_from_stack()
+        denomenator = self.pop_from_stack()
+        if denomenator != 0:
+            word = numerator / denomenator
+            self.push_to_stack(word)
+        else:
+            raise ZeroDivisionError("Divided by Zero")
 
-    def imul(self):
+    def mul(self):
         """Pushes the result of the top two numbers in the stack"""
-        self.push_int_to_stack(self.stack.pop()*self.stack.pop())
+        self.push_to_stack(self.pop_from_stack()*self.pop_from_stack())
 
-    def ineg(self):
+    def neg(self):
         """Pushes the next number in the stack multiplied by '-1'"""
-        self.push_int_to_stack(self.stack.pop() * (-1))
+        val = self.pop_from_stack() * (-1)
+        print("neg",val)
+        self.push_to_stack(val)
 
-    def ior(self):
+    def opcode_or(self):
         """Pushes the result of the operation 'or' of two numbers in the stack"""
-        self.push_int_to_stack(self.stack.pop() | self.stack.pop())
+        self.push_to_stack(self.pop_from_stack() | self.pop_from_stack())
 
-    def irem(self):
+    def rem(self):
         """Pushes the remainder of the second number in the stack divided by the next number"""
-        self.push_int_to_stack(self.stack.pop() % self.stack.pop())
+        self.push_to_stack(self.pop_from_stack() % self.pop_from_stack())
 
-    def ishl(self):
+    def shl(self):
         """Pushes the result of the second number in the stack with it's bytes shifted left
         by the amount of the next number in the stack"""
-        self.push_int_to_stack(self.stack.pop() << self.stack.pop())
+        val = self.pop_from_stack()
+        temp_type = self.type
+        self.type = T_INT
+        shift = self.pop_from_stack()
+        val = val << shift
+        self.type = temp_type
+        self.push_to_stack(val)
 
-    def ishr(self):
+    def shr(self):
         """Pushes the result of the second number in the stack with it's bytes shifted right
         by the amount of the next number in the stack"""
-        self.push_int_to_stack(self.stack.pop() >> self.stack.pop())
+        val = self.pop_from_stack()
+        temp_type = self.type
+        self.type = T_INT
+        shift = self.pop_from_stack()
+        val = val >> shift
+        self.type = temp_type
+        self.push_to_stack(val)
 
-    def isub(self):
+    def sub(self):
         """Pushes the result of the second number in the stack minus the next number"""
-        self.push_int_to_stack(self.stack.pop()-self.stack.pop())
+        self.push_to_stack(self.pop_from_stack()-self.pop_from_stack())
 
-    def iushr(self):
+    def ushr(self):
         """Pushes the result of the second number in the stack with it's bytes shifted right
         arithmetically by the amount of the next number in the stack"""
-        self.push_int_to_stack(
-            (self.stack.pop() % 0x100000000) >> self.stack.pop())
+        self.push_to_stack(
+            (self.pop_from_stack() % 0x100000000) >> self.pop_from_stack())
         # needs testing
 
-    def ixor(self):
+    def xor(self):
         """Pushes the result of the operation 'exclusive or' of two numbers in the stack"""
-        self.push_int_to_stack(self.stack.pop() ^ self.stack.pop())
+        self.push_to_stack(self.pop_from_stack() ^ self.pop_from_stack())
 
-    def iload_0(self):
+    def load_0(self):
         """Loads the variable of the variable array 'index 0' unto the stack"""
-        INDEX = 0
-        self.stack.append(self.localvar[INDEX])
+        index = 0
+        self.push_to_stack(self.localvar[index])
 
-    def iload_1(self):
+    def load_1(self):
         """Loads the variable of the variable array 'index 1' unto the stack"""
-        INDEX = 1
-        self.stack.append(self.localvar[INDEX])
+        index = 1
+        self.push_to_stack(self.localvar[index])
 
-    def iload_2(self):
+    def load_2(self):
         """Loads the variable of the variable array 'index 2' unto the stack"""
-        INDEX = 2
-        self.stack.append(self.localvar[INDEX])
+        index = 2
+        self.push_to_stack(self.localvar[index])
 
-    def iload_3(self):
+    def load_3(self):
         """Loads the variable of the variable array 'index 3' unto the stack"""
-        INDEX = 3
-        self.stack.append(self.localvar[INDEX])
+        index = 3
+        self.push_to_stack(self.localvar[index])
 
-    def istore_0(self):
+    def store_0(self):
         """Stores the next number in the stack onto the variable array on 'index 0'"""
-        INDEX = 0
-        self.localvar[INDEX] = self.stack.pop()
+        index = 0
+        self.localvar[index] = self.pop_from_stack()
 
-    def istore_1(self):
+    def store_1(self):
         """Stores the next number in the stack onto the variable array on 'index 1'"""
-        INDEX = 1
-        self.localvar[INDEX] = self.stack.pop()
+        index = 1
+        self.localvar[index] = self.pop_from_stack()
 
-    def istore_2(self):
+    def store_2(self):
         """Stores the next number in the stack onto the variable array on 'index 2'"""
-        INDEX = 2
-        self.localvar[INDEX] = self.stack.pop()
+        index = 2
+        self.localvar[index] = self.pop_from_stack()
 
-    def istore_3(self):
+    def store_3(self):
         """Stores the next number in the stack onto the variable array on 'index 3'"""
-        INDEX = 3
-        self.localvar[INDEX] = self.stack.pop()
+        index = 3
+        self.localvar[index] = self.pop_from_stack()
 
-    def i2b(self):
+    def convert(self,to_type):
+        val = self.pop_from_stack()
+        self.type = to_type
+        self.push_to_stack(val)
+
+    def convert_double(self):
+        self.convert(T_DOUBLE)
+    
+    def convert_int(self):
+        self.convert(T_INT)
+
+    def convert_long(self):
+        self.convert(T_LONG)
+    
+    def convert_float(self):
+        self.convert(T_FLOAT)
+
+    def convert_byte(self):
         """Pushes the next number in the stack as a byte reference"""
-        self.stack.append(self.stack.pop().to_bytes(
+        self.stack.append(self.pop_from_stack().to_bytes(
             length=1, byteorder='big', signed=True))
 
-    def i2c(self):
+    def convert_char(self):
         """Pushes the next number in the stack as a character reference"""
-        self.stack.append(chr(self.stack.pop()))
+        self.stack.append(chr(self.pop_from_stack()))
 
-    def i2d(self):
-        """Pushes the next number in the stack as a double reference"""
-        self.stack.append(self.stack.pop()/1.0)
-
-    def i2f(self):
-        """Pushes the next number in the stack as a float reference"""
-        self.stack.append(self.stack.pop()/1.0)
-
-    def i2l(self):
-        """Pushes the next number in the stack as a long reference"""
-        op_max = 2 ** 64 - 1
-        op_min = -2 ** 64
-        value = self.stack.pop()
-        if op_min <= value <= op_max:
-            self.stack.append(value / 1.0)
-        else:
-            raise ValueError(
-                "Value {} cannot be converted to long".format(value))
-
-    def i2s(self):
-        """Pushes the next number in the stack as a short reference"""
+    def convert_short(self):
         op_max = 2**16-1
         op_min = -2**16
-        value = self.stack.pop()
+        m_number = 1.0
+        value = self.pop_from_stack()
         if op_min <= value <= op_max:
-            self.stack.append(value/1.0)
+            self.stack.append(value/m_number)
         else:
-            raise ValueError(
-                "Value {} cannot be converted to short".format(value))
+            raise ValueError("Value {} cannot be converted to short".format(value))
 
     def ldc(self, index):
         """Pushes constant index to stack"""
-        self.stack.append(index[0])
+        self.push_to_stack(index[0])
 
     def invoke_virtual(self, methodRef):
         """Method for reading a java invoke virtual method and applying the correct method
         from python"""
-        invoke = {"java/io/PrintStream.println:(I)V": "printInt", "java/io/PrintStream.println:(Z)V": "printBoolean",
-                  "Method java/io/PrintStream.println:(D)V": "printDouble", "java/io/PrintStream.println:(Ljava/lang/String;)V": "printString",
-                  "java/util/Scanner.nextString:()Ljava.lang/String": "inputString", "java/util/Scanner.nextInt:()I": "inputInt",
-                  "java/util/Scanner.nextDouble:()D": "inputDouble"}
+        invoke = {"java/io/PrintStream.println:(I)V": "print_primitive", "java/io/PrintStream.println:(Z)V": "print_boolean",
+                  "Method java/io/PrintStream.println:(D)V": "print_primitive", "java/io/PrintStream.println:(Ljava/lang/String;)V": "print_string",
+                  "java/util/Scanner.nextString:()Ljava.lang/String": "input_string", "java/util/Scanner.nextInt:()I": "input_int",
+                  "java/util/Scanner.nextDouble:()D": "input_double"}
         if methodRef in invoke:
             return (getattr(self, invoke[methodRef])())
         else:
             self.not_implemented()
 
     def printInt(self):
-        return int(self.stack.pop())
+        return int(self.pop_from_stack())
 
-    def printBoolean(self):
-        num = self.stack.pop()
+    def print_boolean(self):
+        num = self.pop_from_stack()
         if num == 1:
             return "true"
         elif num == 0:
@@ -390,17 +439,22 @@ class OpCodes:
         else:
             raise TypeError("Value coudn't be intterpretted as a boolean.")
 
-    def printDouble(self):
-        return (self.stack.pop() / 1.0)
+    def print_primitive(self):
+        val = self.pop_from_stack()
+        print(val)
+        return val
+    
+    def print_string(self):
+        """Is called when invokedVirtual method is called to print a string"""
+        return str(self.stack.pop())
 
-    def printString(self):
-        return str(self.class_ref.constant_table.constant_table[self.stack.pop()]['decrypted_message'])
-
-    def inputString(self):
+    def input_string(self):
         return str(input())
 
-    def inputInt(self):
+    def input_int(self):
         return int(input())
-
-    def inputDouble(self):
-        return (input() / 1.0)
+    
+    def input_double(self):
+        """Takes input as a float/double"""
+        m_number = 1.0
+        return input() / m_number
