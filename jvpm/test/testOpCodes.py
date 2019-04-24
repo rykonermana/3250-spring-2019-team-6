@@ -151,13 +151,16 @@ class TestOpCodes(unittest.TestCase):
     def test_invokeVirtual(self):
         test11 = OpCodes()
         test11.stack.append(7)
-        self.assertEqual(test11.invoke_virtual("java/io/PrintStream.println:(I)V"), 7)
+        self.assertEqual(test11.invoke_virtual(
+            "java/io/PrintStream.println:(I)V"), 7)
         # test11.stack.append(4.321)
         # self.assertEqual(test11.invokeVirtual("Method java/io/PrintStream.println:(D)V"), 4.321)
         test11.stack.append(1)
-        self.assertEqual(test11.invoke_virtual("java/io/PrintStream.println:(Z)V"), 'true')
+        self.assertEqual(test11.invoke_virtual(
+            "java/io/PrintStream.println:(Z)V"), 'true')
         test11.stack.append(0)
-        self.assertEqual(test11.invoke_virtual("java/io/PrintStream.println:(Z)V"), 'false')
+        self.assertEqual(test11.invoke_virtual(
+            "java/io/PrintStream.println:(Z)V"), 'false')
         test11.stack.append("HelloWorld")
         self.assertEqual(test11.invoke_virtual("java/io/PrintStream.println:"
                                                "(Ljava/lang/String;)V"), 'HelloWorld')
@@ -310,15 +313,18 @@ class TestOpCodes(unittest.TestCase):
 
     def test_strscanner_simple(self):
         teststrscanner = OpCodes()
-        with unittest.mock.patch('builtins.input', return_value = "Testing"):
-            self.assertEqual(teststrscanner.invoke_virtual("java/util/Scanner.nextString:()Ljava.lang/String"), "Testing")
+        with unittest.mock.patch('builtins.input', return_value="Testing"):
+            self.assertEqual(teststrscanner.invoke_virtual(
+                "java/util/Scanner.nextString:()Ljava.lang/String"), "Testing")
 
     def test_intscanner_simple(self):
         testintscanner = OpCodes()
-        with unittest.mock.patch('builtins.input', return_value = 2):
-            assert testintscanner.invoke_virtual("java/util/Scanner.nextInt:()I") == 2
+        with unittest.mock.patch('builtins.input', return_value=2):
+            assert testintscanner.invoke_virtual(
+                "java/util/Scanner.nextInt:()I") == 2
 
     def test_floatscanner_simple(self):
         testfloatscanner = OpCodes()
-        with unittest.mock.patch('builtins.input', return_value = 1.0):
-            assert testfloatscanner.invoke_virtual("java/util/Scanner.nextDouble:()D") == 1.0
+        with unittest.mock.patch('builtins.input', return_value=1.0):
+            assert testfloatscanner.invoke_virtual(
+                "java/util/Scanner.nextDouble:()D") == 1.0

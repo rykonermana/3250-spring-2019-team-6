@@ -2,9 +2,10 @@ import unittest
 from unittest.mock import mock_open, patch
 from jvpm.ClassFile import ClassFile
 
+
 class TestClassFile(unittest.TestCase):
-    #test class of reading java byte code
-    
+    # test class of reading java byte code
+
     def setUp(self):
         self.cf = ClassFile('jvpm/files/HelloWorld.class')
 

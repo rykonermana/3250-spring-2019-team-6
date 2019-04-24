@@ -2,13 +2,16 @@
 import unittest
 import csv
 import struct
-import array
 from .constant_table import ConstantTable
+from .method_table import MethodTable
 
 # unittest
 
+NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE = 0, 1, 2 ,3, 4
+
 class ClassFile():
     """Main file of the java python virtual machine"""
+
     def __init__(self, file='test/HelloWorld.class'):
         with open(file, 'rb') as binary_file:
             # the byte string being stored in self.data to be parsed
@@ -17,7 +20,8 @@ class ClassFile():
             self.minor = self.get_minor()
             self.major = self.get_major()
             self.constant_pool_count = self.get_constant_pool()-1
-            self.constant_table = ConstantTable(self.data, self.constant_pool_count)
+            self.constant_table = ConstantTable(
+                self.data, self.constant_pool_count)
             self.constant_pool_length = self.constant_table.final_byte
             # self.access_flags = self.get_access_flags()
             # self.this_class = self.get_this_class()
@@ -26,10 +30,10 @@ class ClassFile():
             # self.cp_and_ic = self.interface_count + self.constant_table['length']
             # self.interface_table = self.get_interface_table()
             # self.field_count = self.get_field_count()
-            # self.cp_ic_fc = 224 #  = self.cp_and_ic + self.field_count
+            self.cp_ic_fc = 224 #  = self.cp_and_ic + self.field_count
             # self.field_table = self.get_field_table()
-            # self.method_count = self.get_method_count()
-            # self.method_table = self.get_method_table()
+            self.method_count = self.get_method_count()
+            self.method_table = MethodTable(self.data,self.method_count,self.cp_ic_fc)
             # self.cp_ic_fc_mc = self.cp_ic_fc + len(self.method_table)
             # self.attribute_count = self.get_attribute_count()
             # self.attribute_table = self.get_attribute_table()
@@ -54,18 +58,6 @@ class ClassFile():
         """Returns how large the constant pool is"""
         return self.data[8] + self.data[9]
 
-    #
-    # def get_access_flags(self):
-    #     return self.data[10 + self.constant_pool_length-1:11 + self.constant_pool_length]
-    #
-    # def get_this_class(self):
-    #     return self.data[12 + self.constant_pool_length]
-    #     + self.data[13 + self.constant_pool_length]
-    #
-    # def get_super_class(self):
-    #     return self.data[14 + self.constant_pool_length]
-    #     + self.data[15 + self.constant_pool_length]
-    #
     # def get_interface_count(self):
     #     return self.data[16 + self.constant_pool_length] + self.data[17
     #     + self.constant_pool_length]
@@ -78,23 +70,19 @@ class ClassFile():
     #
     # def get_field_count(self):
     #     return self.data[18 + self.cp_and_ic] + self.data[19 + self.cp_and_ic]
-    #
+
     # def get_field_table(self):
     #     field = self.data[self.cp_and_ic+20:(self.field_count+self.cp_ic_fc+20)]
     #     # for i in range(self.field_count):
     #     #    field += format(self.data[i + 20 + self.cp_and_ic], '02X')
     #     return field
 
-    # def get_method_count(self):
-    #    return self.data[20 + self.cp_ic_fc] + self.data[21 + self.cp_ic_fc]
+    def get_method_count(self):
+        return self.data[20 + self.cp_ic_fc] + self.data[21 + self.cp_ic_fc]
 
-    # def get_method_table(self):
-    #    method = self.data[22+self.cp_ic_fc:22+self.cp_ic_fc+self.method_count]
-    #    return method
-    #
     # def get_attribute_count(self):
     #     return self.data[22 + self.cp_ic_fc_mc] + self.data[23 + self.cp_ic_fc_mc]
-    #
+
     # def get_attribute_table(self):
     #     attribute = self.data[(24+self.cp_ic_fc_mc):(24+self.cp_ic_fc_mc+self.attribute_count)]
     #     # for i in range(self.attribute_count):
@@ -104,10 +92,10 @@ class ClassFile():
     def __str__(self):
         """Prints out to the console"""
         result = "{} {}".format("Magic:", self.magic)
-        result += "{} {}\n{} {}\n{} {}\n{}".format("Minor version: ", self.minor, 
-            "Major version: ", self.major, 
-            "Constant pool count: ", self.constant_pool_count, 
-            str(self.constant_table))
+        result += "{} {}\n{} {}\n{} {}\n{}".format("Minor version: ", self.minor,
+                                                   "Major version: ", self.major,
+                                                   "Constant pool count: ", self.constant_pool_count,
+                                                   str(self.constant_table))
     #     print("Access flags: ", hex(self.access_flags[0]), hex(self.access_flags[1]))
     #     print("This class: ", self.this_class)
     #     print("Superclass: ", self.superclass)
@@ -128,42 +116,50 @@ class ClassFile():
         opcodes = OpCodes(self.method_table)
         opcodes.run()
 
+
 class OpCodes:
     """This class defines a method for operational codes that java virtual machine uses"""
-    def __init__(self, opcodes=[]):
-        self.table = self.load()  # {0x00: self.not_implemented} #read in table with opcodes
+
+    def __init__(self, class_ref, opcodes=[]):
+        # {0x00: self.not_implemented} #read in table with opcodes
+        self.table = self.load()
         self.stack = []
         self.localvar = [0]*10
         self.opcodes = opcodes
-        # self.run()
+        self.class_ref = class_ref
+        self.type = NONE
 
     def load(self):
         """Fills a dictionary with the bytecodes of different operational codes"""
-        dict1 = {}
         with open('jvpm/files/int_opcodes.csv', 'r') as csvfile:
+            dict1 = {}
             spamreader = csv.DictReader(csvfile)
             for ind in list(spamreader):
+                opcode_info = {'name': ind['name'].strip(), 'num_arguments': int(
+                    ind['num_parameters'].strip())}
                 the_number = int(ind['opcode'].strip(), 16)
-                dict1[the_number] = ind['name'].strip()
+                dict1[the_number] = opcode_info
         return dict1
 
     def run(self):
-        """"Prints to the console a list of the opcodes"""
-        for _ in self.opcodes:
+        """"Runs method associated with opcode"""
+        for opcode, value in self.opcodes:
             print("stack: ", self.stack)  # pragma: no cover
-            # method = self.interpret(i)
-            # print("running method", method, "...")
-            # print("finished method", method, "...")
-            # test = input()
+            print("running method: ",
+                  self.table[opcode]['name'])  # pragma: no cover
+            if self.table[opcode]['num_arguments'] > 0:
+                args = []
+                for arg in value:
+                    args.append(arg)
+                getattr(self, self.table[opcode]['name'])(args)
+            else:
+                getattr(self, self.table[opcode]['name'])()
+        return self.table[value]
+        # test = input()
 
     def not_implemented(self):
         """Called when a certain element of the program is not yet implemented"""
         raise NotImplementedError("This function is not implemented.")
-    def interpret(self, value):
-        """Interprets"""
-        print("running method: ", self.table[value])  # pragma: no cover
-        getattr(self, self.table[value])()
-        return self.table[value]
 
     def push_int_to_stack(self, value):
         """Method to check if python is attempting to push a 64 bit integer which is
@@ -172,9 +168,9 @@ class OpCodes:
             raise ValueError()
         self.stack.append(value)
 
-    def iadd(self):
-        """Adds the next two numbers in a stack and pushes the result back on"""
-        self.push_int_to_stack(self.stack.pop() + self.stack.pop())
+    def add(self):
+        """Adds two numbers in a stack and pushes the result back on"""
+        self.push_to_stack(self.pop_from_stack() + self.pop_from_stack())
 
     def iand(self):
         """Pushes the result of the operation 'and' of two numbers in the stack"""
@@ -246,7 +242,8 @@ class OpCodes:
     def iushr(self):
         """Pushes the result of the second number in the stack with it's bytes shifted right
         arithmetically by the amount of the next number in the stack"""
-        self.push_int_to_stack((self.stack.pop() % 0x100000000) >> self.stack.pop())
+        self.push_int_to_stack(
+            (self.stack.pop() % 0x100000000) >> self.stack.pop())
         # needs testing
 
     def ixor(self):
@@ -295,7 +292,8 @@ class OpCodes:
 
     def i2b(self):
         """Pushes the next number in the stack as a byte reference"""
-        self.stack.append(self.stack.pop().to_bytes(length=1, byteorder='big', signed=True))
+        self.stack.append(self.stack.pop().to_bytes(
+            length=1, byteorder='big', signed=True))
 
     def i2c(self):
         """Pushes the next number in the stack as a character reference"""
@@ -317,7 +315,8 @@ class OpCodes:
         if op_min <= value <= op_max:
             self.stack.append(value / 1.0)
         else:
-            raise ValueError("Value {} cannot be converted to long".format(value))
+            raise ValueError(
+                "Value {} cannot be converted to long".format(value))
 
     def i2s(self):
         """Pushes the next number in the stack as a short reference"""
@@ -327,22 +326,33 @@ class OpCodes:
         if op_min <= value <= op_max:
             self.stack.append(value/1.0)
         else:
-            raise ValueError("Value {} cannot be converted to short".format(value))
+            raise ValueError(
+                "Value {} cannot be converted to short".format(value))
+
+    def ldc(self, index):
+        """Pushes constant index to stack"""
+        self.stack.append(index[0])
 
     def invoke_virtual(self, methodRef):
         """Method for reading a java invoke virtual method and applying the correct method
         from python"""
-        invoke = {"java/io/PrintStream.println:(I)V": "printInt", "java/io/PrintStream.println:(Z)V": "printBoolean", 
-        "Method java/io/PrintStream.println:(D)V": "printDouble", "java/io/PrintStream.println:(Ljava/lang/String;)V": "printString",
-        "java/util/Scanner.nextString:()Ljava.lang/String": "inputString", "java/util/Scanner.nextInt:()I": "inputInt",
-        "java/util/Scanner.nextDouble:()D": "inputDouble"}
+        invoke = {"java/io/PrintStream.println:(I)V": "printInt", "java/io/PrintStream.println:(Z)V": "printBoolean",
+                  "Method java/io/PrintStream.println:(D)V": "printDouble", "java/io/PrintStream.println:(Ljava/lang/String;)V": "printString",
+                  "java/util/Scanner.nextString:()Ljava.lang/String": "inputString", "java/util/Scanner.nextInt:()I": "inputInt",
+                  "java/util/Scanner.nextDouble:()D": "inputDouble"}
         if methodRef in invoke:
             return (getattr(self, invoke[methodRef])())
         else:
             self.not_implemented()
-	
+
+    def push_to_stack(self,val):
+        if self.type == T_INT:
+            self.push_int_to_stack(val)
+        elif self.type == T_LONG:
+            self.push_long_to_stack(val)
+
     def printInt(self):
-        return int(self.stack.pop())	
+        return int(self.stack.pop())
 
     def printBoolean(self):
         num = self.stack.pop()
@@ -355,15 +365,15 @@ class OpCodes:
 
     def printDouble(self):
         return (self.stack.pop() / 1.0)
-		
+
     def printString(self):
-        return str(self.stack.pop())
-		
+        return str(self.class_ref.constant_table.constant_table[self.stack.pop()]['decrypted_message'])
+
     def inputString(self):
         return str(input())
-		
+
     def inputInt(self):
         return int(input())
-		
+
     def inputDouble(self):
         return (input() / 1.0)

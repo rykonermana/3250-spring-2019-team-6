@@ -1,36 +1,85 @@
-name,opcode
-iconst_m1 ,2
-iconst_0 ,3
-iconst_1 ,4
-iconst_2 ,5
-iconst_3 ,6
-iconst_4 ,7
-iconst_5 ,8
-iload_0 ,1a 
-iload_1 ,1b 
-iload_2 ,1c 
-iload_3 ,1d 
-istore ,36
-istore_0 ,3b 
-istore_1 ,3c 
-istore_2 ,3d 
-istore_3 ,3e 
-iadd ,60
-isub ,64
-imul ,68
-idiv ,6c 
-irem ,70
-ineg ,74
-ishl ,78
-ishr ,7a 
-iushr ,7c 
-iand ,7e 
-ior ,80
-ixor ,82
-i2l ,85
-i2f ,86
-i2d ,87
-i2b ,91
-i2c ,92
-i2s ,93
-ireturn ,ac 
+name,opcode,num_initial_bytes,method
+iconst_m1 ,2,0,iconst_m1 
+iconst_0 ,3,0,iconst_0 
+iconst_1 ,4,0,iconst_1 
+iconst_2 ,5,0,iconst_2 
+iconst_3 ,6,0,iconst_3 
+iconst_4 ,7,0,iconst_4 
+iconst_5 ,8,0,iconst_5 
+iload_0 ,1a ,0,iload_0 
+iload_1 ,1b ,0,iload_1 
+iload_2 ,1c ,0,iload_2 
+iload_3 ,1d ,0,iload_3 
+istore ,36,0,istore 
+istore_0 ,3b ,0,istore_0 
+istore_1 ,3c ,0,istore_1 
+istore_2 ,3d ,0,istore_2 
+istore_3 ,3e ,0,istore_3 
+iadd ,60,0,iadd 
+isub ,64,0,isub 
+imul ,68,0,imul 
+idiv ,6c ,0,idiv 
+irem ,70,0,irem 
+ineg ,74,0,ineg 
+ishl ,78,0,ishl 
+ishr ,7a ,0,ishr 
+iushr ,7c ,0,iushr 
+iand ,7e ,0,iand 
+ior ,80,0,ior 
+ixor ,82,0,ixor 
+i2l ,85,0,i2l 
+i2f ,86,0,i2f 
+i2d ,87,0,i2d 
+i2b ,91,0,i2b 
+i2c ,92,0,i2c 
+i2s ,93,0,i2s 
+ireturn ,ac ,0,ireturn 
+lload_0 ,1e ,0,lload_0 
+lload_1 ,1f ,0,lload_1 
+lload_2 ,20,0,lload_2 
+lload_3 ,21,0,lload_3 
+fload_0 ,22,0,fload_0 
+fload_1 ,23,0,fload_1 
+fload_2 ,24,0,fload_2 
+fload_3 ,25,0,fload_3 
+lload ,16,0,lload 
+fload ,17,0,fload 
+ldc ,12,2,ldc 
+ldc_w ,13,4,ldc_w 
+ldc2_w ,14,4,ldc2_w 
+iload ,15,0,iload 
+lload ,16,0,lload 
+fload ,17,0,fload 
+lstore_0 ,3f ,0,lstore_0 
+lstore_1 ,40,0,lstore_1 
+lstore_2 ,41,0,lstore_2 
+lstore_3 ,42,0,lstore_3 
+fstore_0 ,43,0,fstore_0 
+fstore_1 ,44,0,fstore_1 
+fstore_2 ,45,0,fstore_2 
+fstore_3 ,46,0,fstore_3 
+ladd ,61,0,ladd 
+fadd ,62,0,fadd 
+lsub ,65,0,lsub 
+fsub ,66,0,fsub 
+lmul ,69,0,lmul 
+fmul ,6a ,0,fmul 
+ldiv ,6d ,0,ldiv 
+fdiv ,6e ,0,fdiv 
+lrem ,71,0,lrem 
+frem ,72,0,frem 
+lneg ,75,0,lneg 
+fneg ,76,0,fneg 
+lshl ,79,0,lshl 
+lushr ,7d ,0,lushr 
+lshr ,7b ,0,lshr 
+land ,7f ,0,land 
+lor ,81,0,lor 
+lxor ,83,0,lxor 
+l2i ,88,0,l2i 
+l2f ,89,0,l2f 
+l2d ,8a ,0,l2d 
+f2i ,8b ,0,f2i 
+f2l ,8c ,0,f2l 
+f2d ,8d ,0,f2d 
+invokevirtual ,b6 ,4,invokevirtual 
