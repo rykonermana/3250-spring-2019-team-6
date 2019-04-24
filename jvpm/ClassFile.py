@@ -96,7 +96,8 @@ class ClassFile():
         result = "{} {}".format("Magic:", self.magic)
         result += "{} {}\n{} {}\n{} {}\n{}".format("Minor version: ", self.minor,
                                                    "Major version: ", self.major,
-                                                   "Constant pool count: ", self.constant_pool_count,
+                                                   "Constant pool count: ",
+                                                   self.constant_pool_count,
                                                    str(self.constant_table))
     #     print("Access flags: ", hex(self.access_flags[0]), hex(self.access_flags[1]))
     #     print("This class: ", self.this_class)
@@ -117,6 +118,7 @@ class ClassFile():
         """Runs the opcode class with the method table passed through it"""
         opcodes = OpCodes(self.method_table)
         opcodes.run()
+
 
 class OpCodes:
     """This class defines a method for operational codes that java virtual machine uses"""
@@ -186,7 +188,8 @@ class OpCodes:
     def push_int_to_stack(self, value):
         """Method to check if python is attempting to push a 64 bit integer which is
         not allowed in java"""
-        if value > 2147483647 or value < -2147483648:
+        extreme_value = 2147483647
+        if value > extreme_value or value < ((-1 * extreme_value) - 1):
             raise ValueError()
         self.stack.append(value)
 
@@ -243,31 +246,38 @@ class OpCodes:
 
     def const_m1(self):
         """Pushes '-1' onto the stack"""
-        self.push_to_stack(-1)
+        m_number = -1
+        self.push_to_stack(m_number)
 
     def const_0(self):
         """Pushes '0' unto the stack"""
-        self.push_to_stack(0)
+        m_number = 0
+        self.push_to_stack(m_number)
 
     def const_1(self):
         """pushes '1' unto the stack"""
-        self.push_to_stack(1)
+        m_number = 1
+        self.push_to_stack(m_number)
 
     def const_2(self):
         """Pushes '2' unto the stack"""
-        self.push_to_stack(2)
+        m_number = 2
+        self.push_to_stack(m_number)
 
     def const_3(self):
         """Pushes '3' unto the stack"""
-        self.push_to_stack(3)
+        m_number = 3
+        self.push_to_stack(m_number)
 
     def const_4(self):
         """Pushes '4' unto the stack"""
-        self.push_to_stack(4)
+        m_number = 4
+        self.push_to_stack(m_number)
 
     def const_5(self):
         """Pushes '5' unto the stack"""
-        self.push_to_stack(5)
+        m_number = 5
+        self.push_to_stack(m_number)
 
     def div(self):
         """Pushes the result of the second number in the stack divided by the next
@@ -327,9 +337,8 @@ class OpCodes:
     def ushr(self):
         """Pushes the result of the second number in the stack with it's bytes shifted right
         arithmetically by the amount of the next number in the stack"""
-        self.push_to_stack(
-            (self.pop_from_stack() % 0x100000000) >> self.pop_from_stack())
-        # needs testing
+        m_number = 0x100000000
+        self.push__to_stack((self.pop_from_stack() % m_number) >> self.pop_from_stack())
 
     def xor(self):
         """Pushes the result of the operation 'exclusive or' of two numbers in the stack"""
@@ -409,7 +418,8 @@ class OpCodes:
         if op_min <= value <= op_max:
             self.stack.append(value/m_number)
         else:
-            raise ValueError("Value {} cannot be converted to short".format(value))
+            raise ValueError(
+                "Value {} cannot be converted to short".format(value))
 
     def ldc(self, index):
         """Pushes constant index to stack"""
@@ -418,26 +428,36 @@ class OpCodes:
     def invoke_virtual(self, methodRef):
         """Method for reading a java invoke virtual method and applying the correct method
         from python"""
-        invoke = {"java/io/PrintStream.println:(I)V": "print_primitive", "java/io/PrintStream.println:(Z)V": "print_boolean",
-                  "Method java/io/PrintStream.println:(D)V": "print_primitive", "java/io/PrintStream.println:(Ljava/lang/String;)V": "print_string",
-                  "java/util/Scanner.nextString:()Ljava.lang/String": "input_string", "java/util/Scanner.nextInt:()I": "input_int",
+        invoke = {"java/io/PrintStream.println:(I)V": "print_int",
+                  "java/io/PrintStream.println:(Z)V": "print_boolean",
+                  "Method java/io/PrintStream.println:(D)V": "print_double",
+                  "java/io/PrintStream.println:(Ljava/lang/String;)V": "print_string",
+                  "java/util/Scanner.nextString:()Ljava.lang/String": "input_string",
+                  "java/util/Scanner.nextInt:()I": "input_int",
                   "java/util/Scanner.nextDouble:()D": "input_double"}
         if methodRef in invoke:
-            return (getattr(self, invoke[methodRef])())
-        else:
-            self.not_implemented()
+            return getattr(self, invoke[methodRef])()
+        # else
+        self.not_implemented()
 
-    def printInt(self):
-        return int(self.pop_from_stack())
+    def print_int(self):
+        """Is called when invokeVirtual method is called to print an integer"""
+        return int(self.stack.pop())
 
     def print_boolean(self):
-        num = self.pop_from_stack()
+        """Is called when invokeVirtual method is called to print an boolean"""
+        num = self.stack.pop()
         if num == 1:
             return "true"
-        elif num == 0:
+        if num == 0:
             return "false"
-        else:
-            raise TypeError("Value coudn't be intterpretted as a boolean.")
+        # else
+        raise TypeError("Value couldn't be interpreted as a boolean.")
+
+    def print_double(self):
+        """Is called when invokedVirtual method is called to print a double"""
+        m_number = 1.0
+        return self.stack.pop() / m_number
 
     def print_primitive(self):
         val = self.pop_from_stack()
@@ -449,11 +469,13 @@ class OpCodes:
         return str(self.stack.pop())
 
     def input_string(self):
+        """Takes input as a string"""
         return str(input())
 
     def input_int(self):
+        """Takes input as an integer"""
         return int(input())
-    
+
     def input_double(self):
         """Takes input as a float/double"""
         m_number = 1.0
