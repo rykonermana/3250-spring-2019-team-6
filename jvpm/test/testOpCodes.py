@@ -4,7 +4,8 @@ from unittest.mock import mock_open, patch
 from unittest.mock import MagicMock
 from ..ClassFile import OpCodes
 
-NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE = 0, 1, 2 ,3, 4
+NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE = 0, 1, 2, 3, 4
+
 
 class TestOpCodes(unittest.TestCase):
     """Unittest for opcodes"""
@@ -210,7 +211,7 @@ class TestOpCodes(unittest.TestCase):
             "java/io/PrintStream.println:(Z)V"), 'false')
         op_code.stack.append("HelloWorld")
         self.assertEqual(op_code.invoke_virtual("java/io/PrintStream.println:"
-                                               "(Ljava/lang/String;)V"), 'HelloWorld')
+                                                "(Ljava/lang/String;)V"), 'HelloWorld')
         self.assertRaises(NotImplementedError, op_code.invoke_virtual, "java/util/Stack.push:")
 
     def test_i2b_simple(self):
@@ -286,40 +287,40 @@ class TestOpCodes(unittest.TestCase):
         """Tests that a double value in java is returned as a float"""
         op_code = OpCodes()
         op_code.type = T_INT
-        op_code.stack.append(2**20-1)
+        op_code.stack.append(2 ** 20 - 1)
         op_code.convert_float()
-        self.assertAlmostEqual(op_code.stack.pop(), 2**20-1)
+        self.assertAlmostEqual(op_code.stack.pop(), 2 ** 20 - 1)
 
     def test_i2d_simpletest2(self):
         """Tests that a double value in java is returned as a float"""
         op_code = OpCodes()
         op_code.type = T_INT
-        op_code.stack.append(-2**20)
+        op_code.stack.append(-2 ** 20)
         op_code.convert_float()
-        self.assertAlmostEqual(op_code.stack.pop(), -2**20)
+        self.assertAlmostEqual(op_code.stack.pop(), -2 ** 20)
 
     def test_i2f_simpletest(self):
         """Tests that an integer is returned as a float"""
         op_code = OpCodes()
         op_code.type = T_INT
-        op_code.stack.append(2**10-1)
+        op_code.stack.append(2 ** 10 - 1)
         op_code.convert_float()
-        self.assertAlmostEqual(op_code.stack.pop(), 2**10-1)
+        self.assertAlmostEqual(op_code.stack.pop(), 2 ** 10 - 1)
 
     def test_i2f_simpletest2(self):
         """Tests that an integer is returned as a float"""
         op_code = OpCodes()
         op_code.type = T_INT
-        op_code.stack.append(-2**10)
+        op_code.stack.append(-2 ** 10)
         op_code.convert_float()
-        self.assertAlmostEqual(op_code.stack.pop(), -2**10)
+        self.assertAlmostEqual(op_code.stack.pop(), -2 ** 10)
 
     def test_i2s_valueTooLarge(self):
         """Tests that a ValueError is thrown when trying to cast an integer that is too large
         to a short type"""
         op_code = OpCodes()
         op_code.type = T_INT
-        op_code.stack.append(2**16)
+        op_code.stack.append(2 ** 16)
         self.assertRaises(ValueError, op_code.convert_short)
 
     def test_i2s_value_too_small(self):
@@ -327,7 +328,7 @@ class TestOpCodes(unittest.TestCase):
         to a short type"""
         op_code = OpCodes()
         op_code.type = T_INT
-        op_code.stack.append(-2**16-1)
+        op_code.stack.append(-2 ** 16 - 1)
         self.assertRaises(ValueError, op_code.convert_short)
 
     def test_i2l_valueTooLarge(self):
@@ -335,7 +336,7 @@ class TestOpCodes(unittest.TestCase):
         to a short type"""
         op_code = OpCodes()
         op_code.type = T_INT
-        op_code.stack.append(2**64)
+        op_code.stack.append(2 ** 64)
         self.assertRaises(ValueError, op_code.convert_long)
 
     def test_i2l_value_too_small(self):
@@ -343,7 +344,7 @@ class TestOpCodes(unittest.TestCase):
         to a short type"""
         op_code = OpCodes()
         op_code.type = T_INT
-        op_code.stack.append(-2**64-1)
+        op_code.stack.append(-2 ** 64 - 1)
         self.assertRaises(ValueError, op_code.convert_long)
 
     def test_iload1_simple(self):
@@ -428,7 +429,7 @@ class TestOpCodes(unittest.TestCase):
     def test_floatscanner_simple(self):
         op_code = OpCodes()
         op_code.type = T_FLOAT
-        with unittest.mock.patch('builtins.input', return_value = 1.0):
+        with unittest.mock.patch('builtins.input', return_value=1.0):
             assert op_code.invoke_virtual("java/util/Scanner.nextDouble:()D") == 1.0
 
     def test_lshl(self):
@@ -438,7 +439,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.stack.append(1)
         op_code.push_long_to_stack(5)
         op_code.shl()
-        self.assertEqual(op_code.pop_long_from_stack(),10)
+        self.assertEqual(op_code.pop_long_from_stack(), 10)
 
     def test_lshl_neg(self):
         """As method name implies"""
@@ -462,18 +463,18 @@ class TestOpCodes(unittest.TestCase):
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
-        op_code.push_long_to_stack(2**62-1)
+        op_code.push_long_to_stack(2 ** 62 - 1)
         op_code.shl()
-        self.assertEqual(op_code.pop_long_from_stack(),2**63-2)
+        self.assertEqual(op_code.pop_long_from_stack(), 2 ** 63 - 2)
 
     def test_lshl_min(self):
         """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
-        op_code.push_long_to_stack(-(2 ** 62)+1)
+        op_code.push_long_to_stack(-(2 ** 62) + 1)
         op_code.shl()
-        self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63-2) )
+        self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63 - 2))
 
     def test_lshl_longNeg(self):
         """As method name implies"""
@@ -482,7 +483,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.stack.append(1)
         op_code.push_long_to_stack(-5)
         op_code.shl()
-        self.assertEqual(op_code.pop_long_from_stack(),-10)
+        self.assertEqual(op_code.pop_long_from_stack(), -10)
 
     def test_lshr(self):
         """As method name implies"""
@@ -491,7 +492,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.stack.append(1)
         op_code.push_long_to_stack(3)
         op_code.shr()
-        self.assertEqual(op_code.pop_long_from_stack(),1)
+        self.assertEqual(op_code.pop_long_from_stack(), 1)
 
     def test_lshr_neg(self):
         """As method name implies"""
@@ -515,9 +516,9 @@ class TestOpCodes(unittest.TestCase):
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
-        op_code.push_long_to_stack(2**63-1)
+        op_code.push_long_to_stack(2 ** 63 - 1)
         op_code.shr()
-        self.assertEqual(op_code.pop_long_from_stack(),2**62-1)
+        self.assertEqual(op_code.pop_long_from_stack(), 2 ** 62 - 1)
 
     def test_lshr_min(self):
         """As method name implies"""
@@ -526,14 +527,14 @@ class TestOpCodes(unittest.TestCase):
         op_code.stack.append(1)
         op_code.push_long_to_stack(-(2 ** 63))
         op_code.shr()
-        self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 62) )
+        self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 62))
 
     def test_push_pop_long(self):
         """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(-(2 ** 63))
-        self.assertEqual(op_code.pop_long_from_stack(), -(2**63))
+        self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63))
 
     def test_lshr_longNeg(self):
         """As method name implies"""
@@ -542,7 +543,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.stack.append(1)
         op_code.push_long_to_stack(-3)
         op_code.shr()
-        self.assertEqual(op_code.pop_long_from_stack(),-2)
+        self.assertEqual(op_code.pop_long_from_stack(), -2)
 
     def test_ladd(self):
         """As method name implies"""
@@ -566,19 +567,19 @@ class TestOpCodes(unittest.TestCase):
         """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
-        op_code.push_long_to_stack(2**63 - 2)
+        op_code.push_long_to_stack(2 ** 63 - 2)
         op_code.push_long_to_stack(1)
         op_code.add()
-        self.assertEqual(op_code.pop_long_from_stack(), (2**63-1))
+        self.assertEqual(op_code.pop_long_from_stack(), (2 ** 63 - 1))
 
     def test_ladd_minimum(self):
         """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
-        op_code.push_long_to_stack(-(2**63-2))
+        op_code.push_long_to_stack(-(2 ** 63 - 2))
         op_code.push_long_to_stack(-1)
         op_code.add()
-        self.assertEqual(op_code.pop_long_from_stack(), -(2**63) +1)
+        self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63) + 1)
 
     def test_land(self):
         """As method name implies"""

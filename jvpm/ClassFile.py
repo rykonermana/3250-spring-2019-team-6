@@ -9,7 +9,8 @@ from .method_table import MethodTable
 
 # unittest
 
-NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE = 0, 1, 2 ,3, 4
+NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE = 0, 1, 2, 3, 4
+
 
 class ClassFile():
     """Main file of the java python virtual machine"""
@@ -21,7 +22,7 @@ class ClassFile():
             self.magic = self.get_magic()
             self.minor = self.get_minor()
             self.major = self.get_major()
-            self.constant_pool_count = self.get_constant_pool()-1
+            self.constant_pool_count = self.get_constant_pool() - 1
             self.constant_table = ConstantTable(
                 self.data, self.constant_pool_count)
             self.constant_pool_length = self.constant_table.final_byte
@@ -79,7 +80,7 @@ class ClassFile():
     #     #    field += format(self.data[i + 20 + self.cp_and_ic], '02X')
     #     return field
 
-    #def get_method_count(self):
+    # def get_method_count(self):
     #    return self.data[20 + self.cp_ic_fc] + self.data[21 + self.cp_ic_fc]
 
     # def get_attribute_count(self):
@@ -99,19 +100,19 @@ class ClassFile():
                                                    "Constant pool count: ",
                                                    self.constant_pool_count,
                                                    str(self.constant_table))
-    #     print("Access flags: ", hex(self.access_flags[0]), hex(self.access_flags[1]))
-    #     print("This class: ", self.this_class)
-    #     print("Superclass: ", self.superclass)
-    #     print("Interface count: ", self.interface_count)
-    #     print("Cp + Ic: ", self.cp_and_ic)
-    #     print("Field count: ", self.field_count)
-    #     print("Cp + Ic + fc: ", self.cp_ic_fc)
-    #     print("Field table: ", "[%s]" % ", ".join(map(str, self.field_table)))
-    #     print("Method count: ", self.method_count)
-    #     print("Cp + IC + Fc + Mc: ", self.cp_ic_fc_mc)
-    #     print("Opcode table: ",''.join("%02x, "%i for i in self.method_table))
-    #     print("Attribute count: ", self.attribute_count)
-    #     print("Attribute table: ", "[%s]" % ", ".join(map(str, self.attribute_table)))
+        #     print("Access flags: ", hex(self.access_flags[0]), hex(self.access_flags[1]))
+        #     print("This class: ", self.this_class)
+        #     print("Superclass: ", self.superclass)
+        #     print("Interface count: ", self.interface_count)
+        #     print("Cp + Ic: ", self.cp_and_ic)
+        #     print("Field count: ", self.field_count)
+        #     print("Cp + Ic + fc: ", self.cp_ic_fc)
+        #     print("Field table: ", "[%s]" % ", ".join(map(str, self.field_table)))
+        #     print("Method count: ", self.method_count)
+        #     print("Cp + IC + Fc + Mc: ", self.cp_ic_fc_mc)
+        #     print("Opcode table: ",''.join("%02x, "%i for i in self.method_table))
+        #     print("Attribute count: ", self.attribute_count)
+        #     print("Attribute table: ", "[%s]" % ", ".join(map(str, self.attribute_table)))
         return result
 
     def run_opcodes(self):
@@ -127,7 +128,7 @@ class OpCodes:
         # {0x00: self.not_implemented} #read in table with opcodes
         self.table = self.load()
         self.stack = []
-        self.localvar = [0]*10
+        self.localvar = [0] * 10
         self.opcodes = opcodes
         self.class_ref = class_ref
         self.type = NONE
@@ -138,9 +139,9 @@ class OpCodes:
             dict1 = {}
             spamreader = csv.DictReader(csvfile)
             for ind in list(spamreader):
-                opcode_info = {'name': ind['name'].strip(), 
-                    'num_initial_bytes': int(ind['num_initial_bytes'].strip()),
-                    'type':int(ind['type'])}
+                opcode_info = {'name': ind['name'].strip(),
+                               'num_initial_bytes': int(ind['num_initial_bytes'].strip()),
+                               'type': int(ind['type'])}
                 the_number = int(ind['opcode'].strip(), 16)
                 dict1[the_number] = opcode_info
         return dict1
@@ -148,8 +149,8 @@ class OpCodes:
     def run(self):
         """"Runs method associated with opcode"""
         for opcode, value in self.opcodes:
-            #print("stack: ", self.stack)  # pragma: no cover
-            #print("running method: ",
+            # print("stack: ", self.stack)  # pragma: no cover
+            # print("running method: ",
             #      self.table[opcode]['name'])  # pragma: no cover
             self.type = self.table[opcode]['type']
             if self.table[opcode]['num_arguments'] > 0:
@@ -166,8 +167,10 @@ class OpCodes:
         """Called when a certain element of the program is not yet implemented"""
         raise NotImplementedError("This function is not implemented.")
 
-############################## PUSH TO STACK METHODS ###########################################
-    def push_to_stack(self,val):
+    ############################## PUSH TO STACK METHODS ###########################################
+
+    def push_to_stack(self, val):
+        """Method to push the correct style variable to the stack"""
         if self.type == T_INT:
             self.push_int_to_stack(val)
         elif self.type == T_LONG:
@@ -178,62 +181,74 @@ class OpCodes:
             self.stack.append(val)
 
     def pop_from_stack(self):
+        """Method to pop the correct style variable to the stack"""
         if self.type == T_LONG:
             return self.pop_long_from_stack()
-        elif self.type == T_INT:
+        if self.type == T_INT:
             return self.stack.pop()
-        elif self.type == T_FLOAT:
+        if self.type == T_FLOAT:
             return self.pop_float_from_stack()
 
     def push_int_to_stack(self, value):
         """Method to check if python is attempting to push a 64 bit integer which is
         not allowed in java"""
         extreme_value = 2147483647
-        if value > extreme_value or value < ((-1 * extreme_value) - 1):
+        low_extreme_value = -2147483648
+        if value > extreme_value or value < low_extreme_value:
             raise ValueError()
         self.stack.append(value)
 
     def push_float_to_stack(self, value):
-        """Method to check if python is attempting to push a 64 bit float which is
-        not allowed in java"""
-        if value > 2147483647 or value < -2147483648:
+        """Method to push a float value that is first checked if it is in the allowable range"""
+        extreme_value = 2147483647
+        low_extreme_value = -2147483648
+        if value > extreme_value or value < low_extreme_value:
             raise ValueError()
         self.stack.append(numpy.float32(value))
 
     def pop_float_from_stack(self):
-        """Method to check if python is attempting to push a 64 bit float which is
-        not allowed in java"""
+        """Method to pop a float value that is first checked if it is in the allowable range"""
         value = self.stack.pop()
-        if value > 2147483647 or value < -2147483648:
+        extreme_value = 2147483647
+        low_extreme_value = -2147483648
+        if value > extreme_value or value < low_extreme_value:
             raise ValueError("Invalid float")
         return numpy.float32(value)
-    
-    def push_long_to_stack(self, word):
-        negative = 1
-        if word > 2**63-1 or word < -(2**63):
-            raise ValueError("long is too big or small")
-        if word<0:
-            negative = -1
-            word*=-1
-        self.stack.append(negative*self.extractLowerBits(word))
-        self.stack.append(negative*self.extractUpperBits(word))
-        
-    def pop_long_from_stack(self):
-        upperBits = self.stack.pop()
-        lowerBits = self.stack.pop()
-        negative = 1
-        if upperBits<0 or lowerBits <0:
-            negative = -1
-        upperBits = abs(upperBits) << 32
-        binaryWord = (abs(lowerBits) + upperBits)*negative
-        return binaryWord
 
-    def extractUpperBits(self, word):
-        return (int(word) & 0xFFFFFFFF00000000) >> 32
-		
-    def extractLowerBits(self, word):
-        return int(word) & 0x00000000FFFFFFFF
-    
+    def push_long_to_stack(self, word):
+        """Method to pop a float value that is first checked if it is in the allowable range"""
+        negative = 1
+        if word > 2 ** 63 - 1 or word < -(2 ** 63):
+            raise ValueError("long is too big or small")
+        if word < 0:
+            negative = -1
+            word *= -1
+        self.stack.append(negative * self.extract_lower_bits(word))
+        self.stack.append(negative * self.extract_upper_bits(word))
+
+    def pop_long_from_stack(self):
+        """Method to pop a long variable from a stack that would take two stack blocks in java"""
+        upper_bits = self.stack.pop()
+        lower_bits = self.stack.pop()
+        negative = 1
+        if upper_bits < 0 or lower_bits < 0:
+            negative = -1
+        shift_amount = 32
+        upper_bits = abs(upper_bits) << shift_amount
+        binary_word = (abs(lower_bits) + upper_bits) * negative
+        return binary_word
+
+    def extract_upper_bits(self, word):
+        """Method to get the highest value 32 bits of a 64-bit value"""
+        bit_screen = 0xFFFFFFFF00000000
+        shift_amount = 32
+        return (int(word) & bit_screen) >> shift_amount
+
+    def extract_lower_bits(self, word):
+        """Method to get the lowest value 32 bits of a 64-bit value"""
+        bit_screen = 0x00000000FFFFFFFF
+        return int(word) & bit_screen
+
     ## start primitive type opcodes ##########################################################
 
     def add(self):
@@ -292,7 +307,7 @@ class OpCodes:
 
     def mul(self):
         """Pushes the result of the top two numbers in the stack"""
-        self.push_to_stack(self.pop_from_stack()*self.pop_from_stack())
+        self.push_to_stack(self.pop_from_stack() * self.pop_from_stack())
 
     def neg(self):
         """Pushes the next number in the stack multiplied by '-1'"""
@@ -331,13 +346,13 @@ class OpCodes:
 
     def sub(self):
         """Pushes the result of the second number in the stack minus the next number"""
-        self.push_to_stack(self.pop_from_stack()-self.pop_from_stack())
+        self.push_to_stack(self.pop_from_stack() - self.pop_from_stack())
 
     def ushr(self):
         """Pushes the result of the second number in the stack with it's bytes shifted right
         arithmetically by the amount of the next number in the stack"""
         m_number = 0x100000000
-        self.push__to_stack((self.pop_from_stack() % m_number) >> self.pop_from_stack())
+        self.push_to_stack((self.pop_from_stack() % m_number) >> self.pop_from_stack())
 
     def xor(self):
         """Pushes the result of the operation 'exclusive or' of two numbers in the stack"""
@@ -383,21 +398,26 @@ class OpCodes:
         index = 3
         self.localvar[index] = self.pop_from_stack()
 
-    def convert(self,to_type):
+    def convert(self, to_type):
+        """Calls on a method depending on the type to convert a value to that type"""
         val = self.pop_from_stack()
         self.type = to_type
         self.push_to_stack(val)
 
     def convert_double(self):
+        """Converts value to double"""
         self.convert(T_DOUBLE)
-    
+
     def convert_int(self):
+        """Converts value to integer"""
         self.convert(T_INT)
 
     def convert_long(self):
+        """Converts value to long"""
         self.convert(T_LONG)
-    
+
     def convert_float(self):
+        """Converts value to float"""
         self.convert(T_FLOAT)
 
     def convert_byte(self):
@@ -410,12 +430,13 @@ class OpCodes:
         self.stack.append(chr(self.pop_from_stack()))
 
     def convert_short(self):
-        op_max = 2**16-1
-        op_min = -2**16
+        """Converts a value to a short if within the allowable range"""
+        op_max = 2 ** 16 - 1
+        op_min = -2 ** 16
         m_number = 1.0
         value = self.pop_from_stack()
         if op_min <= value <= op_max:
-            self.stack.append(value/m_number)
+            self.stack.append(value / m_number)
         else:
             raise ValueError(
                 "Value {} cannot be converted to short".format(value))
@@ -459,10 +480,11 @@ class OpCodes:
         return self.stack.pop() / m_number
 
     def print_primitive(self):
+        """Is called to print a primitive value"""
         val = self.pop_from_stack()
         print(val)
         return val
-    
+
     def print_string(self):
         """Is called when invokedVirtual method is called to print a string"""
         return str(self.stack.pop())
