@@ -3,6 +3,7 @@ import unittest
 import csv
 import struct
 import array
+import numpy
 from .constant_table import ConstantTable
 
 # unittest
@@ -181,6 +182,20 @@ class OpCodes:
             raise ValueError()
         self.stack.append(value)
 
+    def push_float_to_stack(self, value):
+        """Method to check if python is attempting to push a 64 bit float which is
+        not allowed in java"""
+        if value > 2147483647 or value < -2147483648:
+            raise ValueError()
+        self.stack.append(numpy.float32(value))
+
+    def pop_float_from_stack(self, value):
+        """Method to check if python is attempting to push a 64 bit float which is
+        not allowed in java"""
+        if value > 2147483647 or value < -2147483648:
+            raise ValueError()
+        self.stack.pop(numpy.float32(value))
+    
     def iadd(self):
         """Adds the next two numbers in a stack and pushes the result back on"""
         self.push_int_to_stack(self.stack.pop() + self.stack.pop())

@@ -13,6 +13,7 @@ public class JavaTest {
       int myInt;
       double myDouble;
       String myString;
+      float myFloat;
          
       a = 1 + 2;
       b = 3 / 4;
@@ -34,6 +35,8 @@ public class JavaTest {
       System.out.println("This is my integer: " + myInt);
       myDouble = Reader.nextDouble();
       System.out.println("This is my double: " + myDouble);
+      myFloat = Reader.nextFloat();
+      System.out.println("This is my float: " + myFloat);
       System.out.println("Hello World");
             
    }
