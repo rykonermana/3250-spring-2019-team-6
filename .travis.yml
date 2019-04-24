@@ -6,6 +6,7 @@ python:
 install:
 - pip install codecov
 - pip install coverage
+- pip install numpy
 addons:
   sonarcloud:
     organization: rykonermana-github

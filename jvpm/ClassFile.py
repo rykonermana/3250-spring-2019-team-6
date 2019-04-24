@@ -79,8 +79,8 @@ class ClassFile():
     #     #    field += format(self.data[i + 20 + self.cp_and_ic], '02X')
     #     return field
 
-    def get_method_count(self):
-        return self.data[20 + self.cp_ic_fc] + self.data[21 + self.cp_ic_fc]
+    #def get_method_count(self):
+    #    return self.data[20 + self.cp_ic_fc] + self.data[21 + self.cp_ic_fc]
 
     # def get_attribute_count(self):
     #     return self.data[22 + self.cp_ic_fc_mc] + self.data[23 + self.cp_ic_fc_mc]
@@ -148,9 +148,9 @@ class OpCodes:
     def run(self):
         """"Runs method associated with opcode"""
         for opcode, value in self.opcodes:
-            print("stack: ", self.stack)  # pragma: no cover
-            print("running method: ",
-                  self.table[opcode]['name'])  # pragma: no cover
+            #print("stack: ", self.stack)  # pragma: no cover
+            #print("running method: ",
+            #      self.table[opcode]['name'])  # pragma: no cover
             self.type = self.table[opcode]['type']
             if self.table[opcode]['num_arguments'] > 0:
                 args = []
@@ -297,7 +297,6 @@ class OpCodes:
     def neg(self):
         """Pushes the next number in the stack multiplied by '-1'"""
         val = self.pop_from_stack() * (-1)
-        print("neg",val)
         self.push_to_stack(val)
 
     def opcode_or(self):
