@@ -29,7 +29,7 @@ class OpcodeParse:
     
     def load_method_helper(self):
         dict_variable_length = {}
-        with open('C:/Users/swanc/Documents/CS3250/temp/3250-spring-2019-team-6/jvpm/files/int_opcodes.csv', 'r') as csvfile:
+        with open('jvpm/files/int_opcodes.csv', 'r') as csvfile:
             spamreader = csv.DictReader(csvfile)
             for constant in list(spamreader):
                 print(constant)

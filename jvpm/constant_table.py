@@ -79,7 +79,7 @@ class ConstantTable:
 def load_constant_helper():
     """loads file with details on each constant type"""
     dict_variable_length = {}
-    with open('C:/Users/swanc/Documents/CS3250/temp/3250-spring-2019-team-6/jvpm/files/constant_codes.csv', 'r') as csvfile:
+    with open('jvpm/files/constant_codes.csv', 'r') as csvfile:
         spamreader = csv.DictReader(csvfile)
         for constant in list(spamreader):
             constant_info = {}
