@@ -9,7 +9,7 @@ NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE = 0, 1, 2, 3, 4
 
 class ClassFile():
     """Main file of the java python virtual machine"""
-    def __init__(self, file='C:/Users/swanc/Documents/CS3250/temp/3250-spring-2019-team-6/jvpm/files/HelloWorld.class'):
+    def __init__(self, file='jvpm/files/HelloWorld.class'):
         with open(file, 'rb') as binary_file:
             self.data = binary_file.read()
             self.magic = self.get_magic()
