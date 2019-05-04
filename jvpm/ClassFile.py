@@ -277,11 +277,15 @@ class OpCodes:
 
     def opcode_or(self):
         """Pushes the result of the operation 'or' of two numbers in the stack"""
-        self.push_to_stack(self.pop_from_stack() | self.pop_from_stack())
+        val1 = self.pop_from_stack()
+        val2 = self.pop_from_stack()
+        self.push_to_stack(val1 | val2)
 
     def rem(self):
         """Pushes the remainder of the second number in the stack divided by the next number"""
-        self.push_to_stack(self.pop_from_stack() % self.pop_from_stack())
+        val1 = self.pop_from_stack()
+        val2 = self.pop_from_stack()
+        self.push_to_stack(val1 % val2)
 
     def shl(self):
         """Pushes the result of the second number in the stack with it's bytes shifted left
@@ -307,7 +311,9 @@ class OpCodes:
 
     def sub(self):
         """Pushes the result of the second number in the stack minus the next number"""
-        self.push_to_stack(self.pop_from_stack() - self.pop_from_stack())
+        val1 = self.pop_from_stack() #to clear up sonarcloud smells
+        val2 = self.pop_from_stack()
+        self.push_to_stack(val1 - val2)
 
     def ushr(self):
         """Pushes the result of the second number in the stack with it's bytes shifted right
@@ -317,7 +323,9 @@ class OpCodes:
 
     def xor(self):
         """Pushes the result of the operation 'exclusive or' of two numbers in the stack"""
-        self.push_to_stack(self.pop_from_stack() ^ self.pop_from_stack())
+        val1 = self.pop_from_stack() #to clear up sonarcloud smells
+        val2 = self.pop_from_stack()
+        self.push_to_stack(val1 ^ val2)
 
     def load_0(self):
         """Loads the variable of the variable array 'index 0' unto the stack"""
