@@ -114,9 +114,6 @@ class OpCodes:
     def run(self):
         """"Runs method associated with opcode"""
         for opcode, value in self.opcodes:
-            # print("stack: ", self.stack)  # pragma: no cover
-            # print("running method: ",
-            #      self.table[opcode]['name'])  # pragma: no cover
             self.type = self.table[opcode]['type']
             if self.table[opcode]['num_arguments'] > 0:
                 args = []
@@ -409,7 +406,7 @@ class OpCodes:
         """Pushes constant index to stack"""
         self.push_to_stack(index[0])
 
-    def invoke_virtual(self, methodRef):
+    def invoke_virtual(self, method_ref):
         """Method for reading a java invoke virtual method and applying the correct method
         from python"""
         invoke = {"java/io/PrintStream.println:(I)V": "print_int",
@@ -419,8 +416,8 @@ class OpCodes:
                   "java/util/Scanner.nextString:()Ljava.lang/String": "input_string",
                   "java/util/Scanner.nextInt:()I": "input_int",
                   "java/util/Scanner.nextDouble:()D": "input_double"}
-        if methodRef in invoke:
-            return getattr(self, invoke[methodRef])()
+        if method_ref in invoke:
+            return getattr(self, invoke[method_ref])()
         # else
         self.not_implemented()
 
