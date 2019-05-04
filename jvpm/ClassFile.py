@@ -1,45 +1,32 @@
 """This program runs a java virtual machine using python"""
-import unittest
-import csv
-import struct
-import numpy
-
-from .constant_table import ConstantTable
-from .method_table import MethodTable
-
-# unittest
+from jvpm.ClassFile import *
+from jvpm.constant_table import *
+from jvpm.opcode_parser import *
+from jvpm.method_row import *
 
 NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE = 0, 1, 2, 3, 4
 
 
 class ClassFile():
     """Main file of the java python virtual machine"""
-
-    def __init__(self, file='jvpm/files/HelloWorld.class'):
+    def __init__(self, file='C:/Users/swanc/Documents/CS3250/temp/3250-spring-2019-team-6/jvpm/files/HelloWorld.class'):
         with open(file, 'rb') as binary_file:
-            # the byte string being stored in self.data to be parsed
             self.data = binary_file.read()
             self.magic = self.get_magic()
             self.minor = self.get_minor()
             self.major = self.get_major()
             self.constant_pool_count = self.get_constant_pool() - 1
-            self.constant_table = ConstantTable(
-                self.data, self.constant_pool_count)
+            self.constant_table = ConstantTable(self.data, self.constant_pool_count)
             self.constant_pool_length = self.constant_table.final_byte
-            # self.access_flags = self.get_access_flags()
-            # self.this_class = self.get_this_class()
-            # self.superclass = self.get_super_class()
-            # self.interface_count = self.get_interface_count()
-            # self.cp_and_ic = self.interface_count + self.constant_table['length']
-            # self.interface_table = self.get_interface_table()
-            # self.field_count = self.get_field_count()
-            # self.cp_ic_fc = 224 #  = self.cp_and_ic + self.field_count
-            # self.field_table = self.get_field_table()
-            # self.method_count = self.get_method_count()
-            # self.method_table = MethodTable(self.data,self.method_count,self.cp_ic_fc)
-            # self.cp_ic_fc_mc = self.cp_ic_fc + len(self.method_table)
-            # self.attribute_count = self.get_attribute_count()
-            # self.attribute_table = self.get_attribute_table()
+            # skipping access flags, class, super class
+            self.interface_count = self.get_interface_count()
+            assert self.interface_count == 0 # Interface table not implemented
+            self.cp_and_ic = self.interface_count + self.constant_pool_length
+            self.field_count = self.get_field_count()
+            assert self.field_count == 0 # Field table parse not implemented
+            self.cp_ic_fc = self.cp_and_ic + self.field_count
+            self.method_count = self.get_method_count()
+            self.method_table = self.get_method_table()
 
     def get_magic(self):
         """Finds the magic number in the byte code which confirms the following
@@ -61,71 +48,51 @@ class ClassFile():
         """Returns how large the constant pool is"""
         return self.data[8] + self.data[9]
 
-    # def get_interface_count(self):
-    #     return self.data[16 + self.constant_pool_length] + self.data[17
-    #     + self.constant_pool_length]
-    #
-    # def get_interface_table(self):
-    #     interface = ""
-    #     for i in range(self.interface_count):
-    #         interface += format(self.data[i + 18 + self.constant_pool_length], '02X')
-    #     return interface
-    #
-    # def get_field_count(self):
-    #     return self.data[18 + self.cp_and_ic] + self.data[19 + self.cp_and_ic]
+    def get_interface_count(self):
+        return self.data[16 + self.constant_pool_length] + self.data[17
+            + self.constant_pool_length]
 
-    # def get_field_table(self):
-    #     field = self.data[self.cp_and_ic+20:(self.field_count+self.cp_ic_fc+20)]
-    #     # for i in range(self.field_count):
-    #     #    field += format(self.data[i + 20 + self.cp_and_ic], '02X')
-    #     return field
+    def get_field_count(self):
+        return self.data[18 + self.cp_and_ic] + self.data[19 + self.cp_and_ic]
 
-    # def get_method_count(self):
-    #    return self.data[20 + self.cp_ic_fc] + self.data[21 + self.cp_ic_fc]
+    def get_method_count(self):
+       return parse_bytes_value(self.data, 20 + self.cp_ic_fc, 2)
 
-    # def get_attribute_count(self):
-    #     return self.data[22 + self.cp_ic_fc_mc] + self.data[23 + self.cp_ic_fc_mc]
-
-    # def get_attribute_table(self):
-    #     attribute = self.data[(24+self.cp_ic_fc_mc):(24+self.cp_ic_fc_mc+self.attribute_count)]
-    #     # for i in range(self.attribute_count):
-    #     #    attribute += format(self.data[i + 24 + self.cp_ic_fc_mc], '02X')
-    #     return attribute
+    def get_method_table(self):
+        table = []
+        start_length = self.cp_ic_fc +22
+        for _ in range(self.method_count):
+            row = MethodRow(self.data, start_length)
+            start_length += row.total_length
+            table.append(row)
+            print(row)
+        return table
 
     def __str__(self):
         """Prints out to the console"""
-        result = "{} {}".format("Magic:", self.magic)
-        result += "{} {}\n{} {}\n{} {}\n{}".format("Minor version: ", self.minor,
-                                                   "Major version: ", self.major,
-                                                   "Constant pool count: ",
-                                                   self.constant_pool_count,
-                                                   str(self.constant_table))
-        #     print("Access flags: ", hex(self.access_flags[0]), hex(self.access_flags[1]))
-        #     print("This class: ", self.this_class)
-        #     print("Superclass: ", self.superclass)
-        #     print("Interface count: ", self.interface_count)
-        #     print("Cp + Ic: ", self.cp_and_ic)
-        #     print("Field count: ", self.field_count)
-        #     print("Cp + Ic + fc: ", self.cp_ic_fc)
-        #     print("Field table: ", "[%s]" % ", ".join(map(str, self.field_table)))
-        #     print("Method count: ", self.method_count)
-        #     print("Cp + IC + Fc + Mc: ", self.cp_ic_fc_mc)
-        #     print("Opcode table: ",''.join("%02x, "%i for i in self.method_table))
-        #     print("Attribute count: ", self.attribute_count)
-        #     print("Attribute table: ", "[%s]" % ", ".join(map(str, self.attribute_table)))
+        result = "{} {}\n".format("Magic:", self.magic)
+        result += "{} {}\n{} {}\n{} {}\n{}\n".format(
+            "Minor version: ", self.minor,
+            "Major version: ", self.major, "Constant pool count: ",
+            self.constant_pool_count, str(self.constant_table))
+        result += "{} {}\n{} {}\n{} {}\n{} {}\n{} {}\n{}{}".format(
+            "Interface count: ", self.interface_count,
+            "Cp + Ic: ", self.cp_and_ic, "Field count: ", self.field_count,
+            "Cp + Ic + fc: ", self.cp_ic_fc, "Method count: ", self.method_count,
+            "Method table: ", "\n".join(["\n" + str(a) for a in self.method_table]))
         return result
 
     def run_opcodes(self):
         """Runs the opcode class with the method table passed through it"""
-        opcodes = OpCodes(self.method_table)
+        opcodes = OpCodes(self, self.method_table)
         opcodes.run()
 
-
+import numpy
 class OpCodes:
     """This class defines a method for operational codes that java virtual machine uses"""
 
-    def __init__(self, class_ref=ClassFile(), opcodes=[]):
-        # {0x00: self.not_implemented} #read in table with opcodes
+    def __init__(self, class_ref, opcodes=[]):
+        print("here")
         self.table = self.load()
         self.stack = []
         self.localvar = [0] * 10
@@ -137,8 +104,8 @@ class OpCodes:
         """Fills a dictionary with the bytecodes of different operational codes"""
         with open('jvpm/files/int_opcodes.csv', 'r') as csvfile:
             dict1 = {}
-            spamreader = csv.DictReader(csvfile)
-            for ind in list(spamreader):
+            spam_reader = csv.DictReader(csvfile)
+            for ind in list(spam_reader):
                 opcode_info = {'name': ind['name'].strip(),
                                'num_initial_bytes': int(ind['num_initial_bytes'].strip()),
                                'type': int(ind['type'])}
@@ -161,7 +128,6 @@ class OpCodes:
             else:
                 getattr(self, self.table[opcode]['name'])()
         return self.table[value]
-        # test = input()
 
     def not_implemented(self):
         """Called when a certain element of the program is not yet implemented"""
@@ -501,3 +467,13 @@ class OpCodes:
         """Takes input as a float/double"""
         m_number = 1.0
         return input() / m_number
+
+
+def main():
+    classy = ClassFile("C:/Users/swanc/Documents/CS3250/temp/3250-spring-2019-team-6/jvpm/files/AddTwo.class")
+    print(str(classy))
+
+
+if __name__ == "__main__":
+    main()
+

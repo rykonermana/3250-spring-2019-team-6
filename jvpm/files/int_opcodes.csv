@@ -1,9 +1,9 @@
 name,opcode,num_initial_bytes,method,type_enum,type
-f2d ,8d ,0,conver_double,T_FLOAT,3
+f2d ,8d ,0,convert_double,T_FLOAT,3
 f2i ,8b ,0,convert_int,T_FLOAT,3
 f2l ,8c ,0,convert_long,T_FLOAT,3
-fadd ,62,0,fadd ,T_FLOAT,3
-fdiv ,6e ,0,fdiv ,T_FLOAT,3
+fadd ,62,0,add ,T_FLOAT,3
+fdiv ,6e ,0,div ,T_FLOAT,3
 fload ,17,0,load ,T_FLOAT,3
 fload_0 ,22,0,load_0 ,T_FLOAT,3
 fload_1 ,23,0,load_1 ,T_FLOAT,3
@@ -32,8 +32,8 @@ iconst_3 ,6,0,const_3 ,T_INT,1
 iconst_4 ,7,0,const_4 ,T_INT,1
 iconst_5 ,8,0,const_5 ,T_INT,1
 iconst_m1 ,2,0,const_m1 ,T_INT,1
-idiv ,6c ,0,idiv ,T_INT,1
-iload ,15,0,iload ,T_INT,1
+idiv ,6c ,0,div ,T_INT,1
+iload ,15,0,load ,T_INT,1
 iload_0 ,1a ,0,load_0 ,T_INT,1
 iload_1 ,1b ,0,load_1 ,T_INT,1
 iload_2 ,1c ,0,load_2 ,T_INT,1
@@ -42,9 +42,9 @@ imul ,68,0,imul ,T_INT,1
 ineg ,74,0,ineg ,T_INT,1
 invokevirtual ,b6 ,4,invokevirtual ,NONE,0
 ior ,80,0,opcode_or ,T_INT,1
-irem ,70,0,irem ,T_INT,1
-ishl ,78,0,ishl ,T_INT,1
-ishr ,7a ,0,ishr ,T_INT,1
+irem ,70,0,rem ,T_INT,1
+ishl ,78,0,shl ,T_INT,1
+ishr ,7a ,0,shr ,T_INT,1
 istore ,36,0,store ,T_INT,1
 istore_0 ,3b ,0,store_0 ,T_INT,1
 istore_1 ,3c ,0,store_1 ,T_INT,1

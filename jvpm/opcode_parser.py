@@ -1,6 +1,7 @@
 import csv
 
-class MethodTable:
+
+class OpcodeParse:
     """class to parse Java bytecode constant pool"""
 
     def __init__(self, data, count, init_position):
@@ -16,8 +17,8 @@ class MethodTable:
         the_table = {}
         active_position = self.init_position
         for i in range(1, self.method_pool_count+1):
-            # 3 steps here: get constant type from bytes, get additional bytes for constant code, get utf-8 variable length message. split???
-            opcode = self.data[active_position:active_position+1]
+            opcode = self.data[active_position]
+            print(opcode)
             active_position += 1
             message_length = self.method_pool_helper[opcode]['num_initial_bytes']
             dict_constant = {'opcode': opcode,
@@ -28,13 +29,14 @@ class MethodTable:
     
     def load_method_helper(self):
         dict_variable_length = {}
-        with open('jvpm/files/constant_codes.csv', 'r') as csvfile:
+        with open('C:/Users/swanc/Documents/CS3250/temp/3250-spring-2019-team-6/jvpm/files/int_opcodes.csv', 'r') as csvfile:
             spamreader = csv.DictReader(csvfile)
             for constant in list(spamreader):
-                method_info = {}
-                method_info['num_initial_bytes'] = int(
-                    constant['num_initial_bytes bytes'].strip())
+                print(constant)
+                method_info = {'num_initial_bytes': int(
+                    constant['num_initial_bytes'].strip())}
                 method_info['variable_length'] = False
                 the_number = int(constant['opcode'].strip(), 16)
                 dict_variable_length[the_number] = method_info
+        print(dict_variable_length)
         return dict_variable_length
