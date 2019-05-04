@@ -218,7 +218,9 @@ class OpCodes:
 
     def opcode_and(self):
         """Pushes the result of the operation 'and' of two numbers in the stack"""
-        self.push_to_stack(self.pop_from_stack() & self.pop_from_stack())
+        val1 = self.pop_from_stack() #to clear up sonarcloud smells
+        val2 = self.pop_from_stack()
+        self.push_to_stack(val1 & val2)
 
     def const_m1(self):
         """Pushes '-1' onto the stack"""
