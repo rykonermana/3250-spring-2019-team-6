@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8d3691d3-5a9f-41c1-a6e7-9a8a64d7a7e7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/jvpm/attribute.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jvpm/method_row.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jvpm/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/3250-spring-2019-team-6.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/3250-spring-2019-team-6.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jvpm/ClassFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/jvpm/ClassFile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jvpm/constant_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/jvpm/constant_table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jvpm/demo_code.py" beforeDir="false" afterPath="$PROJECT_DIR$/jvpm/demo_code.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jvpm/files/int_opcodes.csv" beforeDir="false" afterPath="$PROJECT_DIR$/jvpm/files/int_opcodes.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jvpm/method_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/jvpm/opcode_parser.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/jvpm/ClassFile.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+            <state relative-caret-position="323">
+              <caret line="67" selection-end-line="477" />
               <folding>
                 <element signature="e#60#88#0" expanded="true" />
               </folding>
@@ -127,6 +117,7 @@
       <find>get_method_table</find>
       <find>ClassFile</find>
       <find>ClassFile()</find>
+      <find>called</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -277,12 +268,12 @@
       <workItem from="1556124746575" duration="596000" />
       <workItem from="1556132092572" duration="504000" />
       <workItem from="1556753256001" duration="598000" />
-      <workItem from="1556760328741" duration="15333000" />
+      <workItem from="1556760328741" duration="15967000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19871000" />
+    <option name="totallyTimeSpent" value="20505000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
@@ -392,8 +383,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/jvpm/ClassFile.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="323">
+          <caret line="67" selection-end-line="477" />
           <folding>
             <element signature="e#60#88#0" expanded="true" />
           </folding>

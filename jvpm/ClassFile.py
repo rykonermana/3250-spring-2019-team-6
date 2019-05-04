@@ -65,7 +65,6 @@ class ClassFile():
             row = MethodRow(self.data, start_length)
             start_length += row.total_length
             table.append(row)
-            print(row)
         return table
 
     def __str__(self):
@@ -91,8 +90,7 @@ import numpy
 class OpCodes:
     """This class defines a method for operational codes that java virtual machine uses"""
 
-    def __init__(self, class_ref, opcodes=[]):
-        print("here")
+    def __init__(self, class_ref=ClassFile(), opcodes=[]):
         self.table = self.load()
         self.stack = []
         self.localvar = [0] * 10
