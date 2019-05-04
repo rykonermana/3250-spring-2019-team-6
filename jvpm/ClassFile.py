@@ -94,7 +94,7 @@ class OpCodes:
         self.table = self.load()
         self.stack = []
         self.localvar = [0] * 10
-        self.opcodes = opcodes
+        self.opcode_list = opcodes
         self.class_ref = class_ref
         self.type = NONE
 
@@ -113,7 +113,7 @@ class OpCodes:
 
     def run(self):
         """"Runs method associated with opcode"""
-        for opcode, value in self.opcodes:
+        for opcode, value in self.opcode_list:
             self.type = self.table[opcode]['type']
             if self.table[opcode]['num_arguments'] > 0:
                 args = []
