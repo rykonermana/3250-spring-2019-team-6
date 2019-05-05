@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8d3691d3-5a9f-41c1-a6e7-9a8a64d7a7e7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jvpm/ClassFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/jvpm/ClassFile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jvpm/demo_code.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jvpm/files/int_opcodes.csv" beforeDir="false" afterPath="$PROJECT_DIR$/jvpm/files/int_opcodes.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jvpm/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/jvpm/utils.py" afterDir="false" />
-    </list>
+    <list default="true" id="8d3691d3-5a9f-41c1-a6e7-9a8a64d7a7e7" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/jvpm/ClassFile.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="85" selection-start-line="85" selection-end-line="85" />
+            <state relative-caret-position="374">
+              <caret line="91" lean-forward="true" selection-start-line="91" selection-end-line="91" />
               <folding>
                 <element signature="e#60#88#0" expanded="true" />
               </folding>
@@ -167,11 +161,10 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1912" />
-    <option name="y" value="-8" />
-    <option name="width" value="1124" />
-    <option name="height" value="632" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1913" />
+    <option name="width" value="974" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -295,22 +288,22 @@
       <workItem from="1556124746575" duration="596000" />
       <workItem from="1556132092572" duration="504000" />
       <workItem from="1556753256001" duration="598000" />
-      <workItem from="1556760328741" duration="37349000" />
+      <workItem from="1556760328741" duration="37952000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41887000" />
+    <option name="totallyTimeSpent" value="42490000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="1913" y="0" width="974" height="1047" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19083156" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24179432" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.29577464" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2986871" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -418,8 +411,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/jvpm/ClassFile.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="85" selection-start-line="85" selection-end-line="85" />
+        <state relative-caret-position="374">
+          <caret line="91" lean-forward="true" selection-start-line="91" selection-end-line="91" />
           <folding>
             <element signature="e#60#88#0" expanded="true" />
           </folding>
