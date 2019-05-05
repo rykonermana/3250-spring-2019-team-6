@@ -40,7 +40,7 @@ iload_2 ,1c ,0,load_2 ,T_INT,1
 iload_3 ,1d ,0,load_3 ,T_INT,1
 imul ,68,0,imul ,T_INT,1
 ineg ,74,0,ineg ,T_INT,1
-invokevirtual ,b6 ,4,invokevirtual ,NONE,0
+invokevirtual ,b6 ,2,invoke_virtual,NONE,0
 ior ,80,0,opcode_or ,T_INT,1
 irem ,70,0,rem ,T_INT,1
 ishl ,78,0,shl ,T_INT,1
@@ -58,9 +58,9 @@ l2f ,89,0,convert_float,T_LONG,2
 l2i ,88,0,convert_int,T_LONG,2
 ladd ,61,0,add ,T_LONG,2
 land ,7f ,0,opcode_and ,T_LONG,2
-ldc ,12,2,ldc ,NONE,0
-ldc_w ,13,4,ldc_w ,NONE,0
-ldc2_w ,14,4,ldc2_w ,NONE,0
+ldc ,12,1,ldc ,NONE,0
+ldc_w ,13,2,ldc_w ,NONE,0
+ldc2_w ,14,2,ldc2_w ,NONE,0
 ldiv ,6d ,0,div,T_LONG,2
 lload ,16,0,load,T_LONG,2
 lload_0 ,1e ,0,load_0 ,T_LONG,2
@@ -80,3 +80,15 @@ lstore_3 ,42,0,store_3 ,T_LONG,2
 lsub ,65,0,sub ,T_LONG,2
 lushr ,7d ,0,ushr ,T_LONG,2
 lxor ,83,0,xor ,T_LONG,2
+return,b1,0,do_nothing,T_NONE,0
+invokespecial ,b7 ,0,do_nothing,T_NONE,0
+new ,bb ,0,do_nothing,T_NONE,0
+getstatic ,b2 ,2,do_nothing,T_NONE,0
+aload_0 ,2a ,0,load_0 ,T_STRING,4
+aload_1 ,2b ,0,load_1 ,T_STRING,4
+aload_2 ,2c ,0,load_2 ,T_STRING,4
+aload_3 ,2d ,0,load_3 ,T_STRING,4
+astore_0 ,4b ,0,store_0 ,T_STRING,4
+astore_1 ,4c ,0,store_1 ,T_STRING,4
+astore_2 ,4d ,0,store_2 ,T_STRING,4
+astore_3 ,4e ,0,store_3 ,T_STRING,4

@@ -1,10 +1,8 @@
 """Unittest to be used with ClassFile.py"""
 import unittest
-from unittest.mock import mock_open, patch
-from unittest.mock import MagicMock
+from unittest.mock import mock_open
+from jvpm.utils import *
 from ..ClassFile import OpCodes
-
-NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE = 0, 1, 2, 3, 4
 
 
 class TestOpCodes(unittest.TestCase):
@@ -525,7 +523,7 @@ class TestOpCodes(unittest.TestCase):
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
-        op_code.push_long_to_stack(-(2 ** 63))
+        op_code.push_long_to_stack(-(2 ** 63-1))
         op_code.shr()
         self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 62))
 
@@ -533,8 +531,8 @@ class TestOpCodes(unittest.TestCase):
         """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
-        op_code.push_long_to_stack(-(2 ** 63))
-        self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63))
+        op_code.push_long_to_stack(-(2 ** 63-1))
+        self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63-1))
 
     def test_lshr_longNeg(self):
         """As method name implies"""

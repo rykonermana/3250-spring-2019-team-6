@@ -7,6 +7,9 @@ METHOD_DESCRIPTOR_LENGTH = 2
 METHOD_ATTRIBUTE_COUNT_START = METHOD_FLAGS_LENGTH + METHOD_NAME_LENGTH + METHOD_DESCRIPTOR_LENGTH
 METHOD_ATTRIBUTE_COUNT_LENGTH = 2
 
+ATTRIBUTE_CODE_LENGTH_START = 4
+ATTRIBUTE_CODE_LENGTH_LENGTH = 4
+
 
 class MethodRow:
     def __init__(self, data, start_position):
@@ -28,6 +31,13 @@ class MethodRow:
             self.total_length += attribute.total_length
             attributes.append(attribute)
         return attributes
+
+    def get_op_code_bytes(self):
+        attribute_bytes = self.attributes[0].get_attribute_bytes()
+        op_code_bytes_length = parse_bytes_value(attribute_bytes, ATTRIBUTE_CODE_LENGTH_START,
+                                                ATTRIBUTE_CODE_LENGTH_LENGTH)
+        start = ATTRIBUTE_CODE_LENGTH_START + ATTRIBUTE_CODE_LENGTH_LENGTH
+        return attribute_bytes[start:start+op_code_bytes_length]
 
     def __str__(self):
         return "{}\n{}: {}\n{}: {}\n{}".format("Method", "Name Index", self.name_index,

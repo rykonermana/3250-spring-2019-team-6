@@ -4,12 +4,10 @@ from jvpm.constant_table import *
 from jvpm.opcode_parser import *
 from jvpm.method_row import *
 
-NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE = 0, 1, 2, 3, 4
 
-
-class ClassFile():
+class ClassFile:
     """Main file of the java python virtual machine"""
-    def __init__(self, file='jvpm/files/HelloWorld.class'):
+    def __init__(self, file=""):
         with open(file, 'rb') as binary_file:
             self.data = binary_file.read()
             self.magic = self.get_magic()
@@ -20,12 +18,13 @@ class ClassFile():
             self.constant_pool_length = self.constant_table.final_byte
             # skipping access flags, class, super class
             self.interface_count = self.get_interface_count()
-            assert self.interface_count == 0 # Interface table not implemented
+            assert self.interface_count == 0  # Interface table not implemented
             self.cp_and_ic = self.interface_count + self.constant_pool_length
             self.field_count = self.get_field_count()
-            assert self.field_count == 0 # Field table parse not implemented
+            assert self.field_count == 0  # Field table parse not implemented
             self.cp_ic_fc = self.cp_and_ic + self.field_count
             self.method_count = self.get_method_count()
+            assert self.method_count == 2  # not implemented for a java file with more than 1 method
             self.method_table = self.get_method_table()
 
     def get_magic(self):
@@ -83,14 +82,19 @@ class ClassFile():
 
     def run_opcodes(self):
         """Runs the opcode class with the method table passed through it"""
-        opcodes = OpCodes(self, self.method_table)
+        raw_op_code_bytes = self.method_table[1].get_op_code_bytes()
+        formatted_op_code = OpcodeParse(raw_op_code_bytes).op_code_table
+        opcodes = OpCodes(self, formatted_op_code)
         opcodes.run()
 
+
 import numpy
+
+
 class OpCodes:
     """This class defines a method for operational codes that java virtual machine uses"""
 
-    def __init__(self, class_ref=ClassFile(), opcodes=[]):
+    def __init__(self, class_ref=None, opcodes=[]):
         self.table = self.load()
         self.stack = []
         self.localvar = [0] * 10
@@ -100,11 +104,12 @@ class OpCodes:
 
     def load(self):
         """Fills a dictionary with the bytecodes of different operational codes"""
-        with open('jvpm/files/int_opcodes.csv', 'r') as csvfile:
+        with open(DIRECTORY + 'jvpm/files/int_opcodes.csv', 'r') as csvfile:
             dict1 = {}
             spam_reader = csv.DictReader(csvfile)
             for ind in list(spam_reader):
                 opcode_info = {'name': ind['name'].strip(),
+                               'method':ind['method'].strip(),
                                'num_initial_bytes': int(ind['num_initial_bytes'].strip()),
                                'type': int(ind['type'])}
                 the_number = int(ind['opcode'].strip(), 16)
@@ -113,16 +118,14 @@ class OpCodes:
 
     def run(self):
         """"Runs method associated with opcode"""
-        for opcode, value in self.opcode_list:
+        for opcode_and_params in self.opcode_list:
+            opcode = opcode_and_params['opcode']
             self.type = self.table[opcode]['type']
-            if self.table[opcode]['num_arguments'] > 0:
-                args = []
-                for arg in value:
-                    args.append(arg)
-                getattr(self, self.table[opcode]['name'])(args)
+            if self.table[opcode]['num_initial_bytes'] > 0:
+                value = opcode_and_params['message']
+                getattr(self, self.table[opcode]['method'])(value)
             else:
-                getattr(self, self.table[opcode]['name'])()
-        return self.table[value]
+                getattr(self, self.table[opcode]['method'])()
 
     def not_implemented(self):
         """Called when a certain element of the program is not yet implemented"""
@@ -138,7 +141,7 @@ class OpCodes:
             self.push_long_to_stack(val)
         elif self.type == T_FLOAT:
             self.push_float_to_stack(val)
-        elif self.type == T_DOUBLE:
+        elif self.type == T_DOUBLE or self.type == T_OBJECT:
             self.stack.append(val)
 
     def pop_from_stack(self):
@@ -149,6 +152,8 @@ class OpCodes:
             return self.stack.pop()
         if self.type == T_FLOAT:
             return self.pop_float_from_stack()
+        else:
+            return self.stack.pop()
 
     def push_int_to_stack(self, value):
         """Method to check if python is attempting to push a 64 bit integer which is
@@ -201,7 +206,7 @@ class OpCodes:
 
     def extract_upper_bits(self, word):
         """Method to get the highest value 32 bits of a 64-bit value"""
-        bit_screen = 0xFFFFFFFF00000000
+        bit_screen = 0x7FFFFFFF00000000
         shift_amount = 32
         return (int(word) & bit_screen) >> shift_amount
 
@@ -414,15 +419,22 @@ class OpCodes:
 
     def ldc(self, index):
         """Pushes constant index to stack"""
-        self.push_to_stack(index[0])
+        self.type = T_OBJECT
+        constant_number = parse_bytes_value(index, 0, 1)
+        self.push_to_stack(self.class_ref.constant_table.get_constant(constant_number))
+
+    def invoke_virtual_helper(self, bytes_constant):
+        constant_number = parse_bytes_value(bytes_constant, 0, 2)
+        method_string = self.class_ref.constant_table.get_constant(constant_number)
+        self.invoke_virtual(self, method_string)
 
     def invoke_virtual(self, method_ref):
         """Method for reading a java invoke virtual method and applying the correct method
         from python"""
-        invoke = {"java/io/PrintStream.println:(I)V": "print_int",
+        invoke = {"java/io/PrintStream.println:(I)V": "print_primitive",
                   "java/io/PrintStream.println:(Z)V": "print_boolean",
                   "Method java/io/PrintStream.println:(D)V": "print_double",
-                  "java/io/PrintStream.println:(Ljava/lang/String;)V": "print_string",
+                  "java/io/PrintStream.println:(Ljava/lang/String;)V": "print_primitive",
                   "java/util/Scanner.nextString:()Ljava.lang/String": "input_string",
                   "java/util/Scanner.nextInt:()I": "input_int",
                   "java/util/Scanner.nextDouble:()D": "input_double"}
@@ -431,34 +443,32 @@ class OpCodes:
         # else
         self.not_implemented()
 
-    def print_int(self):
-        """Is called when invokeVirtual method is called to print an integer"""
-        return int(self.stack.pop())
-
     def print_boolean(self):
         """Is called when invokeVirtual method is called to print an boolean"""
+        self.type = T_INT
         num = self.stack.pop()
         if num == 1:
+            print("true")
             return "true"
         if num == 0:
+            print("false")
             return "false"
         # else
         raise TypeError("Value couldn't be interpreted as a boolean.")
 
     def print_double(self):
         """Is called when invokedVirtual method is called to print a double"""
-        m_number = 1.0
-        return self.stack.pop() / m_number
+        self.type = T_DOUBLE
+        m_number = self.pop_from_stack()
+        print(m_number)
+        return m_number
 
     def print_primitive(self):
+        self.type = T_OBJECT
         """Is called to print a primitive value"""
         val = self.pop_from_stack()
         print(val)
         return val
-
-    def print_string(self):
-        """Is called when invokedVirtual method is called to print a string"""
-        return str(self.stack.pop())
 
     def input_string(self):
         """Takes input as a string"""
@@ -473,10 +483,15 @@ class OpCodes:
         m_number = 1.0
         return input() / m_number
 
+    def do_nothing(self, args=[]):
+        """called by opcodes that aren't required in python
+        """
+
 
 def main():
-    classy = ClassFile("C:/Users/swanc/Documents/CS3250/temp/3250-spring-2019-team-6/jvpm/files/AddTwo.class")
-    print(str(classy))
+    classy = ClassFile(DIRECTORY + "jvpm/files/HelloWorld.class")
+    classy.run_opcodes()
+    #print(str(classy))
 
 
 if __name__ == "__main__":

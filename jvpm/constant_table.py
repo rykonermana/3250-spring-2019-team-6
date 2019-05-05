@@ -1,4 +1,5 @@
 import csv
+from jvpm.utils import *
 
 INIT_POSITION = 10
 
@@ -34,6 +35,9 @@ class ConstantTable:
                 active_position += value_length
             the_table[i] = dict_constant
         return the_table, (active_position - INIT_POSITION)
+
+    def get_constant(self, index):
+        return self.constant_table[index]['decrypted_message']
 
     def get_constant_messages(self):
         """loop through constants to get values"""
@@ -79,7 +83,7 @@ class ConstantTable:
 def load_constant_helper():
     """loads file with details on each constant type"""
     dict_variable_length = {}
-    with open('jvpm/files/constant_codes.csv', 'r') as csvfile:
+    with open(DIRECTORY + 'jvpm/files/constant_codes.csv', 'r') as csvfile:
         spamreader = csv.DictReader(csvfile)
         for constant in list(spamreader):
             constant_info = {}
