@@ -423,10 +423,15 @@ class OpCodes:
         constant_number = parse_bytes_value(index, 0, 1)
         self.push_to_stack(self.class_ref.constant_table.get_constant(constant_number))
 
+    def invoke_special(self, bytes_constant):
+        constant_number = parse_bytes_value(bytes_constant, 0, 2)
+        method_string = self.class_ref.constant_table.get_constant(constant_number)
+        self.push_to_stack(method_string)
+
     def invoke_virtual_helper(self, bytes_constant):
         constant_number = parse_bytes_value(bytes_constant, 0, 2)
         method_string = self.class_ref.constant_table.get_constant(constant_number)
-        self.invoke_virtual(self, method_string)
+        self.invoke_virtual(method_string)
 
     def invoke_virtual(self, method_ref):
         """Method for reading a java invoke virtual method and applying the correct method
@@ -472,16 +477,23 @@ class OpCodes:
 
     def input_string(self):
         """Takes input as a string"""
-        return str(input())
+        val = str(input())
+        self.type = T_OBJECT
+        self.push_to_stack(val)
+        return val
 
     def input_int(self):
         """Takes input as an integer"""
-        return int(input())
+        val = int(input())
+        self.type = T_INT
+        self.push_to_stack(val)
+        return val
 
     def input_double(self):
         """Takes input as a float/double"""
-        m_number = 1.0
-        return input() / m_number
+        val = float(input())
+        self.type = T_DOUBLE
+        return val
 
     def do_nothing(self, args=[]):
         """called by opcodes that aren't required in python
@@ -489,7 +501,7 @@ class OpCodes:
 
 
 def main():
-    classy = ClassFile(DIRECTORY + "jvpm/files/HelloWorld.class")
+    classy = ClassFile(DIRECTORY + "jvpm/files/AddTwo.class")
     classy.run_opcodes()
     #print(str(classy))
 

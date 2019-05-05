@@ -40,7 +40,7 @@ iload_2 ,1c ,0,load_2 ,T_INT,1
 iload_3 ,1d ,0,load_3 ,T_INT,1
 imul ,68,0,imul ,T_INT,1
 ineg ,74,0,ineg ,T_INT,1
-invokevirtual ,b6 ,2,invoke_virtual,NONE,0
+invokevirtual ,b6 ,2,invoke_virtual_helper,NONE,0
 ior ,80,0,opcode_or ,T_INT,1
 irem ,70,0,rem ,T_INT,1
 ishl ,78,0,shl ,T_INT,1
@@ -81,8 +81,8 @@ lsub ,65,0,sub ,T_LONG,2
 lushr ,7d ,0,ushr ,T_LONG,2
 lxor ,83,0,xor ,T_LONG,2
 return,b1,0,do_nothing,T_NONE,0
-invokespecial ,b7 ,0,do_nothing,T_NONE,0
-new ,bb ,0,do_nothing,T_NONE,0
+invokespecial ,b7 ,2,invoke_special,T_NONE,4
+new ,bb ,2,do_nothing,T_NONE,0
 getstatic ,b2 ,2,do_nothing,T_NONE,0
 aload_0 ,2a ,0,load_0 ,T_STRING,4
 aload_1 ,2b ,0,load_1 ,T_STRING,4
@@ -92,3 +92,4 @@ astore_0 ,4b ,0,store_0 ,T_STRING,4
 astore_1 ,4c ,0,store_1 ,T_STRING,4
 astore_2 ,4d ,0,store_2 ,T_STRING,4
 astore_3 ,4e ,0,store_3 ,T_STRING,4
+dup ,59,0,do_nothing,NONE,0
