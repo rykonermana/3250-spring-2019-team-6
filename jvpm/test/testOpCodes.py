@@ -2,7 +2,7 @@
 import unittest
 from unittest.mock import mock_open
 from jvpm.utils import *
-from ..ClassFile import OpCodes
+from jvpm.OpCodes import *
 
 
 class TestOpCodes(unittest.TestCase):
