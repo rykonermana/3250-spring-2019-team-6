@@ -1,5 +1,4 @@
 """This program runs a java virtual machine using python"""
-from jvpm.ClassFile import *
 from jvpm.constant_table import *
 from jvpm.opcode_parser import *
 from jvpm.method_row import *
@@ -27,6 +26,7 @@ class ClassFile:
             self.method_count = self.get_method_count()
             assert self.method_count == 2  # not implemented for a java file with more than 1 method
             self.method_table = self.get_method_table()
+
 
     def get_magic(self):
         """Finds the magic number in the byte code which confirms the following
@@ -89,7 +89,7 @@ class ClassFile:
         opcodes.run()
 
 def main():
-    classy = ClassFile(DIRECTORY + "jvpm/files/AddTwo.class")
+    classy = ClassFile(DIRECTORY + "jvpm/files/HelloWorld.class")
     classy.run_opcodes()
     #print(str(classy))
 
