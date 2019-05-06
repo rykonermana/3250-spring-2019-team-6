@@ -1,4 +1,4 @@
-"""Unittest to be used with ClassFile.py"""
+"""Unittest to be used with OpCodes.py"""
 import unittest
 from unittest.mock import mock_open
 from jvpm.utils import *
