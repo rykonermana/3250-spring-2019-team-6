@@ -501,7 +501,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertRaises(ValueError, op_code.shr)
 
     def test_lshr_zeros(self):
-        """As method name implies"""
+        """logical shift right to check for zeros"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(0)
@@ -510,7 +510,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 3)
 
     def test_lshr_max(self):
-        """As method name implies"""
+        """logical shift right to set maximum value"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
@@ -519,7 +519,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 2 ** 62 - 1)
 
     def test_lshr_min(self):
-        """As method name implies"""
+        """logical shift right to set minimum value"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
@@ -528,14 +528,14 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 62))
 
     def test_push_pop_long(self):
-        """As method name implies"""
+        """to push and pop long"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(-(2 ** 63-1))
         self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63-1))
 
     def test_lshr_longNeg(self):
-        """As method name implies"""
+        """to push and pop negative """
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
@@ -544,7 +544,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), -2)
 
     def test_ladd(self):
-        """As method name implies"""
+        """to add into stack"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(1)
@@ -553,7 +553,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 2)
 
     def test_ladd_negs(self):
-        """As method name implies"""
+        """to add negative into stack"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(-1)
@@ -562,7 +562,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), -2)
 
     def test_ladd_maximum(self):
-        """As method name implies"""
+        """adding highest possible value into stack"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(2 ** 63 - 2)
@@ -571,7 +571,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), (2 ** 63 - 1))
 
     def test_ladd_minimum(self):
-        """As method name implies"""
+        """adding lowest possible value into stack"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(-(2 ** 63 - 2))
@@ -580,7 +580,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63) + 1)
 
     def test_land(self):
-        """As method name implies"""
+        """to perform logical operation AND """
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(3)
@@ -589,56 +589,56 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 2)
 
     def test_lconst_m1(self):
-        """As method name implies"""
+        """loading -1 into stack"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_m1()
         self.assertEqual(op_code.pop_long_from_stack(), -1)
 
     def test_lconst_0(self):
-        """As method name implies"""
+        """loading 0 into stack"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_0()
         self.assertEqual(op_code.pop_long_from_stack(), 0)
 
     def test_lconst_1(self):
-        """As method name implies"""
+        """loading 1 into stack"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_1()
         self.assertEqual(op_code.pop_long_from_stack(), 1)
 
     def test_lconst_2(self):
-        """As method name implies"""
+        """loading 2 into stack"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_2()
         self.assertEqual(op_code.pop_long_from_stack(), 2)
 
     def test_lconst_3(self):
-        """As method name implies"""
+        """loading 3 into stack"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_3()
         self.assertEqual(op_code.pop_long_from_stack(), 3)
 
     def test_lconst_4(self):
-        """As method name implies"""
+        """loading 4 into stack"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_4()
         self.assertEqual(op_code.pop_long_from_stack(), 4)
 
     def test_lconst_5(self):
-        """As method name implies"""
+        """loading 5 into stack"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_5()
         self.assertEqual(op_code.pop_long_from_stack(), 5)
 
     def test_ldiv_0(self):
-        """tests opcode ldiv (division with long)"""
+        """tests opcode ldiv (division with long) """
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(0)
