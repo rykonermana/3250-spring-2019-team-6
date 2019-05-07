@@ -95,6 +95,5 @@ def main():
 
 
 if __name__ == "__main__":
-    # must call the main method
     main()
 
