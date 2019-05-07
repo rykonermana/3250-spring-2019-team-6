@@ -49,7 +49,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), -2147483648)
 
     def test_iand_simple(self):
-        """perform bitwise AND operation between two integers"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(5)
@@ -58,56 +58,56 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 1)
 
     def test_iconst_m1_simple(self):
-        """to load the int value into the stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_m1()
         self.assertEqual(op_code.stack.pop(), -1)
 
     def test_iconst_0_simple(self):
-        """to load the int value 0 into the stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_0()
         self.assertEqual(op_code.stack.pop(), 0)
 
     def test_iconst_1_simple(self):
-        """to load the int value 1 into the stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_1()
         self.assertEqual(op_code.stack.pop(), 1)
 
     def test_iconst_2_simple(self):
-        """to load the int value 2 into the stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_2()
         self.assertEqual(op_code.stack.pop(), 2)
 
     def test_iconst_3_simple(self):
-        """to load int value 3 into the stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_3()
         self.assertEqual(op_code.stack.pop(), 3)
 
     def test_iconst_4_simple(self):
-        """to load int value 4 into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_4()
         self.assertEqual(op_code.stack.pop(), 4)
 
     def test_iconst_5_simple(self):
-        """to load int value 5 into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_5()
         self.assertEqual(op_code.stack.pop(), 5)
 
     def test_idiv_simple(self):
-        """to divide two integers"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(2)
@@ -116,7 +116,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 2)
 
     def test_imul_simple(self):
-        """to multiply two integers"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(2)
@@ -125,7 +125,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 8)
 
     def test_ineg_simple(self):
-        """to negate two int"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(5)
@@ -133,7 +133,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), -5)
 
     def test_ior_simple(self):
-        """bitwise int OR"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(6)
@@ -142,7 +142,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 6)
 
     def test_irem_simple(self):
-        """logical int remainder"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(3)
@@ -151,7 +151,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 1)
 
     def test_ishl_simple(self):
-        """int shift left"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(3)
@@ -160,7 +160,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 64)
 
     def test_ishr_simple(self):
-        """int shift right"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(3)
@@ -169,7 +169,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 1)
 
     def test_isub_simple(self):
-        """int subtract"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(2)
@@ -178,7 +178,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 4)
 
     def test_iushr_simple(self):
-        """int logical shift right"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(3)
@@ -186,7 +186,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.shr()
 
     def test_ixor_simple(self):
-        """int xor"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(7)
@@ -213,7 +213,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertRaises(NotImplementedError, op_code.invoke_virtual, "java/util/Stack.push:")
 
     def test_i2b_simple(self):
-        """converting int into byte and lowest possible value"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(-128)
@@ -221,7 +221,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), b'\x80')
 
     def test_i2b_simpletest(self):
-        """converting int into byte with highest possible value"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(127)
@@ -346,7 +346,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertRaises(ValueError, op_code.convert_long)
 
     def test_iload1_simple(self):
-        """load an int value from local variable 1"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.localvar.insert(1, 8)
@@ -354,7 +354,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 8)
 
     def test_iload0_simple(self):
-        """loads an int value from local variable 0"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.localvar.insert(0, 8)
@@ -362,7 +362,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 8)
 
     def test_iload2_simple(self):
-        """loads an int value from local variable 2"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.localvar.insert(2, 6)
@@ -370,7 +370,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 6)
 
     def test_iload3_simple(self):
-        """loads an int value from local variable 3"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.localvar.insert(3, 4)
@@ -378,7 +378,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 4)
 
     def test_istore0_simple(self):
-        """storing 0 into array"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(5)
@@ -386,7 +386,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.localvar[0], 5)
 
     def test_istore1_simple(self):
-        """storing 1 into array"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(5)
@@ -394,7 +394,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.localvar[1], 5)
 
     def test_istore2_simple(self):
-        """storing 2 into array"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(4)
@@ -402,7 +402,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.localvar[2], 4)
 
     def test_istore3_simple(self):
-        """storing 3 into array"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(2)
@@ -431,7 +431,7 @@ class TestOpCodes(unittest.TestCase):
             assert op_code.invoke_virtual("java/util/Scanner.nextDouble:()D") == 1.0
 
     def test_lshl(self):
-        """"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
@@ -440,7 +440,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 10)
 
     def test_lshl_neg(self):
-        """logical shift left to check negative ints"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(-1)
@@ -448,7 +448,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertRaises(ValueError, op_code.shl)
 
     def test_lshl_zeros(self):
-        """logical shift left to check zeros"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(0)
@@ -457,7 +457,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 5)
 
     def test_lshl_max(self):
-        """logical shift left to set highest value"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
@@ -466,7 +466,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 2 ** 63 - 2)
 
     def test_lshl_min(self):
-        """logical shift left to set minimum value"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
@@ -475,7 +475,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63 - 2))
 
     def test_lshl_longNeg(self):
-        """ logical shift left for long negative"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
@@ -484,7 +484,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), -10)
 
     def test_lshr(self):
-        """logical shift right base method"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
@@ -493,7 +493,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 1)
 
     def test_lshr_neg(self):
-        """logical shift right to check negative"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(-1)
@@ -501,7 +501,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertRaises(ValueError, op_code.shr)
 
     def test_lshr_zeros(self):
-        """logical shift right to check for zeros"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(0)
@@ -510,7 +510,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 3)
 
     def test_lshr_max(self):
-        """logical shift right to set maximum value"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
@@ -519,7 +519,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 2 ** 62 - 1)
 
     def test_lshr_min(self):
-        """logical shift right to set minimum value"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
@@ -528,14 +528,14 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 62))
 
     def test_push_pop_long(self):
-        """to push and pop long"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(-(2 ** 63-1))
         self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63-1))
 
     def test_lshr_longNeg(self):
-        """to push and pop negative """
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.stack.append(1)
@@ -544,7 +544,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), -2)
 
     def test_ladd(self):
-        """to add into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(1)
@@ -553,7 +553,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 2)
 
     def test_ladd_negs(self):
-        """to add negative into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(-1)
@@ -562,7 +562,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), -2)
 
     def test_ladd_maximum(self):
-        """adding highest possible value into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(2 ** 63 - 2)
@@ -571,7 +571,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), (2 ** 63 - 1))
 
     def test_ladd_minimum(self):
-        """adding lowest possible value into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(-(2 ** 63 - 2))
@@ -580,7 +580,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63) + 1)
 
     def test_land(self):
-        """to perform logical operation AND """
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(3)
@@ -589,56 +589,56 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.pop_long_from_stack(), 2)
 
     def test_lconst_m1(self):
-        """loading -1 into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_m1()
         self.assertEqual(op_code.pop_long_from_stack(), -1)
 
     def test_lconst_0(self):
-        """loading 0 into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_0()
         self.assertEqual(op_code.pop_long_from_stack(), 0)
 
     def test_lconst_1(self):
-        """loading 1 into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_1()
         self.assertEqual(op_code.pop_long_from_stack(), 1)
 
     def test_lconst_2(self):
-        """loading 2 into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_2()
         self.assertEqual(op_code.pop_long_from_stack(), 2)
 
     def test_lconst_3(self):
-        """loading 3 into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_3()
         self.assertEqual(op_code.pop_long_from_stack(), 3)
 
     def test_lconst_4(self):
-        """loading 4 into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_4()
         self.assertEqual(op_code.pop_long_from_stack(), 4)
 
     def test_lconst_5(self):
-        """loading 5 into stack"""
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.const_5()
         self.assertEqual(op_code.pop_long_from_stack(), 5)
 
     def test_ldiv_0(self):
-        """tests opcode ldiv (division with long) """
+        """tests opcode ldiv (division with long)"""
         op_code = OpCodes()
         op_code.type = T_LONG
         op_code.push_long_to_stack(0)
