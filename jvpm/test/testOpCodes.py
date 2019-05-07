@@ -1,8 +1,8 @@
 """Unittest to be used with OpCodes.py"""
 import unittest
-from .unittest.mock import mock_open
-from .utils import *
-from .OpCodes import *
+from unittest.mock import mock_open
+from jvpm.utils import *
+from jvpm.OpCodes import *
 
 
 class TestOpCodes(unittest.TestCase):

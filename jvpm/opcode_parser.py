@@ -1,5 +1,5 @@
 import csv
-from .utils import *
+from jvpm.utils import *
 
 class OpcodeParse:
     """class to parse Java bytecode constant pool"""
