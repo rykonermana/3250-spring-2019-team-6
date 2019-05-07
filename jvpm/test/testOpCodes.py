@@ -49,7 +49,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), -2147483648)
 
     def test_iand_simple(self):
-        """As method name implies"""
+        """perform bitwise AND operation between two integers"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(5)
@@ -58,56 +58,56 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 1)
 
     def test_iconst_m1_simple(self):
-        """As method name implies"""
+        """to load the int value into the stack"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_m1()
         self.assertEqual(op_code.stack.pop(), -1)
 
     def test_iconst_0_simple(self):
-        """As method name implies"""
+        """to load the int value 0 into the stack"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_0()
         self.assertEqual(op_code.stack.pop(), 0)
 
     def test_iconst_1_simple(self):
-        """As method name implies"""
+        """to load the int value 1 into the stack"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_1()
         self.assertEqual(op_code.stack.pop(), 1)
 
     def test_iconst_2_simple(self):
-        """As method name implies"""
+        """to load the int value 2 into the stack"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_2()
         self.assertEqual(op_code.stack.pop(), 2)
 
     def test_iconst_3_simple(self):
-        """As method name implies"""
+        """to load int value 3 into the stack"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_3()
         self.assertEqual(op_code.stack.pop(), 3)
 
     def test_iconst_4_simple(self):
-        """As method name implies"""
+        """to load int value 4 into stack"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_4()
         self.assertEqual(op_code.stack.pop(), 4)
 
     def test_iconst_5_simple(self):
-        """As method name implies"""
+        """to load int value 5 into stack"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.const_5()
         self.assertEqual(op_code.stack.pop(), 5)
 
     def test_idiv_simple(self):
-        """As method name implies"""
+        """to divide two integers"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(2)
@@ -116,7 +116,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 2)
 
     def test_imul_simple(self):
-        """As method name implies"""
+        """to multiply two integers"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(2)
@@ -125,7 +125,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 8)
 
     def test_ineg_simple(self):
-        """As method name implies"""
+        """to negate two int"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(5)
@@ -133,7 +133,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), -5)
 
     def test_ior_simple(self):
-        """As method name implies"""
+        """bitwise int OR"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(6)
@@ -142,7 +142,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 6)
 
     def test_irem_simple(self):
-        """As method name implies"""
+        """logical int remainder"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(3)
@@ -151,7 +151,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 1)
 
     def test_ishl_simple(self):
-        """As method name implies"""
+        """int shift left"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(3)
@@ -160,7 +160,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 64)
 
     def test_ishr_simple(self):
-        """As method name implies"""
+        """int shift right"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(3)
@@ -169,7 +169,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 1)
 
     def test_isub_simple(self):
-        """As method name implies"""
+        """int subtract"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(2)
@@ -178,7 +178,7 @@ class TestOpCodes(unittest.TestCase):
         self.assertEqual(op_code.stack.pop(), 4)
 
     def test_iushr_simple(self):
-        """As method name implies"""
+        """int logical shift right"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(3)
@@ -186,7 +186,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.shr()
 
     def test_ixor_simple(self):
-        """As method name implies"""
+        """int xor"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(7)
