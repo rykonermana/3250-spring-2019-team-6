@@ -3,7 +3,7 @@ from jvpm.constant_table import *
 from jvpm.opcode_parser import *
 from jvpm.method_row import *
 from jvpm.OpCodes import *
-
+from jvpm.utils import *
 import numpy
 
 

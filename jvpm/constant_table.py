@@ -1,5 +1,5 @@
 import csv
-from jvpm.utils import *
+from .utils import *
 
 INIT_POSITION = 10
 

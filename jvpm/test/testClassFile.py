@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import mock_open, patch
-from jvpm.ClassFile import ClassFile
+from jvpm.ClassFile import *
 
 
 class TestClassFile(unittest.TestCase):
