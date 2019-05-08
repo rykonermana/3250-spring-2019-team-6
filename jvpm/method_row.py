@@ -12,6 +12,7 @@ ATTRIBUTE_CODE_LENGTH_LENGTH = 4
 
 
 class MethodRow:
+    """Module to parse one method from the method table"""
     def __init__(self, data, start_position):
         self.data = data
         self.start_position = start_position
@@ -22,10 +23,12 @@ class MethodRow:
         self.attributes = self.get_attributes()
 
     def get_attribute_count(self):
+        """gets the number of attributes within table"""
         return parse_bytes_value(self.data, self.start_position+METHOD_ATTRIBUTE_COUNT_START,
                                  METHOD_ATTRIBUTE_COUNT_LENGTH)
 
     def get_attributes(self):
+        """parses attributes from table and stores each in a list"""
         attributes = []
         for _ in range(self.attribute_count):
             attribute = Attribute(self.data, self.start_position + self.total_length)
@@ -34,6 +37,7 @@ class MethodRow:
         return attributes
 
     def get_op_code_bytes(self):
+        """returns bytes of the 1st attribute (assumed to be the code attribute)"""
         attribute_bytes = self.attributes[0].get_attribute_bytes()
         op_code_bytes_length = parse_bytes_value(attribute_bytes, ATTRIBUTE_CODE_LENGTH_START,
                                                  ATTRIBUTE_CODE_LENGTH_LENGTH)

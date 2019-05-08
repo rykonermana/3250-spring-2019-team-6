@@ -1,5 +1,5 @@
 """Main method to be ran"""
-from .ClassFile import *
+from jvpm.class_file import main
 import sys
 
 if __name__ == "__main__":
