@@ -1,8 +1,8 @@
-"""Unittest to be used with ClassFile.py"""
+"""Unittest to be used with class_filee.py"""
 import unittest
 from unittest.mock import mock_open, patch
 from unittest.mock import MagicMock
-from ..ClassFile import OpCodes
+from ..classfile import OpCodes
 
 NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE = 0, 1, 2, 3, 4
 
@@ -196,7 +196,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.xor()
         self.assertEqual(op_code.stack.pop(), 4)
 
-    def test_invokeVirtual(self):
+    def test_invoke_virtual(self):
         """Tests invokeVirtual method java/io/PrintStream with various inputs"""
         op_code = OpCodes()
         op_code.type = T_INT
@@ -222,7 +222,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.convert_byte()
         self.assertEqual(op_code.stack.pop(), b'\x80')
 
-    def test_i2b_simpletest(self):
+    def test_i2b_simple_test(self):
         """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
@@ -230,21 +230,21 @@ class TestOpCodes(unittest.TestCase):
         op_code.convert_byte()
         self.assertEqual(op_code.stack.pop(), b'\x7f')
 
-    def test_i2b_showerror(self):
+    def test_i2b_show_error(self):
         """Tests that OverFlow error is thrown when the value is too large to be a byte"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(128)
         self.assertRaises(OverflowError, op_code.convert_byte)
 
-    def test_showError(self):
+    def test_show_error(self):
         """Tests that OverFlow error is thrown when the value is too small to be a byte"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(-129)
         self.assertRaises(OverflowError, op_code.convert_byte)
 
-    def test_i2c_simpletest(self):
+    def test_i2c_simple_test(self):
         """Tests that the number given returns as the correct char type"""
         op_code = OpCodes()
         op_code.type = T_INT
@@ -252,7 +252,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.convert_char()
         self.assertEqual(op_code.stack.pop(), '\x00')
 
-    def test_i2c_simpletest2(self):
+    def test_i2c_simple_test_2(self):
         """Tests that the number given returns as the correct char type"""
         op_code = OpCodes()
         op_code.type = T_INT
@@ -260,7 +260,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.convert_char()
         self.assertEqual(op_code.stack.pop(), '\x7f')
 
-    def test_i2c_simpletest3(self):
+    def test_i2c_simple_test_3(self):
         """Tests that the number given returns as the correct char type"""
         op_code = OpCodes()
         op_code.type = T_INT
@@ -268,14 +268,14 @@ class TestOpCodes(unittest.TestCase):
         op_code.convert_char()
         self.assertEqual(op_code.stack.pop(), 'A')
 
-    def test_i2c_simpletest4(self):
+    def test_i2c_simple_test_4(self):
         """Tests that the number given returns as the correct char type"""
         op_code = OpCodes()
         op_code.type = T_INT
         op_code.stack.append(-128)
         self.assertRaises(ValueError, op_code.convert_char)
 
-    def test_i2c_simple5(self):
+    def test_i2c_simple_test_5(self):
         """Tests that the number given returns as the correct char type"""
         op_code = OpCodes()
         op_code.type = T_INT
@@ -283,7 +283,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.convert_char()
         self.assertEqual(op_code.stack.pop(), '\x80')
 
-    def test_i2d_simpletest(self):
+    def test_i2d_simple_test(self):
         """Tests that a double value in java is returned as a float"""
         op_code = OpCodes()
         op_code.type = T_INT
@@ -291,7 +291,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.convert_float()
         self.assertAlmostEqual(op_code.stack.pop(), 2 ** 20 - 1)
 
-    def test_i2d_simpletest2(self):
+    def test_i2d_simple_test_2(self):
         """Tests that a double value in java is returned as a float"""
         op_code = OpCodes()
         op_code.type = T_INT
@@ -299,7 +299,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.convert_float()
         self.assertAlmostEqual(op_code.stack.pop(), -2 ** 20)
 
-    def test_i2f_simpletest(self):
+    def test_i2f_simple_test(self):
         """Tests that an integer is returned as a float"""
         op_code = OpCodes()
         op_code.type = T_INT
@@ -307,7 +307,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.convert_float()
         self.assertAlmostEqual(op_code.stack.pop(), 2 ** 10 - 1)
 
-    def test_i2f_simpletest2(self):
+    def test_i2f_simple_test_2(self):
         """Tests that an integer is returned as a float"""
         op_code = OpCodes()
         op_code.type = T_INT
@@ -315,7 +315,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.convert_float()
         self.assertAlmostEqual(op_code.stack.pop(), -2 ** 10)
 
-    def test_i2s_valueTooLarge(self):
+    def test_i2s_value_too_large(self):
         """Tests that a ValueError is thrown when trying to cast an integer that is too large
         to a short type"""
         op_code = OpCodes()
@@ -331,7 +331,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.stack.append(-2 ** 16 - 1)
         self.assertRaises(ValueError, op_code.convert_short)
 
-    def test_i2l_valueTooLarge(self):
+    def test_i2l_value_too_large(self):
         """Tests that a ValueError is thrown when trying to cast an integer that is too large
         to a short type"""
         op_code = OpCodes()
@@ -411,14 +411,14 @@ class TestOpCodes(unittest.TestCase):
         op_code.store_3()
         self.assertEqual(op_code.localvar[3], 2)
 
-    def test_strscanner_simple(self):
+    def test_str_scanner_simple(self):
         """As method name implies"""
         op_code = OpCodes()
         with unittest.mock.patch('builtins.input', return_value="Testing"):
             self.assertEqual(op_code.invoke_virtual(
                 "java/util/Scanner.nextString:()Ljava.lang/String"), "Testing")
 
-    def test_intscanner_simple(self):
+    def test_int_scanner_simple(self):
         """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_INT
@@ -426,7 +426,8 @@ class TestOpCodes(unittest.TestCase):
             assert op_code.invoke_virtual(
                 "java/util/Scanner.nextInt:()I") == 2
 
-    def test_floatscanner_simple(self):
+    def test_float_scanner_simple(self):
+        """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_FLOAT
         with unittest.mock.patch('builtins.input', return_value=1.0):
@@ -476,7 +477,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.shl()
         self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63 - 2))
 
-    def test_lshl_longNeg(self):
+    def test_lshl_long_neg(self):
         """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
@@ -536,7 +537,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.push_long_to_stack(-(2 ** 63))
         self.assertEqual(op_code.pop_long_from_stack(), -(2 ** 63))
 
-    def test_lshr_longNeg(self):
+    def test_lshr_long_neg(self):
         """As method name implies"""
         op_code = OpCodes()
         op_code.type = T_LONG
@@ -665,7 +666,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.mul()
         self.assertEqual(op_code.pop_long_from_stack(), 8)
 
-    def test_lneg_NtoP(self):
+    def test_lneg_neg_to_pos(self):
         """tests opcode lneg (long negative)"""
         op_code = OpCodes()
         op_code.type = T_LONG
@@ -673,7 +674,7 @@ class TestOpCodes(unittest.TestCase):
         op_code.neg()
         self.assertEqual(op_code.pop_long_from_stack(), 1)
 
-    def test_lneg_PtoN(self):
+    def test_lneg_pos_to_neg(self):
         """tests opcode lneg (long negative)"""
         op_code = OpCodes()
         op_code.type = T_LONG
