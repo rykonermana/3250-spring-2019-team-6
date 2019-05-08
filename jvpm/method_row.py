@@ -1,5 +1,5 @@
-from jvpm.attribute import *
-from jvpm.utils import *
+from jvpm.attribute import Attribute
+from jvpm.utils import parse_bytes_value
 
 METHOD_FLAGS_LENGTH = 2
 METHOD_NAME_LENGTH = 2

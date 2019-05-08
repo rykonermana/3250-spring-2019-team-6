@@ -1,7 +1,7 @@
 """Unittest to be used with op_codes.py"""
 import unittest
 from unittest.mock import mock_open
-from jvpm.utils import *
+ # from jvpm.utils import T_INT, T_FLOAT, T_LONG
 from jvpm.op_codes import *
 
 

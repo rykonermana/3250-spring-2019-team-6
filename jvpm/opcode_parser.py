@@ -26,7 +26,7 @@ class OpcodeParse:
             active_position += message_length
             the_table.append(dict_constant)
         return the_table
-    
+
     def load_method_helper(self):
         """Returns the dictionary's variable length"""
         dict_variable_length = {}

@@ -1,8 +1,9 @@
-from jvpm.utils import *
+from jvpm.utils import parse_bytes_value
 
 ATTRIBUTE_LENGTH_BYTE_START = 2
 ATTRIBUTE_LENGTH_BYTE_LENGTH = 4
 ATTRIBUTE_NAME_LENGTH = 2
+
 
 class Attribute():
     def __init__(self, data, start):

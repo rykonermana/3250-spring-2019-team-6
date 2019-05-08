@@ -1,6 +1,6 @@
 """Class to parse Java bytecode constant pool"""
 import csv
-from jvpm.utils import *
+from jvpm.utils import DIRECTORY
 
 INIT_POSITION = 10
 
@@ -33,9 +33,9 @@ class ConstantTable:
             if self.constant_pool_helper[constant_code]['variable_length']:
                 value_length = self.parse_double_bytes_value(
                     dict_constant['message'], 0)
-                dict_constant['decrypted_message'] =\
-                    self.data[active_position: active_position + value_length].decode(
-                    'utf-8', 'replace')
+                dict_constant['decrypted_message'] = \
+                    self.data[active_position: active_position + value_length].decode('utf-8',
+                                                                                      'replace')
                 active_position += value_length
             the_table[i] = dict_constant
         return the_table, (active_position - INIT_POSITION)

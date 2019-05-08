@@ -1,8 +1,8 @@
 """This program runs a java virtual machine using python"""
-from jvpm.constant_table import *
-from jvpm.opcode_parser import *
-from jvpm.method_row import *
-from jvpm.op_codes import *
+from jvpm.constant_table import ConstantTable
+from jvpm.opcode_parser import OpcodeParse
+from jvpm.method_row import MethodRow
+from jvpm.op_codes import parse_bytes_value, OpCodes
 
 
 class ClassFile:
@@ -27,7 +27,6 @@ class ClassFile:
             assert self.method_count == 2  # not implemented for a java file with more than 1 method
             self.method_table = self.get_method_table()
 
-
     def get_magic(self):
         """Finds the magic number in the byte code which confirms the following
          is java formatted byte code"""
@@ -49,18 +48,21 @@ class ClassFile:
         return self.data[8] + self.data[9]
 
     def get_interface_count(self):
-        return self.data[16 + self.constant_pool_length] + self.data[17
-            + self.constant_pool_length]
+        """Gets interface for count"""
+        return self.data[16 + self.constant_pool_length] + self.data[17 + self.constant_pool_length]
 
     def get_field_count(self):
+        """gets field count"""
         return self.data[18 + self.cp_and_ic] + self.data[19 + self.cp_and_ic]
 
     def get_method_count(self):
-       return parse_bytes_value(self.data, 20 + self.cp_ic_fc, 2)
+        """Gets method count"""
+        return parse_bytes_value(self.data, 20 + self.cp_ic_fc, 2)
 
     def get_method_table(self):
+        """Gets method table"""
         table = []
-        start_length = self.cp_ic_fc +22
+        start_length = self.cp_ic_fc + 22
         for _ in range(self.method_count):
             row = MethodRow(self.data, start_length)
             start_length += row.total_length
@@ -88,9 +90,7 @@ class ClassFile:
         opcodes = OpCodes(self, formatted_op_code)
         opcodes.run()
 
-def main(args):
-    classy = ClassFile(args[0])
-    classy.run_opcodes()
-
-
-
+    def main(args):
+        """Runs class file"""
+        classy = ClassFile(args[0])
+        classy.run_opcodes()
