@@ -88,12 +88,9 @@ class ClassFile:
         opcodes = OpCodes(self, formatted_op_code)
         opcodes.run()
 
-def main():
-    classy = ClassFile(DIRECTORY + "jvpm/files/HelloWorld.class")
+def main(args):
+    classy = ClassFile(args[0])
     classy.run_opcodes()
-    #print(str(classy))
 
 
-if __name__ == "__main__":
-    main()
 
