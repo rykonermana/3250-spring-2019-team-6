@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import mock_open, patch
-from jvpm.constant_table import ConstantTable
+from jvpm.constant_table import *
 
 
 class TestClassFile(unittest.TestCase):

@@ -1,5 +1,7 @@
 import csv
+from jvpm.utils import *
 
+INIT_POSITION = 10
 
 class ConstantTable:
     """class to parse Java bytecode constant pool"""
@@ -15,7 +17,6 @@ class ConstantTable:
     def get_constant_pool_table(self):
         """parses java byte code to retrieve raw constant pool"""
         the_table = {}
-        INIT_POSITION = 10
         active_position = INIT_POSITION
         for i in range(1, self.constant_pool_count+1):
             # 3 steps here: get constant type from bytes, get additional bytes for constant code, get utf-8 variable length message. split???
@@ -34,6 +35,9 @@ class ConstantTable:
                 active_position += value_length
             the_table[i] = dict_constant
         return the_table, (active_position - INIT_POSITION)
+
+    def get_constant(self, index):
+        return self.constant_table[index]['decrypted_message']
 
     def get_constant_messages(self):
         """loop through constants to get values"""
@@ -70,9 +74,8 @@ class ConstantTable:
 
     def __str__(self):
         """Return the javap version of the constant"""
-        the_result = "Constant pool: \n", "%s" % "\n ".join(map(lambda x: "{: >10} = {: <15}{}".format('#'+str(x),
-                                                                                                       self.constant_pool_helper[self.constant_table[
-                                                                                                           x]['constant_code']]['description'],
+        the_format = "{: >10} = {: <15}{}"
+        the_result = "Constant pool: \n", "%s" % "\n ".join(map(lambda x: the_format.format('#'+str(x), self.constant_pool_helper[self.constant_table[x]['constant_code']]['description'],
                                                                                                        self.constant_table[x]['decrypted_message']), self.constant_table))
         return ''.join(the_result)
 
@@ -80,7 +83,7 @@ class ConstantTable:
 def load_constant_helper():
     """loads file with details on each constant type"""
     dict_variable_length = {}
-    with open('jvpm/files/constant_codes.csv', 'r') as csvfile:
+    with open(DIRECTORY + 'jvpm/files/constant_codes.csv', 'r') as csvfile:
         spamreader = csv.DictReader(csvfile)
         for constant in list(spamreader):
             constant_info = {}
