@@ -15,7 +15,8 @@ class MethodRow:
     def __init__(self, data, start_position):
         self.data = data
         self.start_position = start_position
-        self.name_index = parse_bytes_value(self.data, self.start_position + METHOD_FLAGS_LENGTH, METHOD_NAME_LENGTH)
+        self.name_index = parse_bytes_value(self.data, self.start_position + METHOD_FLAGS_LENGTH,
+                                            METHOD_NAME_LENGTH)
         self.attribute_count = self.get_attribute_count()
         self.total_length = METHOD_ATTRIBUTE_COUNT_START + METHOD_ATTRIBUTE_COUNT_LENGTH
         self.attributes = self.get_attributes()
@@ -35,7 +36,7 @@ class MethodRow:
     def get_op_code_bytes(self):
         attribute_bytes = self.attributes[0].get_attribute_bytes()
         op_code_bytes_length = parse_bytes_value(attribute_bytes, ATTRIBUTE_CODE_LENGTH_START,
-                                                ATTRIBUTE_CODE_LENGTH_LENGTH)
+                                                 ATTRIBUTE_CODE_LENGTH_LENGTH)
         start = ATTRIBUTE_CODE_LENGTH_START + ATTRIBUTE_CODE_LENGTH_LENGTH
         return attribute_bytes[start:start+op_code_bytes_length]
 

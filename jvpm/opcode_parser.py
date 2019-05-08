@@ -1,5 +1,7 @@
+"""class to parse Java bytecode constant pool"""
 import csv
-from jvpm.utils import *
+from jvpm.utils import DIRECTORY
+
 
 class OpcodeParse:
     """class to parse Java bytecode constant pool"""
@@ -26,12 +28,12 @@ class OpcodeParse:
         return the_table
     
     def load_method_helper(self):
+        """Returns the dictionary's variable length"""
         dict_variable_length = {}
         with open(DIRECTORY + 'jvpm/files/int_opcodes.csv', 'r') as csvfile:
             spamreader = csv.DictReader(csvfile)
             for constant in list(spamreader):
-                method_info = {'num_initial_bytes': int(
-                    constant['num_initial_bytes'].strip())}
+                method_info = {'num_initial_bytes': int(constant['num_initial_bytes'].strip())}
                 method_info['variable_length'] = False
                 the_number = int(constant['opcode'].strip(), 16)
                 dict_variable_length[the_number] = method_info

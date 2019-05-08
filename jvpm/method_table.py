@@ -1,4 +1,6 @@
+"""Class to parse the Java bytecode constant pool"""
 import csv
+
 
 class MethodTable:
     """class to parse Java bytecode constant pool"""
@@ -16,7 +18,8 @@ class MethodTable:
         the_table = {}
         active_position = self.init_position
         for i in range(1, self.method_pool_count+1):
-            # 3 steps here: get constant type from bytes, get additional bytes for constant code, get utf-8 variable length message. split???
+            # 3 steps here: get constant type from bytes, get additional bytes for constant code,
+            # get utf-8 variable length message. split???
             opcode = self.data[active_position:active_position+1]
             active_position += 1
             message_length = self.method_pool_helper[opcode]['num_initial_bytes']
@@ -25,8 +28,9 @@ class MethodTable:
             active_position += message_length
             the_table[i] = dict_constant
         return the_table, (active_position - self.init_position)
-    
+
     def load_method_helper(self):
+        """Loads a dictionary to determine the method"""
         dict_variable_length = {}
         with open('jvpm/files/constant_codes.csv', 'r') as csvfile:
             spamreader = csv.DictReader(csvfile)

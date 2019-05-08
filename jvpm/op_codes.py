@@ -1,16 +1,16 @@
-from jvpm.ClassFile import *
-from jvpm.constant_table import *
-from jvpm.opcode_parser import *
-from jvpm.method_row import *
-from jvpm.OpCodes import *
-from jvpm.utils import *
+"""This class defines a method for operational codes that java virtual machine uses"""
+import csv
 import numpy
+from jvpm.class_file import *
+from jvpm.utils import NONE, T_INT, T_LONG, T_FLOAT, T_DOUBLE, T_OBJECT, DIRECTORY,\
+    parse_bytes_value
 
 
 class OpCodes:
     """This class defines a method for operational codes that java virtual machine uses"""
 
     def __init__(self, class_ref=None, opcodes=[]):
+        """Initiate variables"""
         self.table = self.load()
         self.stack = []
         self.localvar = [0] * 10
@@ -68,8 +68,8 @@ class OpCodes:
             return self.stack.pop()
         if self.type == T_FLOAT:
             return self.pop_float_from_stack()
-        else:
-            return self.stack.pop()
+        # else:
+        return self.stack.pop()
 
     def push_int_to_stack(self, value):
         """Method to check if python is attempting to push a 64 bit integer which is
@@ -234,7 +234,7 @@ class OpCodes:
 
     def sub(self):
         """Pushes the result of the second number in the stack minus the next number"""
-        val1 = self.pop_from_stack() #to clear up sonarcloud smells
+        val1 = self.pop_from_stack() # to clear up sonarcloud smells
         val2 = self.pop_from_stack()
         self.push_to_stack(val1 - val2)
 
@@ -246,7 +246,7 @@ class OpCodes:
 
     def xor(self):
         """Pushes the result of the operation 'exclusive or' of two numbers in the stack"""
-        val1 = self.pop_from_stack() #to clear up sonarcloud smells
+        val1 = self.pop_from_stack() # to clear up sonarcloud smells
         val2 = self.pop_from_stack()
         self.push_to_stack(val1 ^ val2)
 
@@ -340,11 +340,13 @@ class OpCodes:
         self.push_to_stack(self.class_ref.constant_table.get_constant(constant_number))
 
     def invoke_special(self, bytes_constant):
+        """Method that pushes the method string to the stack"""
         constant_number = parse_bytes_value(bytes_constant, 0, 2)
         method_string = self.class_ref.constant_table.get_constant(constant_number)
         self.push_to_stack(method_string)
 
     def invoke_virtual_helper(self, bytes_constant):
+        """invokes the correct virtual method with the method string"""
         constant_number = parse_bytes_value(bytes_constant, 0, 2)
         method_string = self.class_ref.constant_table.get_constant(constant_number)
         self.invoke_virtual(method_string)
@@ -385,8 +387,8 @@ class OpCodes:
         return m_number
 
     def print_primitive(self):
-        self.type = T_OBJECT
         """Is called to print a primitive value"""
+        self.type = T_OBJECT
         val = self.pop_from_stack()
         print(val)
         return val

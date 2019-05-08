@@ -1,3 +1,4 @@
+"""Main method to be ran"""
 from .ClassFile import *
 import sys
 

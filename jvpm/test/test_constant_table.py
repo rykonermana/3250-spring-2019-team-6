@@ -1,11 +1,14 @@
+"""Tests for constant_table.py"""
 import unittest
 from unittest.mock import mock_open, patch
 from jvpm.constant_table import *
 
 
 class TestClassFile(unittest.TestCase):
+    """Unittest for constant_table.py"""
 
     def setUp(self):
+        """Sets up a mock constant table"""
         self.data = b'\xca\xfe\xba\xbe\x00\x00\x004\x00\x1b\n\x00\x05\x00\x0e\t\x00\x0f\x00\x10\n' \
                     b'\x00\x11\x00\x12\x07\x00\x13\x07\x00\x14\x01\x00\x06<init>\x01\x00\x03(' \
                     b')V\x01\x00\x04Code\x01\x00\x0fLineNumberTable\x01\x00\x04main\x01\x00\x16([' \
@@ -68,6 +71,7 @@ class TestClassFile(unittest.TestCase):
         }
 
     def test_get_constant_pool_table(self):
+        """Test to get constant pool table information"""
         test = ConstantTable(self.data, self.count)
         for i in self.constant_table_pre:
             self.assertEqual(
@@ -78,6 +82,7 @@ class TestClassFile(unittest.TestCase):
                 self.constant_table_pre[i]['message'])
 
     def test_get_constant_messages(self):
+        """Decrypts message"""
         test = ConstantTable(self.data, self.count)
         for i in self.constant_table_pre:
             self.assertEqual(
