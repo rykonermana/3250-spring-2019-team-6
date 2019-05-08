@@ -92,6 +92,9 @@ def main():
     classy = ClassFile(DIRECTORY + "jvpm/files/HelloWorld.class")
     classy.run_opcodes()
     #print(str(classy))
+    print("Input a java class file name")
+    test = ClassFile(DIRECTORY + input())
+    test.run_opcodes()
 
 
 if __name__ == "__main__":
