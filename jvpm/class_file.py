@@ -90,7 +90,7 @@ class ClassFile:
         opcodes = OpCodes(self, formatted_op_code)
         opcodes.run()
 
-    def main(args):
-        """Runs class file"""
-        classy = ClassFile(args[0])
-        classy.run_opcodes()
+def main(args):
+    """Runs class file"""
+    classy = ClassFile(args[0])
+    classy.run_opcodes()
